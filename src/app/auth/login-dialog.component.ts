@@ -10,11 +10,11 @@ import { AuthService } from './auth.service';
 })
 export class LoginDialogComponent implements OnInit {
   
-  email = new FormControl('', { 
+  email = new FormControl('olivier@mail.com', { 
     updateOn: 'blur', 
     validators: [Validators.required, Validators.email] 
   });
-  password = new FormControl('', { 
+  password = new FormControl('bestPassw0rd', { 
     updateOn: 'blur', 
     validators: [Validators.required, Validators.minLength(6)] 
   });
