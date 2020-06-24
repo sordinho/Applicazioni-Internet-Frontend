@@ -1,0 +1,917 @@
+{
+  "users": [
+    {
+      "email": "olivier@mail.com",
+      "password": "$2a$10$JEFrpyeKqb/rAkUcumYpeeT4ammo4eTsqtdtzhMiTcO1xqh3yQAC.",
+      "id": 1
+    },
+    {
+      "email": "q@i.io",
+      "password": "$2a$10$hdNiGPqqat3uANFeYx8Xa.c.cgN0DUoC3SHw3VWfYjdeYZP9OtBB.",
+      "id": 2
+    }
+  ],
+  "students": [
+    {
+      "serial": "s267570",
+      "id": "267570",
+      "name": "Davide",
+      "surname": "Sordi",
+      "courseId": "1",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267571",
+      "id": "267571",
+      "name": "Mario",
+      "surname": "Rossi",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267572",
+      "id": "267572",
+      "name": "Giovanni",
+      "surname": "Bianchi",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267573",
+      "id": "267573",
+      "name": "Andrea",
+      "surname": "Verdi",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267574",
+      "id": "267574",
+      "name": "Francesco",
+      "surname": "Riba",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267575",
+      "id": "267575",
+      "name": "Piero",
+      "surname": "Bodi",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267576",
+      "id": "267576",
+      "name": "Luca",
+      "surname": "Sordi",
+      "courseId": "1",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267577",
+      "id": "267577",
+      "name": "Matteo",
+      "surname": "Rossi",
+      "courseId": "1",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267578",
+      "id": "267578",
+      "name": "Franco",
+      "surname": "Bianchi",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267579",
+      "id": "267579",
+      "name": "Alessandro",
+      "surname": "Verdi",
+      "courseId": "1",
+      "groupId": "0"
+    },
+    {
+      "serial": "s267580",
+      "id": "267580",
+      "name": "Luigi",
+      "surname": "Gialli",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s1",
+      "id": "1",
+      "name": "Akim",
+      "surname": "Cumberlidge",
+      "courseId": "1",
+      "groupId": "0"
+    },
+    {
+      "serial": "s2",
+      "id": "2",
+      "name": "Margette",
+      "surname": "Vanyard",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s3",
+      "id": "3",
+      "name": "Nil",
+      "surname": "Stagge",
+      "courseId": "1",
+      "groupId": "0"
+    },
+    {
+      "serial": "s4",
+      "id": "4",
+      "name": "Bail",
+      "surname": "Benting",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s5",
+      "id": "5",
+      "name": "Nelle",
+      "surname": "Lait",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s6",
+      "id": "6",
+      "name": "Marji",
+      "surname": "Tennant",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s7",
+      "id": "7",
+      "name": "Cullin",
+      "surname": "Crickett",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s8",
+      "id": "8",
+      "name": "Inna",
+      "surname": "Du Fray",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s9",
+      "id": "9",
+      "name": "Giavani",
+      "surname": "Chin",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s10",
+      "id": "10",
+      "name": "Oona",
+      "surname": "Pughe",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s11",
+      "id": "11",
+      "name": "Adore",
+      "surname": "Lethbury",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s12",
+      "id": "12",
+      "name": "Bernard",
+      "surname": "Thexton",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s13",
+      "id": "13",
+      "name": "Mart",
+      "surname": "Courtes",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s14",
+      "id": "14",
+      "name": "Scotty",
+      "surname": "Surgey",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s15",
+      "id": "15",
+      "name": "Carson",
+      "surname": "De Bernardi",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s16",
+      "id": "16",
+      "name": "Jaclin",
+      "surname": "Chidgey",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s17",
+      "id": "17",
+      "name": "Teresita",
+      "surname": "Strettell",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s18",
+      "id": "18",
+      "name": "Minetta",
+      "surname": "Clampett",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s19",
+      "id": "19",
+      "name": "Payton",
+      "surname": "Ower",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s20",
+      "id": "20",
+      "name": "Bronny",
+      "surname": "Trett",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s21",
+      "id": "21",
+      "name": "Emmerich",
+      "surname": "Petricek",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s22",
+      "id": "22",
+      "name": "Laughton",
+      "surname": "Duquesnay",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s23",
+      "id": "23",
+      "name": "Eadmund",
+      "surname": "Carmody",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s24",
+      "id": "24",
+      "name": "Carlen",
+      "surname": "De Miranda",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s25",
+      "id": "25",
+      "name": "Ricky",
+      "surname": "Clewarth",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s26",
+      "id": "26",
+      "name": "Grethel",
+      "surname": "Bompass",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s27",
+      "id": "27",
+      "name": "Ursuline",
+      "surname": "Mebs",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s28",
+      "id": "28",
+      "name": "Anneliese",
+      "surname": "Crossan",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s29",
+      "id": "29",
+      "name": "Keely",
+      "surname": "Aleksashin",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s30",
+      "id": "30",
+      "name": "Bea",
+      "surname": "Kisbee",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s31",
+      "id": "31",
+      "name": "Dalt",
+      "surname": "Bone",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s32",
+      "id": "32",
+      "name": "Christiane",
+      "surname": "McPharlain",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s33",
+      "id": "33",
+      "name": "Codi",
+      "surname": "Sinderson",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s34",
+      "id": "34",
+      "name": "Harmony",
+      "surname": "Alliott",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s35",
+      "id": "35",
+      "name": "Rudiger",
+      "surname": "Gillyatt",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s36",
+      "id": "36",
+      "name": "Elizabeth",
+      "surname": "Esplin",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s37",
+      "id": "37",
+      "name": "Lauren",
+      "surname": "Moakson",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s38",
+      "id": "38",
+      "name": "Johan",
+      "surname": "Twelftree",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s39",
+      "id": "39",
+      "name": "Charmain",
+      "surname": "Duddle",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s40",
+      "id": "40",
+      "name": "Byrann",
+      "surname": "Bowland",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s41",
+      "id": "41",
+      "name": "Maryjane",
+      "surname": "Cordsen",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s42",
+      "id": "42",
+      "name": "Skip",
+      "surname": "Hinchshaw",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s43",
+      "id": "43",
+      "name": "Carlin",
+      "surname": "Derobert",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s44",
+      "id": "44",
+      "name": "Maximilianus",
+      "surname": "Dressel",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s45",
+      "id": "45",
+      "name": "Fabian",
+      "surname": "Monier",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s46",
+      "id": "46",
+      "name": "Walden",
+      "surname": "Baldacchino",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s47",
+      "id": "47",
+      "name": "Sydney",
+      "surname": "Jakobssen",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s48",
+      "id": "48",
+      "name": "Niall",
+      "surname": "Duffett",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s49",
+      "id": "49",
+      "name": "Ulick",
+      "surname": "Sapwell",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s50",
+      "id": "50",
+      "name": "Bendicty",
+      "surname": "Guidone",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s51",
+      "id": "51",
+      "name": "Tannie",
+      "surname": "Tupling",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s52",
+      "id": "52",
+      "name": "Bartie",
+      "surname": "Berrygun",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s53",
+      "id": "53",
+      "name": "Nial",
+      "surname": "Rousell",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s54",
+      "id": "54",
+      "name": "Hirsch",
+      "surname": "Beinke",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s55",
+      "id": "55",
+      "name": "Fifine",
+      "surname": "Jacobsen",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s56",
+      "id": "56",
+      "name": "Wye",
+      "surname": "Frankling",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s57",
+      "id": "57",
+      "name": "Kimmie",
+      "surname": "Oldridge",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s58",
+      "id": "58",
+      "name": "Isadora",
+      "surname": "Pearle",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s59",
+      "id": "59",
+      "name": "Broderic",
+      "surname": "Cleminshaw",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s60",
+      "id": "60",
+      "name": "Allayne",
+      "surname": "Bearfoot",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s61",
+      "id": "61",
+      "name": "Yale",
+      "surname": "Palatino",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s62",
+      "id": "62",
+      "name": "Sullivan",
+      "surname": "Oxer",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s63",
+      "id": "63",
+      "name": "Bertram",
+      "surname": "Kalisch",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s64",
+      "id": "64",
+      "name": "Farleigh",
+      "surname": "Baiden",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s65",
+      "id": "65",
+      "name": "Nada",
+      "surname": "Rainsden",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s66",
+      "id": "66",
+      "name": "Adlai",
+      "surname": "Maddison",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s67",
+      "id": "67",
+      "name": "Harri",
+      "surname": "Hemphill",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s68",
+      "id": "68",
+      "name": "Ryann",
+      "surname": "Van Der Weedenburg",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s69",
+      "id": "69",
+      "name": "Stephani",
+      "surname": "Filde",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s70",
+      "id": "70",
+      "name": "Catherina",
+      "surname": "Bassom",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s71",
+      "id": "71",
+      "name": "Larina",
+      "surname": "Greeve",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s72",
+      "id": "72",
+      "name": "Vincenz",
+      "surname": "Easey",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s73",
+      "id": "73",
+      "name": "Pietro",
+      "surname": "Bestall",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s74",
+      "id": "74",
+      "name": "Slade",
+      "surname": "Landsborough",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s75",
+      "id": "75",
+      "name": "Ricki",
+      "surname": "Crang",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s76",
+      "id": "76",
+      "name": "Cross",
+      "surname": "Bogays",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s77",
+      "id": "77",
+      "name": "Ev",
+      "surname": "Phillp",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s78",
+      "id": "78",
+      "name": "Cristi",
+      "surname": "Kauscher",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s79",
+      "id": "79",
+      "name": "Charo",
+      "surname": "Avramov",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s80",
+      "id": "80",
+      "name": "Marianna",
+      "surname": "Perree",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s81",
+      "id": "81",
+      "name": "Joseph",
+      "surname": "Glendza",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s82",
+      "id": "82",
+      "name": "Tatiana",
+      "surname": "Stott",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s83",
+      "id": "83",
+      "name": "Cordey",
+      "surname": "Mowlam",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s84",
+      "id": "84",
+      "name": "Larina",
+      "surname": "Bowry",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s85",
+      "id": "85",
+      "name": "Hillery",
+      "surname": "Emby",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s86",
+      "id": "86",
+      "name": "Eziechiele",
+      "surname": "Finnimore",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s87",
+      "id": "87",
+      "name": "Nealy",
+      "surname": "Hedworth",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s88",
+      "id": "88",
+      "name": "Daveta",
+      "surname": "de Tocqueville",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s89",
+      "id": "89",
+      "name": "Gardner",
+      "surname": "Maffiotti",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s90",
+      "id": "90",
+      "name": "Eleanor",
+      "surname": "Ranking",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s91",
+      "id": "91",
+      "name": "Anni",
+      "surname": "Crowley",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s92",
+      "id": "92",
+      "name": "Katinka",
+      "surname": "Stephenson",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s93",
+      "id": "93",
+      "name": "Cosmo",
+      "surname": "Woofinden",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s94",
+      "id": "94",
+      "name": "Irwinn",
+      "surname": "Goose",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s95",
+      "id": "95",
+      "name": "Dorene",
+      "surname": "Payfoot",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s96",
+      "id": "96",
+      "name": "Zed",
+      "surname": "Scardefield",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s97",
+      "id": "97",
+      "name": "Randolf",
+      "surname": "Down",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s98",
+      "id": "98",
+      "name": "Cherri",
+      "surname": "Shutt",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s99",
+      "id": "99",
+      "name": "Jeanine",
+      "surname": "Prendergast",
+      "courseId": "0",
+      "groupId": "0"
+    },
+    {
+      "serial": "s100",
+      "id": "100",
+      "name": "Rosabel",
+      "surname": "Mulrean",
+      "courseId": "0",
+      "groupId": "0"
+    }
+  ],
+  "courses": [
+    {
+      "serial": 1,
+      "name": "Applicazioni Internet",
+      "path": "applicazioni-internet"
+    }
+  ],
+  "groups": [
+    {
+      "serial": 1,
+      "name": "Gruppone"
+    }
+  ]
+}
