@@ -2,3 +2,24 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+a.home-link {
+    color:#FFFFFF;
+    text-decoration: none;
+}
+
+mat-sidenav-container{ height: 100%; }
+
+.container-small {
+    padding: 8px;
+}
+
+.container {
+    padding: 24px;
+}
+
+.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}

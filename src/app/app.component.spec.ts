@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'Applicazioni-Internet-Frontend'`, () => {
+  it(`should have as title 'VirtualLabs'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('Applicazioni-Internet-Frontend');
+    expect(app.title).toEqual('VirtualLabs');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('Applicazioni-Internet-Frontend app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('ai20-lab04 app is running!');
   });
 });

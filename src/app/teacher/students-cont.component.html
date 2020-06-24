@@ -1,0 +1,8 @@
+<h3>Students enrolled in the course</h3>
+<br>
+<app-students 
+    [enrolledStudents]="enrolledStudents" 
+    [students]="allStudents"
+    (addStudentsEmitter)="enrollStudents($event)"
+    (removeStudentsEmitter)="unenrollStudents($event)" >
+</app-students>
