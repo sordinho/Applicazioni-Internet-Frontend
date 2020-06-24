@@ -27,11 +27,14 @@ export class StudentsComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   _students: Student[];
+  _filteredStudents: Student[];
   _enrolledStudents: Student[];
 
   // component Input interfaces 
   @Input() set students(allStudents: Student[]) {
     this._students = allStudents;
+    this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1" );
+    console.dir("_filteredStudents" + this._filteredStudents);
   }
   @Input() set enrolledStudents(students: Student[]) {
     this._enrolledStudents = students;
@@ -80,7 +83,7 @@ export class StudentsComponent implements AfterViewInit {
     filterValue = filterValue.trim(); // remove whitespace
     filterValue = filterValue.toLowerCase();
     //console.dir("'" + filterValue + "'");
-    this._students = this._students
+    this._filteredStudents = this._students
                         .filter( s => {
                           return filterValue === '' ? true : s.toString().toLowerCase().includes(filterValue) 
                         });
@@ -93,7 +96,8 @@ export class StudentsComponent implements AfterViewInit {
   addStudent() {
     this.addStudentsEmitter.emit([this.addStudentSelection]);
     this.addStudentSelection = null; // reset selection
-    this._students = this._students; // reset options
+    // this._students = this._students; // reset options
+    this._filteredStudents = this._filteredStudents.filter(student => student !== this.addStudentSelection)
   }
   
 }

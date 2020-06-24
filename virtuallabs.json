@@ -45,11 +45,11 @@
       "groupId": "0"
     },
     {
-      "serial": "s267574",
       "id": "267574",
+      "serial": "s267574",
       "name": "Francesco",
       "firstName": "Riba",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
@@ -97,7 +97,7 @@
       "serial": "s267580",
       "name": "Luigi",
       "firstName": "Gialli",
-      "courseId": "1",
+      "courseId": "0",
       "groupId": "0"
     },
     {

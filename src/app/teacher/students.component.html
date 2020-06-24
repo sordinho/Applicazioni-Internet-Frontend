@@ -5,7 +5,7 @@
             (keyup)="filter(searchInput.value)" #searchInput/>
     <mat-autocomplete #auto [displayWith]="displayFn"
                     (optionSelected)="updateAddSelection($event)">
-        <mat-option *ngFor="let student of _students" [value]="student">
+        <mat-option *ngFor="let student of _filteredStudents" [value]="student">
             {{ student }}
         </mat-option>
     </mat-autocomplete>
