@@ -1,0 +1,21 @@
+.home-card {
+    max-width: 350px;
+    margin: auto;
+    margin-top: 15%;
+    padding: 40px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+p.error {
+    text-align: center;
+    border: 1px solid tomato;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+h2 {
+    text-align: center;
+}

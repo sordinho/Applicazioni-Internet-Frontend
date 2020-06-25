@@ -18,6 +18,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
+import {MatCardModule} from '@angular/material/card';
 
 import { StudentsComponent } from './teacher/students.component';
 import { StudentsContComponent } from './teacher/students-cont.component';
@@ -31,6 +32,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AuthInterceptor} from './services/auth.interceptor';
+import { LoginComponent } from './auth/login.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import {AuthInterceptor} from './services/auth.interceptor';
     VmsContComponent,
     HomeComponent,
     PageNotFoundComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,8 @@ import {AuthInterceptor} from './services/auth.interceptor';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent],
