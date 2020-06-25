@@ -10,24 +10,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  email = new FormControl('olivier@mail.com', { 
-    updateOn: 'blur', 
-    validators: [Validators.required, Validators.email] 
+  email = new FormControl('olivier@polito.it', {
+    updateOn: 'blur',
+    validators: [Validators.required, Validators.email]
   });
-  password = new FormControl('bestPassw0rd', { 
-    updateOn: 'blur', 
-    validators: [Validators.required, Validators.minLength(6)] 
+  password = new FormControl('bestPassw0rd', {
+    updateOn: 'blur',
+    validators: [Validators.required, Validators.minLength(6)]
   });
-  
+
   loading = false;
   loginError = false;
   redirectUrl: string;
-  
+
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.redirectUrl = this.route.snapshot.queryParams['redirect_to'] || '/';
-    
+
     // redirect to redirectUrl if already logged in
-    if (this.authService.isLoggedIn()) { 
+    if (this.authService.isLoggedIn()) {
       this.router.navigate([this.redirectUrl]);
     }
   }
