@@ -34,7 +34,7 @@ export class StudentsComponent implements AfterViewInit {
   @Input() set students(allStudents: Student[]) {
     this._students = allStudents;
     this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1" );
-    console.dir("_filteredStudents" + this._filteredStudents);
+    //console.dir("_filteredStudents" + this._filteredStudents);
   }
   @Input() set enrolledStudents(students: Student[]) {
     this._enrolledStudents = students;

@@ -17,6 +17,8 @@
     </mat-card-content>
 
     <mat-card-actions>
-        <button mat-raised-button color="primary" class="full-width" (click)="login()">Login</button>
+        <button mat-raised-button [disabled]="loading" color="primary" class="full-width" (click)="login()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Login</button>
     </mat-card-actions>
 </mat-card>

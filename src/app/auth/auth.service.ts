@@ -11,8 +11,6 @@ import { Router } from '@angular/router';
 export class AuthService {
   
   private API_PATH = 'http://localhost:3000';
-
-  redirectUrl: string;
   
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -22,7 +20,6 @@ export class AuthService {
                   tap( res => {
                     //console.dir("AuthService - loginUser() - .tap() --> token: " + res.accessToken);
                     this.setSession(res);
-                    this.router.navigateByUrl(this.redirectUrl);
                   }),
                   shareReplay()
                 );
