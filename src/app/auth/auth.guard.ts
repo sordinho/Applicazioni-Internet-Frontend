@@ -15,10 +15,20 @@ export class AuthGuard implements CanActivate {
     let url: string = state.url;
     //console.dir("AuthGuard - canActivate() - checkLogin(" + url + ") --> " + this.checkLogin(url));
 
-    if (this.authService.isLoggedIn()) { return true; }
+    if (this.authService.isLoggedIn()) { 
+      const courseId = next.paramMap.get('courseId');
+      
+      if(courseId === null) return true;
+
+      if(courseId === 'PdS' || courseId === 'AI') return true;
+      else {
+        this.router.navigate(['/courses']);
+        return false;
+      }
+    }
     
-    console.dir("AuthGuard - url = " + url);
-    if(url !== "/home") {
+    //console.dir("AuthGuard - url = " + url);
+    if(url !== "/courses") {
       // Navigate to the login page with extras
       this.router.navigate(['/login'], { queryParams: { redirect_to: url } });
     } else {

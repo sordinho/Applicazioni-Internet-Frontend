@@ -15,6 +15,9 @@ export class HomeComponent implements OnInit, OnDestroy{
   
   paramMapSub: Subscription;
   email = this.authService.getEmail();
+  courseName: string;
+  
+  courseSelected = false;
   
   navLinks = [
     { path: 'students', label: 'Students' },
@@ -22,14 +25,24 @@ export class HomeComponent implements OnInit, OnDestroy{
     { path: 'assignments', label: 'Assignments' }
   ];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router) { 
+  }
 
-  ngOnInit() {                                            
+  ngOnInit() { 
+    this.paramMapSub = this.activatedRoute.paramMap.subscribe(
+      (params: ParamMap) => {
+        const courseId = params.get('courseId');
+        if(courseId !== null) {
+          //console.dir("courseId: " + courseId);
+          this.setCourse(courseId);
+        }
+      });
+
   }
 
   ngOnDestroy() {
     if(this.paramMapSub != undefined) {
-      console.dir("AppComponent - ngOnDestroy() - this.paramMapSub.unsubscribe()");
+      //console.dir("AppComponent - ngOnDestroy() - this.paramMapSub.unsubscribe()");
       this.paramMapSub.unsubscribe();
     }
   }
@@ -47,6 +60,35 @@ export class HomeComponent implements OnInit, OnDestroy{
 
   getEmail() {
     return this.authService.getEmail();
+  }
+
+  setCourse(courseName: string) {
+    this.courseSelected = true;
+    switch (courseName) {
+      case 'AI' :
+        this.courseName = 'Applicazioni Internet'
+        break;
+      case 'PdS':
+        this.courseName = 'Programmazione Di Sistema'
+        break;
+      default:
+        this.courseName = ''
+        break;
+    }
+  }
+
+  courseNavigate(courseName: string) {
+    switch (courseName) {
+      case 'AI' :
+        this.router.navigate(['courses/AI']);
+        break;
+      case 'PdS':
+        this.router.navigate(['courses/PdS']);
+        break;
+      default:
+        this.courseName = ''
+        break;
+    }
   }
 
 }

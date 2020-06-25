@@ -3,14 +3,14 @@
       <mat-icon>menu</mat-icon>
     </button>
     &nbsp;&nbsp;
-    <a class="home-link" routerLink="/home">VirtualLabs</a>
+    <a class="home-link" routerLink="/courses">VirtualLabs</a>
     <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
     <p class="user-email">{{ email }}</p>
     <button mat-button (click)="logout()">Logout</button>
   </mat-toolbar>
   
-  <mat-toolbar>
-    Applicazioni Internet
+  <mat-toolbar *ngIf="courseSelected"> 
+    {{ courseName }}
   </mat-toolbar>
   
   <mat-sidenav-container class="example-container">
@@ -18,10 +18,10 @@
     <mat-sidenav mode="side" opened position="start" #sidenav>
       <div class="container-small">
         <mat-nav-list>
-          <mat-list-item routerLink="teacher/course/applicazioni-internet/students">
+          <mat-list-item (click)="courseNavigate('AI')">
             Applicazioni internet
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item (click)="courseNavigate('PdS')">
             Programmazione di sistema
           </mat-list-item>
         </mat-nav-list>
@@ -31,10 +31,11 @@
     <mat-sidenav-content>
       <nav mat-tab-nav-bar>
         <a mat-tab-link
-           *ngFor="let link of navLinks"
-           [routerLink]="['teacher/course/applicazioni-internet', link.path]"
-           routerLinkActive #rla="routerLinkActive"
-           [active]="rla.isActive">
+          [disabled]='!courseSelected'
+          *ngFor="let link of navLinks"
+          [routerLink]="[link.path]"
+          routerLinkActive #rla="routerLinkActive"
+          [active]="rla.isActive">
           {{link.label}}
         </a>
       </nav>

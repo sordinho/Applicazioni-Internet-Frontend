@@ -9,42 +9,36 @@ import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login.component';
 
 const routes: Routes = [
-    { // home
-      path: 'home', 
+    {
+      // courses
+      path: 'courses/:courseId', 
       canActivate: [AuthGuard],
       component: HomeComponent,
       children: [
-        { 
-          path: 'teacher',
-          children: [
-            { // students 
-              path: 'course/applicazioni-internet/students', 
-              component: StudentsContComponent 
-            },
-            { // vms
-              path: 'course/applicazioni-internet/vms', 
-              component: VmsContComponent 
-            }
-          ]
+        { // students 
+          path: 'students', 
+          component: StudentsContComponent 
         },
-      /*{
-        path: 'student',
-        children: [
-          { // vms
-            path: 'course/applicazioni-internet/vms', 
-            component: VmsContComponent 
-          }
-        ]
-        }*/
-        { // **
-          path: '**', 
-          component: PageNotFoundComponent 
+        { // vms
+          path: 'vms', 
+          component: VmsContComponent 
+        },
+        /*
+        { // vm
+          path: 'course/applicazioni-internet/vm', 
+          component: VmsContComponent 
         }
-      ] 
+        */
+      ]
+    },
+    { 
+      path: 'courses', 
+      canActivate: [AuthGuard],
+      component: HomeComponent,
     },
     
-    { // redirect to (default route) 'home'
-      path: '',   redirectTo: '/home', 
+    { // redirect to (default route) 'courses'
+      path: '',   redirectTo: '/courses', 
       pathMatch: 'full' }, 
     
     { 
