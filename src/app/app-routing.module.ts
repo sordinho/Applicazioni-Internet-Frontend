@@ -2,11 +2,15 @@ import {NgModule, Component} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
 import {HomeComponent} from './home.component';
-import {StudentsContComponent} from './teacher/students-cont.component';
-import {VmsContComponent} from './teacher/vms-cont.component';
+import {StudentsContComponent} from './teacher/students/students-cont.component';
+import {VmsComponent} from './teacher/vms/vms.component';
 import {PageNotFoundComponent} from './page-not-found.component';
 import {AuthGuard} from './auth/auth.guard';
 import {LoginComponent} from './auth/login.component';
+import { VmComponent } from './student/vm/vm.component';
+import { AssigmentsComponent } from './teacher/assigments/assigments.component';
+import { GroupsComponent } from './student/groups/groups.component';
+import { DeliveriesComponent } from './student/deliveries/deliveries.component';
 
 const routes: Routes = [
     {
@@ -16,20 +20,32 @@ const routes: Routes = [
         canActivateChild: [AuthGuard],
         component: HomeComponent,
         children: [
+            /* teacher */
             { // students
                 path: 'students',
                 component: StudentsContComponent
             },
             { // vms
                 path: 'vms',
-                component: VmsContComponent
+                component: VmsComponent
             },
-
+            { // assignments
+                path: 'assignments',
+                component: AssigmentsComponent
+            },
+            /* student */
+            { // group
+                path: 'groups',
+                component: GroupsComponent
+            },
             { // vm
                 path: 'vm',
-                component: VmsContComponent
+                component: VmComponent
+            },
+            { // deliveries
+                path: 'deliveries',
+                component: DeliveriesComponent
             }
-
         ]
     },
     {

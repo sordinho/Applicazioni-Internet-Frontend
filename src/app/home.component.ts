@@ -19,11 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   
   courseSelected = false;
   
-  navLinks = [
-    { path: 'students', label: 'Students' },
-    { path: 'vms', label: 'VMs' },
-    { path: 'assignments', label: 'Assignments' }
-  ];
+  navLinks: any[];
 
   constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router) { 
   }
@@ -37,6 +33,20 @@ export class HomeComponent implements OnInit, OnDestroy{
           this.setCourse(courseId);
         }
       });
+
+      if(this.authService.isStudent()) {
+        this.navLinks = [
+          { path: 'groups', label: 'Groups' },
+          { path: 'vm', label: 'VM' },
+          { path: 'deliveries', label: 'Deliveries' }
+        ];
+      } else if(this.authService.isTeacher()) {
+        this.navLinks = [
+          { path: 'students', label: 'Students' },
+          { path: 'vms', label: 'VMs' },
+          { path: 'assignments', label: 'Assignments' }
+        ];
+      }
 
   }
 

@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Student } from '../models/student.model';
+import { Student } from '../../models/student.model';
 import { MatSort } from '@angular/material/sort';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';

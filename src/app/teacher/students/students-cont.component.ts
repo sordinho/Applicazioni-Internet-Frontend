@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Student } from '../models/student.model';
-import { StudentService } from '../services/student.service';
-import { Observable } from 'rxjs';
-
+import { Student } from '../../models/student.model';
+import { StudentService } from '../../services/student.service';
 
 const courseId = "1"; // we have only one course: [ { "id": 1, "name": "Applicazioni Internet", "path": "applicazioni-internet" } ]
 
