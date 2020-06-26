@@ -25,7 +25,6 @@ import { StudentsContComponent } from './teacher/students-cont.component';
 import { VmsContComponent } from './teacher/vms-cont.component';
 import { HomeComponent } from './home.component'
 import { PageNotFoundComponent } from './page-not-found.component';
-import { LoginDialogComponent } from './auth/login-dialog.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -42,7 +41,6 @@ import { LoginComponent } from './auth/login.component';
     VmsContComponent,
     HomeComponent,
     PageNotFoundComponent,
-    LoginDialogComponent,
     LoginComponent
   ],
   imports: [
@@ -68,7 +66,6 @@ import { LoginComponent } from './auth/login.component';
     MatCardModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
-  bootstrap: [AppComponent],
-  entryComponents: [LoginDialogComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
       this.authService.loginUser(this.email.value, this.password.value)
                       .subscribe(
                         suc => {
-                          //console.dir("LoginDialogComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);
+                          //console.dir("LoginComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);
                           this.router.navigate([this.redirectUrl]);
                         },
                         err => {
