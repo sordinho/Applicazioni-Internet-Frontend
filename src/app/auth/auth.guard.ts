@@ -44,7 +44,7 @@ export class AuthGuard implements CanActivate {
     }
 
     canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        console.log('Can Activate Child: ' + this.authService.getRole());
+        //console.log('Can Activate Child: ' + this.authService.getRole());
         if (this.authService.isTeacher()) {
             if (state.url.endsWith('vms') || state.url.endsWith('students') || state.url.endsWith('assignments')) {
                 return true;

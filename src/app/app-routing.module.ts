@@ -1,16 +1,17 @@
 import {NgModule, Component} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
-import {HomeComponent} from './home.component';
+import {HomeComponent} from './home/home.component';
 import {StudentsContComponent} from './teacher/students/students-cont.component';
 import {VmsComponent} from './teacher/vms/vms.component';
 import {PageNotFoundComponent} from './page-not-found.component';
 import {AuthGuard} from './auth/auth.guard';
-import {LoginComponent} from './auth/login.component';
+import {LoginComponent} from './auth/login/login.component';
 import { VmComponent } from './student/vm/vm.component';
 import { AssigmentsComponent } from './teacher/assigments/assigments.component';
 import { GroupsComponent } from './student/groups/groups.component';
 import { DeliveriesComponent } from './student/deliveries/deliveries.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
     {
@@ -62,6 +63,11 @@ const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent
+    },
+
+    {
+        path: 'register',
+        component: RegisterComponent
     },
 
     { // **

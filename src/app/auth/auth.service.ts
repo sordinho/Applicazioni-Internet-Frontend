@@ -11,23 +11,40 @@ import {Router} from '@angular/router';
 export class AuthService {
 
     private API_PATH = 'http://localhost:3000';
-    private role: string;
 
     constructor(private http: HttpClient, private router: Router) {
     }
 
     loginUser(email: string, password: string): Observable<any> {
+        let role: string;
         if (email.endsWith('@studenti.polito.it')) {
-            this.role = 'ROLE_STUDENT';
+            role = 'ROLE_STUDENT';
         } else if (email.endsWith('@polito.it')) {
-            this.role = 'ROLE_TEACHER';
+            role = 'ROLE_TEACHER';
         }
 
         return this.http.post<any>(`${this.API_PATH}/login`, {email, password})
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - loginUser() - .tap() --> token: " + res.accessToken);
-                    this.setSession(res, this.role);
+                    this.setSession(res, role);
+                }),
+                shareReplay()
+            );
+    }
+
+    registerUser(email: string, password: string): Observable<any> {
+        let role: string;
+        if (email.endsWith('@studenti.polito.it')) {
+            role = 'ROLE_STUDENT';
+        } else if (email.endsWith('@polito.it')) {
+            role = 'ROLE_TEACHER';
+        }
+        return this.http.post<any>(`${this.API_PATH}/register`, {email, password})
+            .pipe(
+                tap(res => {
+                    //console.dir("AuthService - registerUser() - .tap() --> token: " + res.accessToken);
+                    this.setSession(res, role);
                 }),
                 shareReplay()
             );
@@ -40,7 +57,7 @@ export class AuthService {
 
         localStorage.setItem('token', authResult.accessToken);
         localStorage.setItem('role', role);
-        console.log('ruolo: ' + role);
+        //console.log('ruolo: ' + role);
         localStorage.setItem('email', token.email);
         // json-server-auth token field exp contains epoch of exportation (last 1 hour)
         localStorage.setItem('expires_at', token.exp);

@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService } from './../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
-  email = new FormControl('olivier@polito.it', {
+  email = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.email]
   });
-  password = new FormControl('bestPassw0rd', {
+  password = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.minLength(6)]
   });
@@ -35,13 +35,13 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login() {
+  register() {
     //console.log("email: " + this.email.value);
     //console.log("pass: " + this.password.value);
     if(!this.email.invalid && !this.password.invalid){
       this.loading = true;
 
-      this.authService.loginUser(this.email.value, this.password.value)
+      this.authService.registerUser(this.email.value, this.password.value)
                       .subscribe(
                         suc => {
                           //console.dir("LoginComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);
