@@ -19,3 +19,7 @@ p.error {
 h2 {
     text-align: center;
 }
+
+a.register-link {
+  text-decoration: none;
+}

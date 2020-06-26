@@ -17,8 +17,12 @@
     </mat-card-content>
 
     <mat-card-actions>
-        <button mat-raised-button [disabled]="loading" color="primary" class="full-width" (click)="login()">
+        <button mat-raised-button [disabled]="loading " color="primary" class="full-width" (click)="login()">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             Login</button>
     </mat-card-actions>
+
+     <!-- Register -->
+    <p>Need an account? <a class="register-link" color="primary" routerLink="/register">Register</a></p>
+
 </mat-card>
