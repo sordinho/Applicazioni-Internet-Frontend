@@ -30,6 +30,10 @@ export class StudentsComponent implements AfterViewInit {
   _filteredStudents: Student[];
   _enrolledStudents: Student[];
 
+  // paginator info
+  pageSize: number; 
+  pageIndex: number; 
+
   // component Input interfaces 
   @Input() set students(allStudents: Student[]) {
     this._students = allStudents;
@@ -52,6 +56,9 @@ export class StudentsComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
+    this.pageSize = this.paginator.pageSize; 
+    this.pageIndex = this.paginator.pageIndex; 
   }
 
   toggleTableRow(event: MatCheckboxChange, row: Student) {
@@ -99,5 +106,45 @@ export class StudentsComponent implements AfterViewInit {
     // this._students = this._students; // reset options
     this._filteredStudents = this._filteredStudents.filter(student => student !== this.addStudentSelection)
   }
+ 
+  pageEvent(event) {
+    console.dir("pageEvent(event) ");
   
+    console.dir("----------");
+
+    console.dir("(before event) index: " + this.pageIndex + " size: " + this.pageSize)
+  
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    console.dir("(after event) index: " + this.pageIndex + " size: " + this.pageSize)
+
+    console.dir("----------");
+    
+    console.dir("event.length = " + event.length);
+    console.dir("paginator.length: " + this.paginator.length);
+
+    console.dir("----------");
+    
+    console.dir("paginator.getNumberOfPages(): " + this.paginator.getNumberOfPages());
+    
+    console.dir("----------");
+
+    var start = this.pageIndex * this.pageSize;
+    var end: number; 
+
+    if(this.pageIndex == this.paginator.getNumberOfPages()-1) {
+      console.dir("Sono in ultima pagina");
+      end = this.paginator.length;
+    } else {
+      console.dir("Non sono in ultima pagina");
+      end = start+this.pageSize;
+    }
+
+    console.dir("deduco che dovessi selezionare tutti gli studenti di questa pagina, selezionerei gli studenti agli indici: ");
+    for(let i=start; i < end; i++) {
+      console.dir(i);
+    }
+
+    console.dir("")
+  }
 }
