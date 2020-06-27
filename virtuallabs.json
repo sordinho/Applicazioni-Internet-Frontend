@@ -6,9 +6,14 @@
       "id": 1
     },
     {
-      "email": "q@i.io",
-      "password": "$2a$10$hdNiGPqqat3uANFeYx8Xa.c.cgN0DUoC3SHw3VWfYjdeYZP9OtBB.",
-      "id": 2
+      "email": "olivier@studenti.polito.it",
+      "password": "$2a$10$JEFrpyeKqb/rAkUcumYpeeT4ammo4eTsqtdtzhMiTcO1xqh3yQAC.",
+      "id": 3
+    },
+    {
+      "email": "olivier@polito.it",
+      "password": "$2a$10$JEFrpyeKqb/rAkUcumYpeeT4ammo4eTsqtdtzhMiTcO1xqh3yQAC.",
+      "id": 4
     }
   ],
   "students": [

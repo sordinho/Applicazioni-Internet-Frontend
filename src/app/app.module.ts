@@ -18,29 +18,40 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
+import {MatCardModule} from '@angular/material/card';
 
-import { StudentsComponent } from './teacher/students.component';
-import { StudentsContComponent } from './teacher/students-cont.component';
-import { VmsContComponent } from './teacher/vms-cont.component';
-import { HomeComponent } from './home.component'
+import { StudentsComponent } from './teacher/students/students.component';
+import { StudentsContComponent } from './teacher/students/students-cont.component';
+import { VmsComponent } from './teacher/vms/vms.component';
+import { HomeComponent } from './home/home.component'
 import { PageNotFoundComponent } from './page-not-found.component';
-import { LoginDialogComponent } from './auth/login-dialog.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule } from '@angular/common/http';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AuthInterceptor} from './services/auth.interceptor';
+import { LoginComponent } from './auth/login/login.component';
+import { VmComponent } from './student/vm/vm.component';
+import { GroupsComponent } from './student/groups/groups.component';
+import { DeliveriesComponent } from './student/deliveries/deliveries.component';
+import { AssigmentsComponent } from './teacher/assigments/assigments.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StudentsContComponent,
     StudentsComponent,
-    VmsContComponent,
+    VmsComponent,
+    AssigmentsComponent,
+    GroupsComponent,
+    VmComponent,
+    DeliveriesComponent,
     HomeComponent,
     PageNotFoundComponent,
-    LoginDialogComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -61,10 +72,10 @@ import {AuthInterceptor} from './services/auth.interceptor';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
-  bootstrap: [AppComponent],
-  entryComponents: [LoginDialogComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
