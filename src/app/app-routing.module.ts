@@ -1,55 +1,84 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule, Component} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 
-import { HomeComponent } from './home.component';
-import { StudentsContComponent } from './teacher/students-cont.component';
-import { VmsContComponent } from './teacher/vms-cont.component';
-import { PageNotFoundComponent } from './page-not-found.component';
-import { AuthGuard } from './auth/auth.guard';
+import {HomeComponent} from './home/home.component';
+import {StudentsContComponent} from './teacher/students/students-cont.component';
+import {VmsComponent} from './teacher/vms/vms.component';
+import {PageNotFoundComponent} from './page-not-found.component';
+import {AuthGuard} from './auth/auth.guard';
+import {LoginComponent} from './auth/login/login.component';
+import { VmComponent } from './student/vm/vm.component';
+import { AssigmentsComponent } from './teacher/assigments/assigments.component';
+import { GroupsComponent } from './student/groups/groups.component';
+import { DeliveriesComponent } from './student/deliveries/deliveries.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
-    { // home
-      path: 'home', 
-      component: HomeComponent },
-    { // redirect to (default route) 'home'
-      path: '',   redirectTo: '/home', 
-      pathMatch: 'full' }, 
-    { 
-      path: 'courses',
-      canActivate: [AuthGuard],
-      children: [
-        { 
-          path: 'teacher',
-          children: [
-            { // students 
-              path: 'course/applicazioni-internet/students', 
-              component: StudentsContComponent 
+    {
+        // courses
+        path: 'courses/:courseId',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        component: HomeComponent,
+        children: [
+            /* teacher */
+            { // students
+                path: 'students',
+                component: StudentsContComponent
             },
             { // vms
-              path: 'course/applicazioni-internet/vms', 
-              component: VmsContComponent 
+                path: 'vms',
+                component: VmsComponent
+            },
+            { // assignments
+                path: 'assignments',
+                component: AssigmentsComponent
+            },
+            /* student */
+            { // group
+                path: 'groups',
+                component: GroupsComponent
+            },
+            { // vm
+                path: 'vm',
+                component: VmComponent
+            },
+            { // deliveries
+                path: 'deliveries',
+                component: DeliveriesComponent
             }
-          ]
-        },
-        /*{
-          path: 'student',
-          children: [
-            { // vms
-              path: 'course/applicazioni-internet/vms', 
-              component: VmsContComponent 
-            }
-          ]
-        }*/
-      ]  
+        ]
     },
+    {
+        path: 'courses',
+        canActivate: [AuthGuard],
+        component: HomeComponent,
+    },
+
+    { // redirect to (default route) 'courses'
+        path: '', redirectTo: '/courses',
+        pathMatch: 'full'
+    },
+
+    {
+        path: 'login',
+        component: LoginComponent
+    },
+
+    {
+        path: 'register',
+        component: RegisterComponent
+    },
+
     { // **
-      path: '**', 
-      component: PageNotFoundComponent 
+        path: '**',
+        component: PageNotFoundComponent
     }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { enableTracing: false } )],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, {enableTracing: false})],
+    exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

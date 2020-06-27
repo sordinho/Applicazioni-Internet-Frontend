@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Student } from '../models/student.model';
+import { Student } from '../../models/student.model';
 import { MatSort } from '@angular/material/sort';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -38,7 +38,7 @@ export class StudentsComponent implements AfterViewInit {
   @Input() set students(allStudents: Student[]) {
     this._students = allStudents;
     this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1" );
-    console.dir("_filteredStudents" + this._filteredStudents);
+    //console.dir("_filteredStudents" + this._filteredStudents);
   }
   @Input() set enrolledStudents(students: Student[]) {
     this._enrolledStudents = students;
