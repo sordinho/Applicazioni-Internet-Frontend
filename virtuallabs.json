@@ -70,7 +70,7 @@
       "serial": "s267576",
       "name": "Luca",
       "firstName": "Sordi",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
@@ -78,15 +78,15 @@
       "serial": "s267577",
       "name": "Matteo",
       "firstName": "Rossi",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
-      "serial": "s267578",
       "id": "267578",
+      "serial": "s267578",
       "name": "Franco",
       "firstName": "Bianchi",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
@@ -94,7 +94,7 @@
       "serial": "s267579",
       "name": "Alessandro",
       "firstName": "Verdi",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
@@ -102,7 +102,7 @@
       "serial": "s267580",
       "name": "Luigi",
       "firstName": "Gialli",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
@@ -114,11 +114,11 @@
       "groupId": "0"
     },
     {
-      "serial": "s2",
       "id": "2",
+      "serial": "s2",
       "name": "Margette",
       "firstName": "Vanyard",
-      "courseId": "0",
+      "courseId": "1",
       "groupId": "0"
     },
     {
