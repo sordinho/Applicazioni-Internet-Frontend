@@ -9,17 +9,11 @@
     width: 100%;
 }
 
-p.error {
-    text-align: center;
-    border: 1px solid tomato;
-    padding: 8px;
-    border-radius: 6px;
-}
 
 h2 {
     text-align: center;
 }
 
 a.register-link {
-  text-decoration: none;
+    text-decoration: none;
 }

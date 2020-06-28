@@ -1,3 +1,6 @@
+import {TEST_GROUP} from './group.model';
+import {Vm} from './vm.model';
+
 export class Student {
     id: string;
     serial: string;
@@ -17,7 +20,16 @@ export class Student {
 
     toString(): string {
         return this.name + ' ' +
-                this.firstName + " (" +
-                this.serial + ')';
+            this.firstName + ' (' +
+            this.serial + ')';
     }
 }
+
+export const TEST_STUDENT: Student = new Student(
+    '267571',
+    's267571',
+    'Mario',
+    'Rossi',
+    '1',
+    '0'
+);

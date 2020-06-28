@@ -37,6 +37,8 @@ import { GroupsComponent } from './student/groups/groups.component';
 import { DeliveriesComponent } from './student/deliveries/deliveries.component';
 import { AssigmentsComponent } from './teacher/assigments/assigments.component';
 import { RegisterComponent } from './auth/register/register.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,7 @@ import { RegisterComponent } from './auth/register/register.component';
     HomeComponent,
     PageNotFoundComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,9 @@ import { RegisterComponent } from './auth/register/register.component';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatCardModule
+    MatCardModule,
+    MatGridListModule,
+    MatExpansionModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
