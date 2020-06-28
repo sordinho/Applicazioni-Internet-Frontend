@@ -26,7 +26,7 @@ export class VmsComponent implements OnInit {
     activesLimit = new FormControl(this.selectedGroup.actives);
     maxLimit = new FormControl(this.selectedGroup.max);
 
-    @ViewChild(MatAccordion) accordion: MatAccordion;
+    @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupVMsService: GroupService) {
     }
@@ -88,5 +88,13 @@ export class VmsComponent implements OnInit {
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
 
+    }
+
+    openAll() {
+        this.accordion.openAll();
+    }
+
+    closeAll() {
+        this.accordion.closeAll();
     }
 }

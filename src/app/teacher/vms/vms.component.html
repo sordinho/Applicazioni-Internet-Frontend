@@ -19,12 +19,29 @@
 	<br>
 	<mat-divider></mat-divider>
 	<br>
-	<h4>Selected group: {{selectedGroup.groupId}} - {{selectedGroup.name}}</h4>
+	<h4>Selected group informations</h4>
+	<mat-accordion class="example-headers-align">
+		<mat-expansion-panel>
+			<mat-expansion-panel-header>
+				<mat-panel-title>
+					<p>{{selectedGroup.groupId}}</p>
+				</mat-panel-title>
+				<mat-panel-description>
+					<p>{{selectedGroup.name}}</p>
+				</mat-panel-description>
+			</mat-expansion-panel-header>
+			<mat-grid-list cols="3" rowHeight="55px">
+				<mat-grid-tile *ngFor="let member of selectedGroup.members">{{member.toString()}}</mat-grid-tile>
+			</mat-grid-list>
+		</mat-expansion-panel>
+	</mat-accordion>
+	<br>
+	<br>
 	<div class="example-action-buttons">
-		<button mat-button (click)="accordion.openAll()">Expand All</button>
-		<button mat-button (click)="accordion.closeAll()">Collapse All</button>
+		<button mat-button (click)="openAll()">Expand All</button>
+		<button mat-button (click)="closeAll()">Collapse All</button>
 	</div>
-	<mat-accordion class="example-headers-align" multi>
+	<mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi>
 		<mat-expansion-panel *ngFor="let vm of vms">
 			<mat-expansion-panel-header>
 				<mat-panel-title>
@@ -33,24 +50,28 @@
 				</mat-panel-title>
 				<mat-panel-description>
 					<p>{{vm.vmModel}}</p>
+					<p>&nbsp;&nbsp;({{vm.status}})</p>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<mat-grid-list cols="3" rowHeight="50px">
+			<mat-grid-list cols="3" rowHeight="55px">
 				<mat-grid-tile>CPU: {{vm.cpu}}</mat-grid-tile>
 				<mat-grid-tile>RAM: {{vm.ram}}</mat-grid-tile>
 				<mat-grid-tile>DISK: {{vm.disk}}</mat-grid-tile>
+				<mat-grid-tile [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
+				<mat-grid-tile>
+					<button mat-stroked-button color="primary" (click)="connectToVm(vm)">
+						<mat-icon>link</mat-icon>
+						<label> Connect</label>
+					</button>
+				</mat-grid-tile>
 			</mat-grid-list>
-			<button mat-stroked-button color="primary" (click)="connectToVm(vm)">
-				<mat-icon>link</mat-icon>
-				<label> Connect</label>
-			</button>
 		</mat-expansion-panel>
 	</mat-accordion>
 	<br><br>
 	<mat-divider></mat-divider>
 	<br>
 	<h4>Manage resources limits</h4>
-	<mat-accordion class="example-headers-align" multi>
+	<mat-accordion class="example-headers-align">
 		<mat-expansion-panel>
 			<mat-expansion-panel-header>
 				<mat-panel-title>
