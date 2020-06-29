@@ -33,8 +33,8 @@ export const TEST_GROUP: Group = new Group(
     '1',
     'vm1',
     10,
-    100,
-    1000,
+    1024,
+    10240,
     5,
     8,
     [TEST_STUDENT, TEST_STUDENT, TEST_STUDENT]

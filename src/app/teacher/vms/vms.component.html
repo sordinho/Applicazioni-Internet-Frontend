@@ -55,8 +55,8 @@
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">
 				<mat-grid-tile>CPU: {{vm.cpu}}</mat-grid-tile>
-				<mat-grid-tile>RAM: {{vm.ram}}</mat-grid-tile>
-				<mat-grid-tile>DISK: {{vm.disk}}</mat-grid-tile>
+				<mat-grid-tile>RAM: {{vm.ram}} &nbsp;MB</mat-grid-tile>
+				<mat-grid-tile>DISK: {{vm.disk}} &nbsp;MB</mat-grid-tile>
 				<mat-grid-tile [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
 				<mat-grid-tile>
 					<button mat-stroked-button color="primary" (click)="connectToVm(vm)">
