@@ -18,6 +18,12 @@
     <mat-sidenav mode="side" opened position="start" #sidenav>
       <div class="container-small">
         <mat-nav-list>
+          <p class="nav-list-header">Courses
+            <button class="nav-list-icon" mat-icon-button (click)="addCourse()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </p>
+          
           <mat-list-item (click)="courseNavigate('AI')">
             Applicazioni internet
           </mat-list-item>

@@ -101,4 +101,8 @@ export class HomeComponent implements OnInit, OnDestroy{
     }
   }
 
+  addCourse() {
+    console.dir("TODO - [home.components.ts] addCourse()");
+  }
+
 }
