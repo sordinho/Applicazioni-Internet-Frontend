@@ -37,7 +37,9 @@
 	</mat-accordion>
 	<br>
 	<br>
-	<div class="example-action-buttons">
+	<mat-divider></mat-divider>
+	<h4>VMs created</h4>
+	<div *ngIf="vms.length>1" class="expand-collapse-buttons">
 		<button mat-button (click)="openAll()">Expand All</button>
 		<button mat-button (click)="closeAll()">Collapse All</button>
 	</div>
@@ -57,7 +59,10 @@
 				<mat-grid-tile>CPU: {{vm.cpu}}</mat-grid-tile>
 				<mat-grid-tile>RAM: {{vm.ram}} &nbsp;MB</mat-grid-tile>
 				<mat-grid-tile>DISK: {{vm.disk}} &nbsp;MB</mat-grid-tile>
-				<mat-grid-tile [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="vm.owner.length==1" [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="vm.owner.length>1" [colspan]="2">Owners:
+					<span *ngFor="let owner of vm.owner">&nbsp;&nbsp;&nbsp;{{owner}}</span>
+				</mat-grid-tile>
 				<mat-grid-tile>
 					<button mat-stroked-button color="primary" (click)="connectToVm(vm)">
 						<mat-icon>link</mat-icon>

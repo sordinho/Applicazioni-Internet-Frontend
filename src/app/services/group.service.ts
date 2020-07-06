@@ -22,4 +22,10 @@ export class GroupService {
     getAllGroups(): Observable<Group[]> {
         return EMPTY;
     }
+
+    getGroupsByCourse(courseID: string): Observable<Group[]> {
+        return EMPTY;
+    }
+
+
 }

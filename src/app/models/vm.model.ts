@@ -8,12 +8,13 @@ export class Vm {
     cpu: number;
     ram: number;
     disk: number;
-    owner: Student;
+    owner: Student[];
     group: Group;
     status: string;
     img: string;
 
-    constructor(id: string, name: string, vmModel: string, cpu: number, ram: number, disk: number, owner: Student, group: Group, status: string) {
+    constructor(id: string, name: string, vmModel: string, cpu: number, ram: number,
+                disk: number, owner: Student[], group: Group, status: string) {
         this.id = id;
         this.name = name;
         this.vmModel = vmModel;
@@ -33,7 +34,7 @@ export const TEST_VM_UBUNTU: Vm = new Vm(
     2,
     256,
     2048,
-    TEST_STUDENT,
+    [TEST_STUDENT,TEST_STUDENT],
     TEST_GROUP,
     'OFF',
 );
@@ -47,7 +48,7 @@ export const TEST_VM_WIN: Vm = new Vm(
     2,
     512,
     2048,
-    TEST_STUDENT,
+    [TEST_STUDENT],
     TEST_GROUP,
     'RUNNING',
 );
