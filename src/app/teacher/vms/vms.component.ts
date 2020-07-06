@@ -16,15 +16,15 @@ export class VmsComponent implements OnInit {
 
     _filteredGroups: Group[] = [];
     _allGroups: Group[] = [];
-    selectedGroup: Group = TEST_GROUP;
+    selectedGroup: Group = null;
     vms: Vm[] = [TEST_VM_UBUNTU, TEST_VM_WIN];
 
     // Form data from resources limits
-    cpuLimit = new FormControl(this.selectedGroup.cpu);
-    ramLimit = new FormControl(this.selectedGroup.ram);
-    diskLimit = new FormControl(this.selectedGroup.disk);
-    activesLimit = new FormControl(this.selectedGroup.actives);
-    maxLimit = new FormControl(this.selectedGroup.max);
+    cpuLimit = new FormControl();
+    ramLimit = new FormControl();
+    diskLimit = new FormControl();
+    activesLimit = new FormControl();
+    maxLimit = new FormControl();
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
@@ -36,28 +36,42 @@ export class VmsComponent implements OnInit {
     }
 
     displayFn(group: Group) {
-        return group.toString();
+        if (group == null || typeof (group.groupId) == 'undefined') {
+            return '';
+        }
+        return group.name + ' (' + group.groupId + ')';
     }
 
-    filter(filterValue: string = '') {
-        filterValue = filterValue.trim(); // remove whitespace
-        filterValue = filterValue.toLowerCase();
-        //console.dir("'" + filterValue + "'");
+    filter(event) {
+        let substringToFind = event.target.value.toLowerCase();
         this._filteredGroups = this._allGroups
-            .filter(g => {
-                return filterValue === '' ? true : g.toString().toLowerCase().includes(filterValue);
-            });
+            .filter((g) =>
+                this.displayFn(g).toLocaleLowerCase().includes(substringToFind));
     }
 
     getAllGroups() {
         this.groupVMsService.getAllGroups()
             .subscribe((data) => {
                 this._allGroups = data;
+                this._filteredGroups = data;
+                console.log(data);
             });
     }
 
-    updateAddSelection(event: MatAutocompleteSelectedEvent) {
-        this.selectedGroup = (event && event.option) ? event.option.value : null;
+    updateAddSelection(value: Group) {
+        this.selectedGroup = value;
+        console.log('selected: ' + this.selectedGroup.toString());
+        console.log('cpu: ' + this.selectedGroup.cpu);
+        console.log('ram: ' + this.selectedGroup.ram);
+        this.updateFormValues();
+    }
+
+    updateFormValues() {
+        this.cpuLimit.setValue(this.selectedGroup.cpu);
+        this.ramLimit.setValue(this.selectedGroup.ram);
+        this.diskLimit.setValue(this.selectedGroup.disk);
+        this.activesLimit.setValue(this.selectedGroup.actives);
+        this.maxLimit.setValue(this.selectedGroup.max);
     }
 
 

@@ -13,7 +13,8 @@ export class Group {
     members: Student[];
 
 
-    constructor(groupId: string, name: string, courseId: string, vmModel: string, cpu: number, ram: number, disk: number, tot: number, max: number, members: Student[]) {
+    constructor(groupId: string, name: string, courseId: string, vmModel: string, cpu: number,
+                ram: number, disk: number, actives: number, max: number, members: Student[]) {
         this.groupId = groupId;
         this.name = name;
         this.courseId = courseId;
@@ -21,9 +22,13 @@ export class Group {
         this.cpu = cpu;
         this.ram = ram;
         this.disk = disk;
-        this.actives = tot;
+        this.actives = actives;
         this.max = max;
         this.members = members;
+    }
+
+    toString(): string {
+        return this.name + ' (' + this.groupId + ')';
     }
 }
 

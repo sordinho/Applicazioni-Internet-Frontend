@@ -5,11 +5,11 @@
 	<mat-label>Find group</mat-label>
 	<input type="search" matInput placeholder="Group name or ID"
 		   [matAutocomplete]="auto"
-		   (keyup)="filter(searchInput.value)" #searchInput/>
+		   (keyup)="filter($event)" #searchInput/>
 	<mat-autocomplete #auto [displayWith]="displayFn"
-					  (optionSelected)="updateAddSelection($event)">
+					  (optionSelected)="updateAddSelection($event.option.value)">
 		<mat-option *ngFor="let group of _filteredGroups" [value]="group">
-			{{ group }}
+			{{ displayFn(group) }}
 		</mat-option>
 	</mat-autocomplete>
 </mat-form-field>

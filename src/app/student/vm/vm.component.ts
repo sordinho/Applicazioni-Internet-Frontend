@@ -41,7 +41,7 @@ export class VmComponent implements OnInit {
     }
 
     saveNewVm() {
-        // TODO:  UPDATE resources limits for the group. To do vm service
+        // TODO:  UPDATE resources usage for the group. To do vm service
 
     }
 

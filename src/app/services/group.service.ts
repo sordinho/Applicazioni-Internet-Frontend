@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EMPTY, Observable} from 'rxjs';
-import {Group} from '../models/group.model';
+import {EMPTY, Observable, of, throwError} from 'rxjs';
+import {Group, TEST_GROUP} from '../models/group.model';
+import {catchError, map} from 'rxjs/operators';
+import {Student} from '../models/student.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -20,7 +22,7 @@ export class GroupService {
     }
 
     getAllGroups(): Observable<Group[]> {
-        return EMPTY;
+        return of([TEST_GROUP]);
     }
 
     getGroupsByCourse(courseID: string): Observable<Group[]> {
