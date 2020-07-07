@@ -3,6 +3,9 @@ import {Group, TEST_GROUP} from '../../models/group.model';
 import {TEST_VM_UBUNTU, TEST_VM_WIN, Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {FormControl} from '@angular/forms';
+import {VmService} from '../../services/vm.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ShareDialogComponent} from './share-dialog.component';
 
 @Component({
     selector: 'app-vm',
@@ -12,7 +15,7 @@ import {FormControl} from '@angular/forms';
 export class VmComponent implements OnInit {
 
     group: Group = TEST_GROUP;
-    vms: Vm[] = [TEST_VM_UBUNTU, TEST_VM_WIN];
+    vms: Vm[] = [];
 
     // Form data new vm
     newVmCpu = new FormControl(1);
@@ -21,10 +24,11 @@ export class VmComponent implements OnInit {
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor() {
+    constructor(private vmService: VmService, private shareDialog: MatDialog) {
     }
 
     ngOnInit(): void {
+        this.initGroupVms();
     }
 
     openAll() {
@@ -37,7 +41,8 @@ export class VmComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-
+        // todo set vm status running
+        window.open('https://www.google.com');
     }
 
     saveNewVm() {
@@ -66,5 +71,41 @@ export class VmComponent implements OnInit {
         this.newVmCpu.setValue(1);
         this.newVmRam.setValue(256);
         this.newVmDisk.setValue(512);
+    }
+
+    initGroupVms() {
+        this.vmService.getVmsByGroupId(this.group.groupId)
+            .subscribe((data) => {
+                this.vms = data;
+            });
+    }
+
+    deleteVM(vm: Vm) {
+        console.log('Delete vm: ' + vm.id);
+    }
+
+    stopVm(vm: Vm) {
+        console.log('Stop vm: ' + vm.id);
+        vm.status = 'OFF';
+    }
+
+    startVm(vm: Vm) {
+        console.log('Start vm: ' + vm.id);
+        vm.status = 'RUNNING';
+    }
+
+    shareVm(vm: Vm) {
+        this.shareDialog.open(ShareDialogComponent, {
+            width: '50%',
+            data: {
+                group: this.group,
+                vm: vm
+            }
+        });
+    }
+
+    studentIsOwner(vm: Vm) {
+        // TODO check if actual user is owner of the given VM
+        return true;
     }
 }

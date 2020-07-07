@@ -6,6 +6,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {TEST_VM_UBUNTU, TEST_VM_WIN, Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
+import {VmService} from '../../services/vm.service';
 
 @Component({
     selector: 'app-vms',
@@ -17,7 +18,7 @@ export class VmsComponent implements OnInit {
     _filteredGroups: Group[] = [];
     _allGroups: Group[] = [];
     selectedGroup: Group = null;
-    vms: Vm[] = [TEST_VM_UBUNTU, TEST_VM_WIN];
+    vms: Vm[] = [];
 
     // Form data from resources limits
     cpuLimit = new FormControl();
@@ -28,7 +29,7 @@ export class VmsComponent implements OnInit {
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor(private groupVMsService: GroupService) {
+    constructor(private groupVMsService: GroupService, private vmService: VmService) {
     }
 
     ngOnInit(): void {
@@ -64,6 +65,8 @@ export class VmsComponent implements OnInit {
         console.log('cpu: ' + this.selectedGroup.cpu);
         console.log('ram: ' + this.selectedGroup.ram);
         this.updateFormValues();
+        this.getGroupVmsData();
+
     }
 
     updateFormValues() {
@@ -72,6 +75,12 @@ export class VmsComponent implements OnInit {
         this.diskLimit.setValue(this.selectedGroup.disk);
         this.activesLimit.setValue(this.selectedGroup.actives);
         this.maxLimit.setValue(this.selectedGroup.max);
+    }
+
+    getGroupVmsData() {
+        this.vmService.getVmsByGroupId(this.selectedGroup.groupId).subscribe((data) => {
+            this.vms = data;
+        });
     }
 
 
@@ -101,7 +110,7 @@ export class VmsComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-
+        window.open('https://www.google.com');
     }
 
     openAll() {

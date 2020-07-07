@@ -1,4 +1,4 @@
-import {Student, TEST_STUDENT} from './student.model';
+import {Student, TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3} from './student.model';
 import {Group, TEST_GROUP} from './group.model';
 
 export class Vm {
@@ -34,7 +34,7 @@ export const TEST_VM_UBUNTU: Vm = new Vm(
     2,
     256,
     2048,
-    [TEST_STUDENT,TEST_STUDENT],
+    [TEST_STUDENT1, TEST_STUDENT2],
     TEST_GROUP,
     'OFF',
 );
@@ -48,7 +48,7 @@ export const TEST_VM_WIN: Vm = new Vm(
     2,
     512,
     2048,
-    [TEST_STUDENT],
+    [TEST_STUDENT3],
     TEST_GROUP,
     'RUNNING',
 );

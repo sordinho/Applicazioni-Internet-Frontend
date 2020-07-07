@@ -64,10 +64,10 @@
 					<span *ngFor="let owner of vm.owner">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<button mat-stroked-button color="primary" (click)="connectToVm(vm)">
+					<a mat-stroked-button color="primary" (click)="connectToVm(vm)">
 						<mat-icon>link</mat-icon>
 						<label> Connect</label>
-					</button>
+					</a>
 				</mat-grid-tile>
 			</mat-grid-list>
 		</mat-expansion-panel>

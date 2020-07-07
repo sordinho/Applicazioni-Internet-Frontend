@@ -1,4 +1,4 @@
-import {Student, TEST_STUDENT} from './student.model';
+import {Student, TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3} from './student.model';
 
 export class Group {
     groupId: string;
@@ -42,5 +42,5 @@ export const TEST_GROUP: Group = new Group(
     10240,
     5,
     8,
-    [TEST_STUDENT, TEST_STUDENT, TEST_STUDENT]
+    [TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3]
 );

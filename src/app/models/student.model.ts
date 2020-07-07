@@ -1,6 +1,3 @@
-import {TEST_GROUP} from './group.model';
-import {Vm} from './vm.model';
-
 export class Student {
     id: string;
     serial: string;
@@ -25,11 +22,29 @@ export class Student {
     }
 }
 
-export const TEST_STUDENT: Student = new Student(
+export const TEST_STUDENT1: Student = new Student(
     '267571',
     's267571',
     'Mario',
     'Rossi',
+    '1',
+    '0'
+);
+
+export const TEST_STUDENT2: Student = new Student(
+    '267570',
+    's267570',
+    'Davide',
+    'Sordi',
+    '1',
+    '0'
+);
+
+export const TEST_STUDENT3: Student = new Student(
+    '267572',
+    's267571',
+    'Giovanni',
+    'Bianchi',
     '1',
     '0'
 );

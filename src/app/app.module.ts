@@ -40,6 +40,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatBadgeModule} from '@angular/material/badge';
+import { ShareDialogComponent } from './student/vm/share-dialog.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import {MatBadgeModule} from '@angular/material/badge';
     PageNotFoundComponent,
     LoginComponent,
     RegisterComponent,
+    ShareDialogComponent,
   ],
     imports: [
         BrowserModule,

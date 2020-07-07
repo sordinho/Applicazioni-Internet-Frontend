@@ -50,19 +50,36 @@
 				<mat-grid-tile>CPU: {{vm.cpu}} </mat-grid-tile>
 				<mat-grid-tile>RAM: {{vm.ram}} &nbsp;MB</mat-grid-tile>
 				<mat-grid-tile>DISK: {{vm.disk}} &nbsp;MB</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owner.length==1" [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owner.length>1" [colspan]="2">Owners:
+			</mat-grid-list>
+			<mat-grid-list cols="2" rowHeight="60px">
+				<mat-grid-tile *ngIf="vm.owner.length==1">Owner: {{vm.owner}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="vm.owner.length>1">Owners:
 					<span *ngFor="let owner of vm.owner">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<button mat-stroked-button color="primary" (click)="connectToVm(vm)">
+					<button *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="stopVm(vm)">
+						<mat-icon>stop</mat-icon>
+						<label> Stop</label>
+					</button>
+					<button *ngIf="vm.status==='OFF'" mat-stroked-button color="primary" (click)="startVm(vm)">
+						<mat-icon>play_arrow</mat-icon>
+						<label> Start</label>
+					</button>
+					<a *ngIf="vm.status==='RUNNING'" style="margin-left: 5px" mat-stroked-button color="primary"
+					   (click)="connectToVm(vm)">
 						<mat-icon>link</mat-icon>
 						<label> Connect</label>
+					</a>
+					<!--					TODO check if actual user is owner-->
+					<button *ngIf="studentIsOwner(vm)" style="margin-left: 5px" mat-stroked-button color="warn"
+							(click)="shareVm(vm)">
+						<mat-icon>share</mat-icon>
+						<label> Share</label>
 					</button>
-					<button style="margin-left: 5px" mat-stroked-button color="warn" (click)="connectToVm(vm)">
+					<a style="margin-left: 5px" mat-stroked-button color="warn" (click)="deleteVM(vm)">
 						<mat-icon>delete</mat-icon>
 						<label> Delete</label>
-					</button>
+					</a>
 				</mat-grid-tile>
 			</mat-grid-list>
 		</mat-expansion-panel>
