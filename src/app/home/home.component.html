@@ -19,7 +19,7 @@
 
         <mat-list-item class="list-header">
           <span mat-line class="list-header-text">Courses</span>
-          <button *ngIf="authService.isTeacher()" mat-icon-button class="add-course-button">
+          <button *ngIf="isTeacher" mat-icon-button class="add-course-button">
               <mat-icon>add</mat-icon>
           </button>
         </mat-list-item>
@@ -27,7 +27,7 @@
         <mat-list-item (click)="courseNavigate('AI')">
           <span mat-line>Applicazioni Internet</span>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <button *ngIf="authService.isTeacher()" mat-icon-button class="edit-button">
+          <button *ngIf="isTeacher" mat-icon-button class="edit-button">
             <mat-icon>edit</mat-icon>
           </button>
         </mat-list-item>
@@ -35,7 +35,7 @@
         <mat-list-item (click)="courseNavigate('PdS')">
           <span mat-line>Programmazione di Sistema</span>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <button *ngIf="authService.isTeacher()" mat-icon-button class="edit-button">
+          <button *ngIf="isTeacher" mat-icon-button class="edit-button">
             <mat-icon>edit</mat-icon>
           </button>
         </mat-list-item>          

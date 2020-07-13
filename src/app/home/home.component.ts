@@ -18,10 +18,12 @@ export class HomeComponent implements OnInit, OnDestroy{
   courseName: string;
   
   courseSelected = false;
+  isTeacher = false;
   
   navLinks: any[];
 
   constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router) { 
+    this.isTeacher = authService.isTeacher();
   }
 
   ngOnInit() { 
