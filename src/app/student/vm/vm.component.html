@@ -2,17 +2,6 @@
 <br>
 
 <h4>Group resources limits</h4>
-<!--<mat-accordion class="example-headers-align">-->
-<!--	<mat-expansion-panel>-->
-<!--		<mat-expansion-panel-header>-->
-<!--			<mat-panel-title>-->
-<!--				Group Resources-->
-<!--			</mat-panel-title>-->
-<!--			<mat-panel-description>-->
-<!--				Check Group resources limits-->
-<!--			</mat-panel-description>-->
-<!--		</mat-expansion-panel-header>-->
-
 <mat-grid-list cols="3" rowHeight="55px">
 	<mat-grid-tile>
 		<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{group.cpu}}</mat-grid-tile>
@@ -25,8 +14,7 @@
 	<mat-grid-tile>Max actives VMs: {{group.actives}}</mat-grid-tile>
 	<mat-grid-tile>Total max VMs: {{group.max}}</mat-grid-tile>
 </mat-grid-list>
-<!--	</mat-expansion-panel>-->
-<!--</mat-accordion>-->
+
 
 <!-- VMs listing-->
 <div *ngIf="vms.length>0">

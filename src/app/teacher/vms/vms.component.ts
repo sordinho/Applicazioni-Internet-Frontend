@@ -1,12 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Student} from '../../models/student.model';
-import {Group, TEST_GROUP} from '../../models/group.model';
+import {Group, } from '../../models/group.model';
 import {GroupService} from '../../services/group.service';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {TEST_VM_UBUNTU, TEST_VM_WIN, Vm} from '../../models/vm.model';
+import {  Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
-import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 import {VmService} from '../../services/vm.service';
+import {FormControl} from '@angular/forms';
 
 @Component({
     selector: 'app-vms',

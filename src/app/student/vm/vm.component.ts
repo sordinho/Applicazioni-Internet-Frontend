@@ -1,8 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Group, TEST_GROUP} from '../../models/group.model';
-import {TEST_VM_UBUNTU, TEST_VM_WIN, Vm} from '../../models/vm.model';
+import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
-import {FormControl} from '@angular/forms';
 import {VmService} from '../../services/vm.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from './share-dialog.component';
