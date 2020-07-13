@@ -3,12 +3,21 @@ p.user-email {
     font-size:15px;
 }
 
-.nav-list-header {
-    padding-left: 16px;
-    padding-right: 16px;
-    margin: 0px;
+.list-header {
+    pointer-events: none;
     text-transform: uppercase;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: start;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.add-course-button {
+    pointer-events: all;
+    cursor: pointer;
+}
+
+.edit-button {
+    visibility:hidden;
+}
+
+.mat-list-item:hover .edit-button{
+    visibility:visible;
 }

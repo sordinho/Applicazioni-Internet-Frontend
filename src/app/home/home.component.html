@@ -14,24 +14,33 @@
   </mat-toolbar>
   
   <mat-sidenav-container class="example-container">
-    
     <mat-sidenav mode="side" opened position="start" #sidenav>
-      <div class="container-small">
-        <mat-nav-list>
-          <p class="nav-list-header">Courses
-            <button class="nav-list-icon" mat-icon-button (click)="addCourse()">
+      <mat-nav-list>
+
+        <mat-list-item class="list-header">
+          <span mat-line class="list-header-text">Courses</span>
+          <button mat-icon-button class="add-course-button">
               <mat-icon>add</mat-icon>
-            </button>
-          </p>
-          
-          <mat-list-item (click)="courseNavigate('AI')">
-            Applicazioni internet
-          </mat-list-item>
-          <mat-list-item (click)="courseNavigate('PdS')">
-            Programmazione di sistema
-          </mat-list-item>
-        </mat-nav-list>
-      </div>
+          </button>
+        </mat-list-item>
+
+        <mat-list-item (click)="courseNavigate('AI')">
+          <span mat-line>Applicazioni Internet</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button mat-icon-button class="edit-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-list-item>
+        
+        <mat-list-item (click)="courseNavigate('PdS')">
+          <span mat-line>Programmazione di Sistema</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button mat-icon-button class="edit-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-list-item>          
+  
+      </mat-nav-list>
     </mat-sidenav>
   
     <mat-sidenav-content>
