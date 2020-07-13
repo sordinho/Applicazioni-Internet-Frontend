@@ -38,10 +38,6 @@ export class ShareDialogComponent implements OnInit {
         return nSelected == nRows;
     }
 
-    close() {
-        this.dialogRef.close();
-    }
-
     shareWithSelected() {
         console.log('Selected: ' + this.selectionModel.selected.length);
         this.selectionModel.selected.forEach((s) => console.log(s.id));

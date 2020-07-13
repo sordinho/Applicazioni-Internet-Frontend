@@ -41,6 +41,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatBadgeModule} from '@angular/material/badge';
 import { ShareDialogComponent } from './student/vm/share-dialog.component';
+import { CreateVmDialogComponent } from './student/vm/create-vm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { ShareDialogComponent } from './student/vm/share-dialog.component';
     LoginComponent,
     RegisterComponent,
     ShareDialogComponent,
+    CreateVmDialogComponent,
   ],
     imports: [
         BrowserModule,

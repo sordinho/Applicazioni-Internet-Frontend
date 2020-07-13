@@ -2,26 +2,31 @@
 <br>
 
 <h4>Group resources limits</h4>
-<mat-accordion class="example-headers-align">
-	<mat-expansion-panel>
-		<mat-expansion-panel-header>
-			<mat-panel-title>
-				Group Resources
-			</mat-panel-title>
-			<mat-panel-description>
-				Check Group resources limits
-			</mat-panel-description>
-		</mat-expansion-panel-header>
+<!--<mat-accordion class="example-headers-align">-->
+<!--	<mat-expansion-panel>-->
+<!--		<mat-expansion-panel-header>-->
+<!--			<mat-panel-title>-->
+<!--				Group Resources-->
+<!--			</mat-panel-title>-->
+<!--			<mat-panel-description>-->
+<!--				Check Group resources limits-->
+<!--			</mat-panel-description>-->
+<!--		</mat-expansion-panel-header>-->
 
-		<mat-grid-list cols="3" rowHeight="55px">
-			<mat-grid-tile>CPU: {{group.cpu}}</mat-grid-tile>
-			<mat-grid-tile>RAM: {{group.ram}} &nbsp;MB</mat-grid-tile>
-			<mat-grid-tile>DISK: {{group.disk}} &nbsp;MB</mat-grid-tile>
-			<mat-grid-tile>Max actives VMs: {{group.actives}}</mat-grid-tile>
-			<mat-grid-tile>Total max VMs: {{group.max}}</mat-grid-tile>
-		</mat-grid-list>
-	</mat-expansion-panel>
-</mat-accordion>
+<mat-grid-list cols="3" rowHeight="55px">
+	<mat-grid-tile>
+		<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{group.cpu}}</mat-grid-tile>
+	<mat-grid-tile>
+		<mat-icon>memory</mat-icon>&nbsp; RAM: {{group.ram}} &nbsp;MB
+	</mat-grid-tile>
+	<mat-grid-tile>
+		<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{group.disk}} &nbsp;MB
+	</mat-grid-tile>
+	<mat-grid-tile>Max actives VMs: {{group.actives}}</mat-grid-tile>
+	<mat-grid-tile>Total max VMs: {{group.max}}</mat-grid-tile>
+</mat-grid-list>
+<!--	</mat-expansion-panel>-->
+<!--</mat-accordion>-->
 
 <!-- VMs listing-->
 <div *ngIf="vms.length>0">
@@ -29,7 +34,12 @@
 	<br>
 	<mat-divider></mat-divider>
 	<br>
-	<h4>Available VMs</h4>
+	<h4>Available VMs
+		&nbsp;&nbsp;
+		<button mat-stroked-button color="primary" (click)="createNewVm()">
+			<mat-icon>add</mat-icon>
+			<label>New VM</label></button>
+	</h4>
 	<div *ngIf="vms.length>1" class="expand-collapse-buttons">
 		<button mat-button (click)="openAll()">Expand All</button>
 		<button mat-button (click)="closeAll()">Collapse All</button>
@@ -47,9 +57,14 @@
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile>CPU: {{vm.cpu}} </mat-grid-tile>
-				<mat-grid-tile>RAM: {{vm.ram}} &nbsp;MB</mat-grid-tile>
-				<mat-grid-tile>DISK: {{vm.disk}} &nbsp;MB</mat-grid-tile>
+				<mat-grid-tile>
+					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.cpu}} </mat-grid-tile>
+				<mat-grid-tile>
+					<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk}} &nbsp;MB
+				</mat-grid-tile>
 			</mat-grid-list>
 			<mat-grid-list cols="2" rowHeight="60px">
 				<mat-grid-tile *ngIf="vm.owner.length==1">Owner: {{vm.owner}}</mat-grid-tile>
@@ -82,56 +97,6 @@
 					</a>
 				</mat-grid-tile>
 			</mat-grid-list>
-		</mat-expansion-panel>
-	</mat-accordion>
-</div>
-
-<!-- VMs creation-->
-<div>
-	<br>
-	<br>
-	<mat-divider></mat-divider>
-	<br>
-	<h4>Create new VMs</h4>
-	<mat-accordion class="example-headers-align">
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					Add a new VM
-				</mat-panel-title>
-				<mat-panel-description>
-					Set VM resources
-					<mat-icon>settings</mat-icon>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-
-			<mat-form-field>
-				<mat-label>CPU</mat-label>
-				<input [formControl]="newVmCpu" matInput type="number" min="1" required>
-			</mat-form-field>
-
-			<mat-form-field>
-				<mat-label>RAM</mat-label>
-				<input [formControl]="newVmRam" matInput type="number" min="256" required>
-				<span matSuffix>MB</span>
-			</mat-form-field>
-
-			<mat-form-field>
-				<mat-label>DISK</mat-label>
-				<input [formControl]="newVmDisk" matInput type="number" min="512" required>
-				<span matSuffix>MB</span>
-			</mat-form-field>
-			<br>
-			<button mat-stroked-button color="primary" (click)="saveNewVm()"
-					[disabled]="!checkResourcesLimits()">
-				<mat-icon>add</mat-icon>
-				<label> Save</label>
-			</button>
-			<button style="margin-left: 5px" mat-stroked-button color="warn" (click)="resetNewValues()">
-				<mat-icon>clear</mat-icon>
-				<label> Reset</label>
-			</button>
-			<p *ngIf="!checkResourcesLimits()" class="error">Error. Exceeded resources limit!</p>
 		</mat-expansion-panel>
 	</mat-accordion>
 </div>
