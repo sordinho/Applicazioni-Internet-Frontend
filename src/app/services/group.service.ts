@@ -29,5 +29,9 @@ export class GroupService {
         return EMPTY;
     }
 
+    getStudentGroup(studentID: string, courseID): Observable<Group> {
+        return of(TEST_GROUP);
+    }
+
 
 }

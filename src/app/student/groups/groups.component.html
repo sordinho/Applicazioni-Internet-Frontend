@@ -1,1 +1,24 @@
-<p>groups works!</p>
+<h3>Group Management</h3>
+<br>
+
+<!-- Group information-->
+<div *ngIf="group!==null">
+	<mat-list style="width: fit-content">
+		<div mat-subheader>Name</div>
+		<mat-list-item>
+			<mat-icon mat-list-icon>class</mat-icon>
+			<div mat-line>{{group.name}}</div>
+		</mat-list-item>
+		<mat-divider></mat-divider>
+		<div mat-subheader>Members</div>
+		<mat-list-item *ngFor="let member of group.members">
+			<mat-icon mat-list-icon>person</mat-icon>
+			<div mat-line>{{member.serial}}</div>
+			<div mat-line> {{member.name}} {{member.firstName}}</div>
+		</mat-list-item>
+	</mat-list>
+</div>
+
+<!-- Group creation/proposal-->
+<div *ngIf="group===null">
+</div>
