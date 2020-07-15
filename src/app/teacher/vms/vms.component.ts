@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Group, } from '../../models/group.model';
+import {Group,} from '../../models/group.model';
 import {GroupService} from '../../services/group.service';
-import {  Vm} from '../../models/vm.model';
+import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
 import {FormControl} from '@angular/forms';
@@ -17,6 +17,11 @@ export class VmsComponent implements OnInit {
     _allGroups: Group[] = [];
     selectedGroup: Group = null;
     vms: Vm[] = [];
+    vmModel = {
+        os: 'WIN',
+        ver: '10',
+        type: 'pro'
+    };
 
     // Form data from resources limits
     cpuLimit = new FormControl();

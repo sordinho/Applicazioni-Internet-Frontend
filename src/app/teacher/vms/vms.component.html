@@ -1,6 +1,19 @@
-<h3>Groups VMs management</h3>
-<br>
+<h4>VM Model management</h4>
+<mat-grid-list cols="3" rowHeight="55px">
+	<mat-grid-tile>
+		<mat-icon>code</mat-icon>&nbsp; OS: {{vmModel.os}}
+	</mat-grid-tile>
+	<mat-grid-tile>
+		<mat-icon>build</mat-icon>&nbsp; Version: {{vmModel.ver}}
+	</mat-grid-tile>
+	<mat-grid-tile>
+		<mat-icon>extension</mat-icon>&nbsp; Type: {{vmModel.type}}
+	</mat-grid-tile>
+</mat-grid-list>
 
+<mat-divider></mat-divider>
+<br>
+<h4>Group VM</h4>
 <mat-form-field>
 	<mat-label>Find group</mat-label>
 	<input type="search" matInput placeholder="Group name or ID"
