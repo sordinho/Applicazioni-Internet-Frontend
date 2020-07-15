@@ -1,5 +1,5 @@
 <h4>VM Model management</h4>
-<mat-grid-list cols="3" rowHeight="55px">
+<mat-grid-list cols="4" rowHeight="55px">
 	<mat-grid-tile>
 		<mat-icon>code</mat-icon>&nbsp; OS: {{vmModel.os}}
 	</mat-grid-tile>
@@ -9,10 +9,16 @@
 	<mat-grid-tile>
 		<mat-icon>extension</mat-icon>&nbsp; Type: {{vmModel.type}}
 	</mat-grid-tile>
+	<mat-grid-tile>
+		<button mat-stroked-button color="warn">
+			<mat-icon>warning</mat-icon>
+			<label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
+			<mat-icon>warning</mat-icon>
+		</button>
+	</mat-grid-tile>
 </mat-grid-list>
 
 <mat-divider></mat-divider>
-<br>
 <h4>Group VM</h4>
 <mat-form-field>
 	<mat-label>Find group</mat-label>
@@ -29,9 +35,7 @@
 
 <div *ngIf="selectedGroup!==null">
 	<br>
-	<br>
 	<mat-divider></mat-divider>
-	<br>
 	<h4>Selected group informations</h4>
 	<mat-accordion class="example-headers-align" multi>
 		<mat-expansion-panel>
