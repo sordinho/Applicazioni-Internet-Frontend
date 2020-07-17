@@ -94,9 +94,9 @@ export class VmsComponent implements OnInit {
 
     checkResourcesLimits(): boolean {
         const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        let actualCpu = this.vms.map(vm => vm.cpu).reduce(reducer);
+        let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
         let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
-        let actualDisk = this.vms.map(vm => vm.disk).reduce(reducer);
+        let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
         let actualMax = this.vms.length;
         let actualActives = this.vms.filter(vm => {
             return vm.status === 'RUNNING';

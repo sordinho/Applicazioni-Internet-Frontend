@@ -36,9 +36,9 @@ export class CreateVmDialogComponent implements OnInit {
             return true;
         }
         const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        let actualCpu = this.vms.map(vm => vm.cpu).reduce(reducer);
+        let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
         let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
-        let actualDisk = this.vms.map(vm => vm.disk).reduce(reducer);
+        let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
 
         return (
             this.group.cpu >= actualCpu + this.newVmCpu.value &&

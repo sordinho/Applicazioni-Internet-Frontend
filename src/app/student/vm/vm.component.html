@@ -46,18 +46,18 @@
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">
 				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.cpu}} </mat-grid-tile>
+					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
 				<mat-grid-tile>
 					<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk}} &nbsp;MB
+					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
 				</mat-grid-tile>
 			</mat-grid-list>
 			<mat-grid-list cols="2" rowHeight="60px">
-				<mat-grid-tile *ngIf="vm.owner.length==1">Owner: {{vm.owner}}</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owner.length>1">Owners:
-					<span *ngFor="let owner of vm.owner">&nbsp;&nbsp;&nbsp;{{owner}}</span>
+				<mat-grid-tile *ngIf="vm.owners.length==1">Owner: {{vm.owners}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="vm.owners.length>1">Owners:
+					<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 				</mat-grid-tile>
 				<mat-grid-tile>
 					<button *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="stopVm(vm)">
