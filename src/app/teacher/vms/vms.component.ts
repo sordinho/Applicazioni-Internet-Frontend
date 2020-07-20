@@ -5,6 +5,7 @@ import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
 import {FormControl} from '@angular/forms';
+import {osTypes} from '../../models/vmModel.model';
 
 @Component({
     selector: 'app-vms',
@@ -16,12 +17,10 @@ export class VmsComponent implements OnInit {
     _filteredGroups: Group[] = [];
     _allGroups: Group[] = [];
     selectedGroup: Group = null;
+    editModel = false;
+    osModelSelected = false;
     vms: Vm[] = [];
-    vmModel = {
-        os: 'WIN',
-        ver: '10',
-        type: 'pro'
-    };
+    osTypes = osTypes;
 
     // Form data from resources limits
     cpuLimit = new FormControl();
@@ -29,6 +28,7 @@ export class VmsComponent implements OnInit {
     diskLimit = new FormControl();
     activesLimit = new FormControl();
     maxLimit = new FormControl();
+    os = new FormControl();
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
@@ -122,5 +122,11 @@ export class VmsComponent implements OnInit {
 
     closeAll() {
         this.accordion.closeAll();
+    }
+
+    saveModel() {
+        this.editModel = false;
+        this.osModelSelected = false;
+        // TODO modify model for all groups
     }
 }

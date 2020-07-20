@@ -1,22 +1,22 @@
 <h4>VM Model management</h4>
-<mat-grid-list cols="4" rowHeight="55px">
-	<mat-grid-tile>
-		<mat-icon>code</mat-icon>&nbsp; OS: {{vmModel.os}}
-	</mat-grid-tile>
-	<mat-grid-tile>
-		<mat-icon>build</mat-icon>&nbsp; Version: {{vmModel.ver}}
-	</mat-grid-tile>
-	<mat-grid-tile>
-		<mat-icon>extension</mat-icon>&nbsp; Type: {{vmModel.type}}
-	</mat-grid-tile>
-	<mat-grid-tile>
-		<button mat-stroked-button color="warn">
-			<mat-icon>warning</mat-icon>
-			<label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
-			<mat-icon>warning</mat-icon>
-		</button>
-	</mat-grid-tile>
-</mat-grid-list>
+<div>
+	<mat-form-field>
+		<mat-label>OS</mat-label>
+		<mat-select [disabled]="!editModel" #osSelector required>
+			<mat-option *ngFor="let osType of osTypes" value="{{osType.value}}"
+						(onSelectionChange)="osModelSelected=true">{{osType.name}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	&nbsp;&nbsp;
+	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="editModel=true">
+		<mat-icon>warning</mat-icon>
+		<label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
+		<mat-icon>warning</mat-icon>
+	</button>
+	<button *ngIf="editModel" mat-stroked-button color="primary" [disabled]="!osModelSelected" (click)="saveModel()">
+		<label>Save</label>
+	</button>
+</div>
 
 <mat-divider></mat-divider>
 <h4>Group VM</h4>
