@@ -2,7 +2,7 @@
 <div>
 	<mat-form-field>
 		<mat-label>OS</mat-label>
-		<mat-select [disabled]="!editModel" #osSelector required>
+		<mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
 			<mat-option *ngFor="let osType of osTypes" value="{{osType.value}}"
 						(onSelectionChange)="osModelSelected=true">{{osType.name}}</mat-option>
 		</mat-select>
@@ -13,7 +13,8 @@
 		<label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
 		<mat-icon>warning</mat-icon>
 	</button>
-	<button *ngIf="editModel" mat-stroked-button color="primary" [disabled]="!osModelSelected" (click)="saveModel()">
+	<button *ngIf="editModel" mat-stroked-button color="primary" [disabled]="!osModelSelected"
+			(click)="saveModel()">
 		<label>Save</label>
 	</button>
 </div>
@@ -109,12 +110,11 @@
 		<mat-expansion-panel *ngFor="let vm of vms">
 			<mat-expansion-panel-header>
 				<mat-panel-title>
-					<p>{{vm.name}}</p>
-					<p>&nbsp;&nbsp;({{vm.id}})</p>
+					<p>({{vm.id}})</p>
 				</mat-panel-title>
 				<mat-panel-description>
-					<p>{{vm.vmModel}}</p>
-					<p>&nbsp;&nbsp;({{vm.status}})</p>
+					<p>{{getOsNameFromValue(vmModel.os)}}</p>
+					<p>({{vm.status}})</p>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">

@@ -26,5 +26,7 @@ export const osTypes = [
         'value': 'MAC_OS',
         'name': 'Mac OS'
     }];
-export const vmModelWin: VmModel = new VmModel(1, 'WINDOWS 10');
-export const vmModelLinux: VmModel = new VmModel(2, 'UBUNTU 20.04');
+export const vmModelWin10: VmModel = new VmModel(1, 'WINDOWS_10');
+export const vmModelWin7: VmModel = new VmModel(2, 'WINDOWS_7');
+export const vmModelLinux: VmModel = new VmModel(3, 'UBUNTU');
+export const vmModelMac: VmModel = new VmModel(4, 'MAC_OS');
