@@ -14,7 +14,9 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class StudentsComponent implements AfterViewInit {
 
-  selectionModel: SelectionModel<Student> = new SelectionModel<Student>(true, [])
+  /* array of selectionModel --> the array index is the page (paginator) and have the selected student of that page */  
+  selectionModels: SelectionModel<Student>[] = new Array()  
+
   dataSource: MatTableDataSource<Student>
 
   addStudentSelection: Student = null;
@@ -62,24 +64,88 @@ export class StudentsComponent implements AfterViewInit {
   }
 
   toggleTableRow(event: MatCheckboxChange, row: Student) {
-    const ret = this.selectionModel.toggle(row);
-    return ret;
+    if(this.selectionModels[this.pageIndex] == null) {
+      console.dir("creating new selectionModel")
+      // there isn't the selectionModel for the current pageIndex!
+      this.selectionModels[this.pageIndex] = new SelectionModel<Student>(true, [])
+    } else {
+      console.dir("selectionModel already exists")
+    }
+    return this.selectionModels[this.pageIndex].toggle(row)
   }
 
   toggleTableMaster(event: MatCheckboxChange) {
-    this.isAllSelected() ? this.selectionModel.clear() : this.dataSource.data.forEach( row => this.selectionModel.select(row) );
+    if(this.selectionModels[this.paginator.pageIndex] != null && 
+        !this.selectionModels[this.paginator.pageIndex].isEmpty()) {
+      // all the student in the current page are selected --> remove current page students selection
+      this.selectionModels[this.paginator.pageIndex].clear() 
+    } else {
+      this.selectAllStudents()
+    }
   }
 
-  isAllSelected() {
-    const nSelected = this.selectionModel.selected.length;
-    const nRows = this.dataSource.data.length;
-    return nSelected == nRows;
+  selectAllStudents() {
+    var start = this.pageIndex * this.pageSize;
+    var end: number; 
+
+    if(this.pageIndex == this.paginator.getNumberOfPages()-1) {
+      //console.dir("Sono in ultima pagina");
+      end = this.paginator.length;
+    } else {
+      //console.dir("Non sono in ultima pagina");
+      end = start+this.pageSize;
+    }
+
+    if(this.selectionModels[this.pageIndex] == null) this.selectionModels[this.pageIndex] = new SelectionModel<Student>(true, [])
+    //console.dir("seleziono gli studenti nella pagina corrente (agli indici): ");
+    for(let i=start; i < end; i++) {
+      //console.dir(i);
+      //console.dir("student: " + this.dataSource.data[i].id);
+      this.selectionModels[this.pageIndex].select(this.dataSource.data[i]);
+    }
+
+    //console.dir("")
+  }
+
+  selectAllStudentsGeneral() {
+
+  }
+
+  areAllStudentsSelected() {
+    // check if all students (in the current page) are selected
+    const nSelected = this.selectionModels[this.pageIndex] != null ? this.selectionModels[this.pageIndex].selected.length : 0  
+    var nStudentsPage: number;
+    
+    if(this.pageIndex == this.paginator.getNumberOfPages()-1) {
+      // last page
+      nStudentsPage = this.paginator.length - (this.paginator.getNumberOfPages()-1)*this.paginator.pageSize
+    } else {
+      nStudentsPage = this.paginator.pageSize
+    }
+    //console.dir("nStudentsPage: " + nStudentsPage);
+    //console.dir("nSelected: " + nSelected)
+    console.dir("areAllStudentsSelected() : " + (nSelected == nStudentsPage))
+
+    return nSelected == nStudentsPage
+  }
+
+  areStudentsSelected() {
+    //console.dir("areStudentsSelected()")
+    for(var i=0; i<this.selectionModels.length; i++) {
+      if(!this.selectionModels[i].isEmpty()) {
+        return true
+      }
+    }
   }
 
   removeSelectedRows() {
+    // remove all the student selected in the current page
     //console.dir("students.ts - studentRemoveEmitter(student: " + this.selectionModel.selected + ")");
-    this.removeStudentsEmitter.emit(this.selectionModel.selected);
-    this.selectionModel = new SelectionModel<Student>(true, []); // reset selectionModel
+    for(var i = 0; i < this.selectionModels.length; i++) { 
+      this.removeStudentsEmitter.emit(this.selectionModels[i].selected);
+      this.selectionModels[i] = new SelectionModel<Student>(true, []); // reset selectionModel*/
+    }
+
   }
 
   displayFn(student: Student) {
@@ -108,43 +174,21 @@ export class StudentsComponent implements AfterViewInit {
   }
  
   pageEvent(event) {
+    /*
     console.dir("pageEvent(event) ");
-  
     console.dir("----------");
-
     console.dir("(before event) index: " + this.pageIndex + " size: " + this.pageSize)
-  
+    */
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+    /*
     console.dir("(after event) index: " + this.pageIndex + " size: " + this.pageSize)
-
     console.dir("----------");
-    
     console.dir("event.length = " + event.length);
     console.dir("paginator.length: " + this.paginator.length);
-
     console.dir("----------");
-    
     console.dir("paginator.getNumberOfPages(): " + this.paginator.getNumberOfPages());
-    
     console.dir("----------");
-
-    var start = this.pageIndex * this.pageSize;
-    var end: number; 
-
-    if(this.pageIndex == this.paginator.getNumberOfPages()-1) {
-      console.dir("Sono in ultima pagina");
-      end = this.paginator.length;
-    } else {
-      console.dir("Non sono in ultima pagina");
-      end = start+this.pageSize;
-    }
-
-    console.dir("deduco che dovessi selezionare tutti gli studenti di questa pagina, selezionerei gli studenti agli indici: ");
-    for(let i=start; i < end; i++) {
-      console.dir(i);
-    }
-
-    console.dir("")
+    */
   }
 }

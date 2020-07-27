@@ -18,7 +18,7 @@
 
     <button mat-raised-button color="primary" 
             (click)="removeSelectedRows()"
-            [disabled]="!selectionModel.hasValue()">Delete Selected</button>
+            [disabled]="!areStudentsSelected()">Delete Selected</button>
     <br><br>
     <table #table mat-table matSort [dataSource]="dataSource">
 
@@ -27,15 +27,15 @@
             <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox 
                     (change)="toggleTableMaster($event)" 
-                    [checked]="selectionModel.hasValue() && isAllSelected()"
-                    [indeterminate]="selectionModel.hasValue() && !isAllSelected()"
+                    [checked]="selectionModels[pageIndex] != null && selectionModels[pageIndex].hasValue() && areAllStudentsSelected()"
+                    [indeterminate]="selectionModels[pageIndex] != null && selectionModels[pageIndex].hasValue() && !areAllStudentsSelected()"
                     [disabled]="dataSource.data.length===0">
                 </mat-checkbox>
             </th>
             <td mat-cell *matCellDef="let row">
                 <mat-checkbox 
                     (change)="toggleTableRow($event, row)"
-                    [checked]="selectionModel.isSelected(row)">
+                    [checked]="selectionModels[pageIndex] != null && selectionModels[pageIndex].isSelected(row)">
                 </mat-checkbox>
             </td>
         </ng-container>
