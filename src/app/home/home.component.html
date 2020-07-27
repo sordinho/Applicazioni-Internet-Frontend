@@ -1,61 +1,64 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button (click)="toggleForMenuClick()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    &nbsp;&nbsp;
-    <a class="home-link" routerLink="/courses">VirtualLabs</a>
-    <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
-    <p class="user-email">{{ email }}</p>
-    <button mat-button (click)="logout()">Logout</button>
-  </mat-toolbar>
+  <button mat-icon-button (click)="toggleForMenuClick()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  &nbsp;&nbsp;
+  <a class="home-link" routerLink="/courses">VirtualLabs</a>
+  <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
+  <p class="user-email">{{ email }}</p>
+  <button mat-button (click)="logout()">Logout</button>
+</mat-toolbar>
   
-  <mat-toolbar *ngIf="courseSelected"> 
-    {{ courseName }}
-  </mat-toolbar>
-  
-  <mat-sidenav-container class="example-container">
-    <mat-sidenav mode="side" opened position="start" #sidenav>
-      <mat-nav-list>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened position="start" #sidenav>
+    <mat-nav-list>
 
-        <mat-list-item class="list-header">
-          <span mat-line class="list-header-text">Courses</span>
-          <button *ngIf="isTeacher" mat-icon-button class="add-course-button">
-              <mat-icon>add</mat-icon>
-          </button>
-        </mat-list-item>
+      <mat-list-item class="list-item" routerLink="/courses/AI" routerLinkActive="active-list-item">
+        <span mat-line>Applicazioni Internet</span>
+        &nbsp;
+        <button *ngIf="isTeacher" mat-icon-button class="edit-button">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-list-item>
 
-        <mat-list-item (click)="courseNavigate('AI')">
-          <span mat-line>Applicazioni Internet</span>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button *ngIf="isTeacher" mat-icon-button class="edit-button">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </mat-list-item>
-        
-        <mat-list-item (click)="courseNavigate('PdS')">
-          <span mat-line>Programmazione di Sistema</span>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button *ngIf="isTeacher" mat-icon-button class="edit-button">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </mat-list-item>          
-  
-      </mat-nav-list>
-    </mat-sidenav>
-  
-    <mat-sidenav-content>
-      <nav mat-tab-nav-bar>
-        <a mat-tab-link
-          [disabled]='!courseSelected'
-          *ngFor="let link of navLinks"
-          [routerLink]="[link.path]"
-          routerLinkActive #rla="routerLinkActive"
-          [active]="rla.isActive">
-          {{link.label}}
-        </a>
-      </nav>
-      <div class="container">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+      <mat-list-item class="list-item" routerLink="/courses/PdS" routerLinkActive="active-list-item">
+        <span mat-line>Programmazione di Sistema</span>
+        &nbsp;
+        <button *ngIf="isTeacher" mat-icon-button class="edit-button">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-list-item>          
+      
+      <mat-list-item *ngIf="isTeacher" class="list-header" routerLink="/courses">
+        <button mat-icon-button class="add-course-button">
+          <mat-icon>add</mat-icon>
+        </button>
+        Create new course 
+      </mat-list-item>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar *ngIf="courseSelected"> 
+      {{ courseName }}
+    </mat-toolbar>
+
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+        [disabled]='!courseSelected'
+        *ngFor="let link of navLinks"
+        [routerLink]="[link.path]"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

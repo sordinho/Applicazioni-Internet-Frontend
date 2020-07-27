@@ -89,20 +89,6 @@ export class HomeComponent implements OnInit, OnDestroy{
     }
   }
 
-  courseNavigate(courseName: string) {
-    switch (courseName) {
-      case 'AI' :
-        this.router.navigate(['courses/AI']);
-        break;
-      case 'PdS':
-        this.router.navigate(['courses/PdS']);
-        break;
-      default:
-        this.courseName = ''
-        break;
-    }
-  }
-
   addCourse() {
     console.dir("TODO - [home.components.ts] addCourse()");
   }

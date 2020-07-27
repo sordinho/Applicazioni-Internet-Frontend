@@ -3,21 +3,25 @@ p.user-email {
     font-size:15px;
 }
 
-.list-header {
-    pointer-events: none;
-    text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.54);
-}
-
 .add-course-button {
     pointer-events: all;
     cursor: pointer;
 }
 
 .edit-button {
+    margin-right: 15px !important;
     visibility:hidden;
 }
 
 .mat-list-item:hover .edit-button{
     visibility:visible;
+}
+
+.list-item {
+    padding-left: 15px !important;
+}
+
+.active-list-item {
+    color: #3F51B5 !important;
+    background-color: #f2f4ff !important;
 }
