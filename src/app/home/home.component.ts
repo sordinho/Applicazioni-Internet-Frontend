@@ -10,12 +10,21 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy{
+
+  courses = [
+    { id: "PdS", name: "Programmazione di Sistema" },
+    { id: "AI", name: "Applicazioni Internet" },
+    { id: "MAD", name: "Mobile Application Development" }
+  ]
+
   title = 'VirtualLabs';
   @ViewChild('sidenav') sidenav: MatSidenav;
   
   paramMapSub: Subscription;
   email = this.authService.getEmail();
-  courseName: string;
+  courseName: string = '';
+
+  courseMenu: string = '';
   
   courseSelected = false;
   isTeacher = false;
@@ -74,23 +83,32 @@ export class HomeComponent implements OnInit, OnDestroy{
     return this.authService.getEmail();
   }
 
-  setCourse(courseName: string) {
+  setCourse(courseId: string) {
     this.courseSelected = true;
-    switch (courseName) {
-      case 'AI' :
-        this.courseName = 'Applicazioni Internet'
-        break;
-      case 'PdS':
-        this.courseName = 'Programmazione Di Sistema'
-        break;
-      default:
-        this.courseName = ''
-        break;
-    }
+    let name: string
+    this.courses.forEach(function (course) {
+      if(course.id === courseId) {
+        name = course.name
+      }
+    })
+    this.courseName = name
+  }
+
+  openMenu(event, courseId :string, ) {
+    event.stopPropagation()
+    this.courseMenu = courseId
   }
 
   addCourse() {
     console.dir("TODO - [home.components.ts] addCourse()");
+  }
+  
+  editCourse() {
+    console.dir("TODO - [home.components.ts] editCourse() - " + this.courseMenu);
+  }
+
+  deleteCourse() {
+    console.dir("TODO - [home.components.ts] deleteCourse() - " + this.courseMenu);
   }
 
 }

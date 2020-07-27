@@ -18,7 +18,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 import { StudentsComponent } from './teacher/students/students.component';
 import { StudentsContComponent } from './teacher/students/students-cont.component';
@@ -37,6 +39,8 @@ import { GroupsComponent } from './student/groups/groups.component';
 import { DeliveriesComponent } from './student/deliveries/deliveries.component';
 import { AssigmentsComponent } from './teacher/assigments/assigments.component';
 import { RegisterComponent } from './auth/register/register.component';
+
+
 
 @NgModule({
   declarations: [
@@ -73,7 +77,8 @@ import { RegisterComponent } from './auth/register/register.component';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

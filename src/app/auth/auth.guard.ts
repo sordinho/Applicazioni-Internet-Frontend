@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
                 return true;
             }
 
-            if (courseId === 'PdS' || courseId === 'AI') {
+            if (courseId === 'PdS' || courseId === 'AI' || courseId === 'MAD') {
                 return true;
             } else {
                 this.router.navigate(['/courses']);

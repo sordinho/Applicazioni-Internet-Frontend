@@ -8,13 +8,12 @@ p.user-email {
     cursor: pointer;
 }
 
-.edit-button {
-    margin-right: 15px !important;
-    visibility:hidden;
+.menu-button {
+    margin-right: 5px !important;
 }
 
-.mat-list-item:hover .edit-button{
-    visibility:visible;
+.mat-list-item:not(:hover) .menu-button {
+    visibility: hidden;
 }
 
 .list-item {

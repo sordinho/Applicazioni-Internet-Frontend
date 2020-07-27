@@ -9,26 +9,33 @@
   <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>
   
+<mat-toolbar *ngIf="courseSelected"> 
+  {{ courseName }}
+</mat-toolbar>
+
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav mode="side" opened position="start" #sidenav>
     <mat-nav-list>
 
-      <mat-list-item class="list-item" routerLink="/courses/AI" routerLinkActive="active-list-item">
-        <span mat-line>Applicazioni Internet</span>
+      <mat-list-item class="list-item" *ngFor="let course of courses" [routerLink]="['/courses/' + course.id]" routerLinkActive="active-list-item">
+        <span mat-line>{{ course.name }}</span>
         &nbsp;
-        <button *ngIf="isTeacher" mat-icon-button class="edit-button">
-          <mat-icon>edit</mat-icon>
+        <button mat-icon-button *ngIf="isTeacher" class="menu-button" [matMenuTriggerFor]="menu" (click)="openMenu($event, course.id)">
+          <mat-icon>more_vert</mat-icon>
         </button>
       </mat-list-item>
 
-      <mat-list-item class="list-item" routerLink="/courses/PdS" routerLinkActive="active-list-item">
-        <span mat-line>Programmazione di Sistema</span>
-        &nbsp;
-        <button *ngIf="isTeacher" mat-icon-button class="edit-button">
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editCourse()">
           <mat-icon>edit</mat-icon>
+          <span>Edit</span>
         </button>
-      </mat-list-item>          
-      
+        <button mat-menu-item (click)="deleteCourse()">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    
       <mat-list-item *ngIf="isTeacher" class="list-header" routerLink="/courses">
         <button mat-icon-button class="add-course-button">
           <mat-icon>add</mat-icon>
@@ -40,10 +47,6 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar *ngIf="courseSelected"> 
-      {{ courseName }}
-    </mat-toolbar>
-
     <nav mat-tab-nav-bar>
       <a mat-tab-link
         [disabled]='!courseSelected'
