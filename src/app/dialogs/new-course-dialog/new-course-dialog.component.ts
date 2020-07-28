@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-new-course-dialog',
@@ -9,9 +9,15 @@ import { FormControl } from '@angular/forms';
 })
 export class NewCourseDialogComponent implements OnInit {
 
-  id = new FormControl();
-  name = new FormControl();
-
+  id = new FormControl('', {
+    updateOn: 'blur',
+    validators: [Validators.required]
+  });
+  name = new FormControl('', {
+    updateOn: 'blur',
+    validators: [Validators.required]
+  });
+  
   error = false;
 
   constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>) { }
@@ -25,8 +31,27 @@ export class NewCourseDialogComponent implements OnInit {
 
   addCourse() {
     console.dir("NewCourseDialogComponent - addCourse() - TODO")
-    // TODO - contact service then return the new course
-    this.dialogRef.close({ id: this.id.value, name: this.name.value })
+    if(!this.id.invalid && !this.name.invalid) { 
+      // TODO - contact service then return the new course
+      this.dialogRef.close({ id: this.id.value, name: this.name.value })
+    } 
+
+  }
+
+  getIdErrorMessage() {
+    if (this.id.hasError('required')) {
+      return 'Id is required';
+    } else {
+      return '';
+    }
+  }
+
+  getNameErrorMessage() {
+    if (this.id.hasError('required')) {
+      return 'Name is required';
+    } else {
+      return '';
+    }
   }
 
 }
