@@ -31,15 +31,17 @@ import { PageNotFoundComponent } from './page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule } from '@angular/common/http';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {AuthInterceptor} from './services/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './services/auth.interceptor';
 import { LoginComponent } from './auth/login/login.component';
 import { VmComponent } from './student/vm/vm.component';
 import { GroupsComponent } from './student/groups/groups.component';
 import { DeliveriesComponent } from './student/deliveries/deliveries.component';
 import { AssigmentsComponent } from './teacher/assigments/assigments.component';
 import { RegisterComponent } from './auth/register/register.component';
-
+import { NewCourseDialogComponent } from './dialogs/new-course-dialog/new-course-dialog.component';
+import { EditCourseDialogComponent } from './dialogs/edit-course-dialog/edit-course-dialog.component';
+import { DeleteCourseDialogComponent } from './dialogs/delete-course-dialog/delete-course-dialog.component';
 
 
 @NgModule({
@@ -55,7 +57,10 @@ import { RegisterComponent } from './auth/register/register.component';
     HomeComponent,
     PageNotFoundComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    NewCourseDialogComponent,
+    EditCourseDialogComponent,
+    DeleteCourseDialogComponent
   ],
   imports: [
     BrowserModule,

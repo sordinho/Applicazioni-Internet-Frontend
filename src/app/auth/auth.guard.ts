@@ -23,7 +23,8 @@ export class AuthGuard implements CanActivate {
                 return true;
             }
 
-            if (courseId === 'PdS' || courseId === 'AI' || courseId === 'MAD') {
+            // TODO tmp solution --> always true -> check if the course in the link exists in the db
+            if (courseId === 'PdS' || courseId === 'AI' || courseId === 'MAD' || true) {
                 return true;
             } else {
                 this.router.navigate(['/courses']);

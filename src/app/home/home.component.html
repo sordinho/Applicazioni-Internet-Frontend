@@ -36,7 +36,7 @@
         </button>
       </mat-menu>
     
-      <mat-list-item *ngIf="isTeacher" class="list-header" routerLink="/courses">
+      <mat-list-item *ngIf="isTeacher" class="list-header" (click)="addCourse()">
         <button mat-icon-button class="add-course-button">
           <mat-icon>add</mat-icon>
         </button>
