@@ -1,8 +1,7 @@
-<h3>Group Management</h3>
-<br>
-
 <!-- Group information-->
 <div *ngIf="group!==null">
+	<h3>Your group</h3>
+	<br>
 	<mat-list style="width: fit-content">
 		<div mat-subheader>Name</div>
 		<mat-list-item>
@@ -21,4 +20,97 @@
 
 <!-- Group creation/proposal-->
 <div *ngIf="group===null">
+	<div>
+		<h3>Propose Group</h3>
+		<br>
+		<div>
+			<mat-form-field style="width: 50%">
+				<mat-label>Group Name</mat-label>
+				<input [formControl]="proposedGroupName" matInput type="text" required>
+			</mat-form-field>
+			&nbsp;&nbsp;
+			<mat-form-field style="width: 20%">
+				<mat-label>Expiry Date</mat-label>
+				<input [formControl]="expiryProposal" matInput type="date" required>
+			</mat-form-field>
+			&nbsp;&nbsp;
+			<button mat-stroked-button color="primary" (click)="proposeGroup()"
+					[disabled]="disableProposalForm()">
+				Propose
+			</button>
+		</div>
+		<table #table mat-table matSort [dataSource]="dataSource">
+			<!-- Checkbox Column -->
+			<ng-container matColumnDef="select">
+				<th mat-header-cell *matHeaderCellDef>
+					Select
+				</th>
+				<td mat-cell *matCellDef="let row">
+					<mat-checkbox
+							(change)="toggleTableRow($event, row)"
+							[checked]="selectionModel.isSelected(row)">
+					</mat-checkbox>
+				</td>
+			</ng-container>
+
+			<!-- Id Column -->
+			<ng-container matColumnDef="serial">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Student ID</th>
+				<td mat-cell *matCellDef="let row"> {{row.serial}} </td>
+			</ng-container>
+
+			<!-- Name Column -->
+			<ng-container matColumnDef="name">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+				<td mat-cell *matCellDef="let row"> {{row.name}} </td>
+			</ng-container>
+
+			<!-- firstName Column -->
+			<ng-container matColumnDef="firstName">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
+				<td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="colsToDisplay"></tr>
+			<tr mat-row *matRowDef="let row; columns: colsToDisplay"></tr>
+		</table>
+		<mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+	</div>
+	<br>
+	<mat-divider></mat-divider>
+	<h4>Group Proposals</h4>
+
+	<mat-accordion #proposalsAccordion="matAccordion" class="example-headers-align" multi>
+		<mat-expansion-panel *ngFor="let vm of proposals">
+			<mat-expansion-panel-header>
+				<mat-panel-title>
+<!--					nome del gruppo-->
+				</mat-panel-title>
+				<mat-panel-description>
+<!--					data di scadenza della proposta-->
+				</mat-panel-description>
+			</mat-expansion-panel-header>
+			<mat-grid-list cols="3" rowHeight="55px">
+				<mat-grid-tile>
+					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.cpu}} </mat-grid-tile>
+				<mat-grid-tile>
+					<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk}} &nbsp;MB
+				</mat-grid-tile>
+				<mat-grid-tile *ngIf="vm.owner.length==1" [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="vm.owner.length>1" [colspan]="2">Owners:
+					<span *ngFor="let owner of vm.owner">&nbsp;&nbsp;&nbsp;{{owner}}</span>
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<a mat-stroked-button color="primary" (click)="connectToVm(vm)">
+						<mat-icon>link</mat-icon>
+						<label> Connect</label>
+					</a>
+				</mat-grid-tile>
+			</mat-grid-list>
+		</mat-expansion-panel>
+	</mat-accordion>
+
 </div>
