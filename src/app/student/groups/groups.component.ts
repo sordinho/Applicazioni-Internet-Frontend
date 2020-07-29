@@ -1,15 +1,15 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GroupService} from '../../services/group.service';
-import {Group} from '../../models/group.model';
+import {Group, TEST_GROUP} from '../../models/group.model';
 import {SelectionModel} from '@angular/cdk/collections';
 import {Student} from '../../models/student.model';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatSort} from '@angular/material/sort';
-import {MatAutocomplete} from '@angular/material/autocomplete';
 import {MatPaginator} from '@angular/material/paginator';
 import {FormControl} from '@angular/forms';
 import * as moment from 'moment';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
     selector: 'app-groups',
@@ -24,9 +24,11 @@ export class GroupsComponent implements OnInit {
     colsToDisplay = ['select'].concat('serial', 'name', 'firstName');
     proposedGroupName = new FormControl();
     expiryProposal = new FormControl();
+    proposals = [TEST_GROUP,TEST_GROUP];
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupService: GroupService) {
     }
@@ -37,11 +39,18 @@ export class GroupsComponent implements OnInit {
 
     }
 
+    openAll() {
+        this.accordion.openAll();
+    }
+
+    closeAll() {
+        this.accordion.closeAll();
+    }
 
     initStudentGroup() {
         this.groupService.getStudentGroup('1234', '1')
             .subscribe((data) => {
-                this.group = null; //data;
+                this.group = data; //data;
             });
     }
 
@@ -65,7 +74,7 @@ export class GroupsComponent implements OnInit {
     disableProposalForm() {
         // Return true if proposal button need to be disabled
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0 || this.expiryProposal === null
-            || this.expiryProposal.value === '' || !moment(this.expiryProposal.value, 'YYYY-MM-DD',true).isValid()
+            || this.expiryProposal.value === '' || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid();
     }
 
 }

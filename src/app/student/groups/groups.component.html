@@ -79,35 +79,28 @@
 	<br>
 	<mat-divider></mat-divider>
 	<h4>Group Proposals</h4>
-
-	<mat-accordion #proposalsAccordion="matAccordion" class="example-headers-align" multi>
-		<mat-expansion-panel *ngFor="let vm of proposals">
+	<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
+		<button mat-button (click)="openAll()">Expand All</button>
+		<button mat-button (click)="closeAll()">Collapse All</button>
+	</div>
+	<mat-accordion class="example-headers-align" multi>
+		<!--		TODO inserire multipli-->
+		<mat-expansion-panel>
 			<mat-expansion-panel-header>
 				<mat-panel-title>
-<!--					nome del gruppo-->
+					Group1-Name
 				</mat-panel-title>
 				<mat-panel-description>
-<!--					data di scadenza della proposta-->
+					31/07/2020
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.cpu}} </mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
+				<mat-grid-tile colspan="2">
+					proposed members
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk}} &nbsp;MB
-				</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owner.length==1" [colspan]="2">Owner: {{vm.owner}}</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owner.length>1" [colspan]="2">Owners:
-					<span *ngFor="let owner of vm.owner">&nbsp;&nbsp;&nbsp;{{owner}}</span>
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<a mat-stroked-button color="primary" (click)="connectToVm(vm)">
-						<mat-icon>link</mat-icon>
-						<label> Connect</label>
-					</a>
+					<button mat-stroked-button style="margin-left: 5px" color="primary">Accept</button>
+					<button mat-stroked-button style="margin-left: 5px" color="warn">Reject</button>
 				</mat-grid-tile>
 			</mat-grid-list>
 		</mat-expansion-panel>
