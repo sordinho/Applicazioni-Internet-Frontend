@@ -5,3 +5,23 @@ table {
 .mat-form-field {
     width: 50%;
 }
+
+.toggle-message {
+    width: 100%;
+    text-align: center;
+    background-color: #F4F4F4;
+    border-radius: 5px;
+}
+
+.message {
+    padding: 15px;
+}
+
+.message-button {
+    cursor:pointer;
+    color:#3F51B5;
+}
+
+strong {
+    font-weight: 500;
+}

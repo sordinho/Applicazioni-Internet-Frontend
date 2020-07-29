@@ -2,7 +2,7 @@ import { Component, Input, ViewChild, AfterViewInit, EventEmitter, Output } from
 import { MatTableDataSource } from '@angular/material/table';
 import { Student } from '../../models/student.model';
 import { MatSort } from '@angular/material/sort';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatPaginator } from '@angular/material/paginator';
@@ -23,10 +23,11 @@ export class StudentsComponent implements AfterViewInit {
 
   colsToDisplay = ['select'].concat('serial', 'name', 'firstName', 'group');
 
-  // @ViewChilds
+  // ViewChilds
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('auto') auto: MatAutocomplete;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox;
 
   _students: Student[];
   _filteredStudents: Student[];
@@ -65,11 +66,11 @@ export class StudentsComponent implements AfterViewInit {
 
   toggleTableRow(event: MatCheckboxChange, row: Student) {
     if(this.selectionModels[this.pageIndex] == null) {
-      console.dir("creating new selectionModel")
+      // console.dir("creating new selectionModel")
       // there isn't the selectionModel for the current pageIndex!
       this.selectionModels[this.pageIndex] = new SelectionModel<Student>(true, [])
     } else {
-      console.dir("selectionModel already exists")
+      //console.dir("selectionModel already exists")
     }
     return this.selectionModels[this.pageIndex].toggle(row)
   }
@@ -79,12 +80,13 @@ export class StudentsComponent implements AfterViewInit {
         !this.selectionModels[this.paginator.pageIndex].isEmpty()) {
       // all the student in the current page are selected --> remove current page students selection
       this.selectionModels[this.paginator.pageIndex].clear() 
+      if(this.masterCheckbox.checked) this.masterCheckbox.checked = false
     } else {
-      this.selectAllStudents()
+      this.selectAllPageStudents()
     }
   }
 
-  selectAllStudents() {
+  selectAllPageStudents() {
     var start = this.pageIndex * this.pageSize;
     var end: number; 
 
@@ -103,15 +105,46 @@ export class StudentsComponent implements AfterViewInit {
       //console.dir("student: " + this.dataSource.data[i].id);
       this.selectionModels[this.pageIndex].select(this.dataSource.data[i]);
     }
-
-    //console.dir("")
   }
 
-  selectAllStudentsGeneral() {
+  selectAllStudents() {
+    let i: number
+    let j: number
+    let studentIndex: number = 0
+    var nStudentsPage: number;
 
+
+    for(i=0; i<this.paginator.getNumberOfPages(); i++) {
+      if(this.selectionModels[i] == null) {
+        //console.dir("creating new selectionModel")
+        // there isn't the selectionModel for the current pageIndex!
+        this.selectionModels[i] = new SelectionModel<Student>(true, [])
+      }
+    
+      // compute number of students for each page
+      if(i == this.paginator.getNumberOfPages()-1) {
+        // last page
+        nStudentsPage = this.paginator.length - (this.paginator.getNumberOfPages()-1)*this.paginator.pageSize
+      } else {
+        nStudentsPage = this.paginator.pageSize
+      }
+      
+      for(j=0; j<nStudentsPage; j++) {  
+        if(!this.selectionModels[i].isSelected(this._enrolledStudents[studentIndex])) {
+          //console.dir("selecting stud #" + studentIndex + " firstName: " + this._enrolledStudents[studentIndex].firstName)
+          this.selectionModels[i].toggle(this._enrolledStudents[studentIndex])
+        }
+        studentIndex++;
+      }
+    }
+    //console.dir("all studs sel: " + this.areAllStudentsSelected());
   }
 
-  areAllStudentsSelected() {
+  clearAllSelections() {
+    this.selectionModels = []
+  }
+
+  areAllPageStudentsSelected() {
     // check if all students (in the current page) are selected
     const nSelected = this.selectionModels[this.pageIndex] != null ? this.selectionModels[this.pageIndex].selected.length : 0  
     var nStudentsPage: number;
@@ -124,15 +157,28 @@ export class StudentsComponent implements AfterViewInit {
     }
     //console.dir("nStudentsPage: " + nStudentsPage);
     //console.dir("nSelected: " + nSelected)
-    console.dir("areAllStudentsSelected() : " + (nSelected == nStudentsPage))
+    // console.dir("areAllPageStudentsSelected() : " + (nSelected == nStudentsPage))
 
     return nSelected == nStudentsPage
+  }
+
+  areAllStudentsSelected() {
+    // check if all students are selected
+    let i: number
+    var nSelectedStudents: number = 0
+    for(i=0; i<this.paginator.getNumberOfPages(); i++) {
+      if(this.selectionModels[i] != null && this.selectionModels[i].hasValue()) {
+        nSelectedStudents += this.selectionModels[i].selected.length
+      }
+    }
+
+    return nSelectedStudents == this._enrolledStudents.length
   }
 
   areStudentsSelected() {
     //console.dir("areStudentsSelected()")
     for(var i=0; i<this.selectionModels.length; i++) {
-      if(!this.selectionModels[i].isEmpty()) {
+      if(this.selectionModels[i] != null && !this.selectionModels[i].isEmpty()) {
         return true
       }
     }

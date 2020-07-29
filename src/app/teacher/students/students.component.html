@@ -20,15 +20,24 @@
             (click)="removeSelectedRows()"
             [disabled]="!areStudentsSelected()">Delete Selected</button>
     <br><br>
+    <div *ngIf="areAllPageStudentsSelected() && !areAllStudentsSelected()" class="toggle-message"> 
+        <p class="message">All <strong>{{ selectionModels[paginator.pageIndex].selected.length }}</strong> students on this page are selected. 
+            <span class="message-button" (click)="selectAllStudents()">Select all {{ _enrolledStudents.length }} students</span>
+        </p>
+    </div>
+    <div *ngIf="areAllStudentsSelected()" class="toggle-message"> 
+        <p class="message">All <strong>{{ _enrolledStudents.length }}</strong> students are selected. 
+            <span class="message-button" (click)="clearAllSelections()">Clear selection</span>
+        </p>
+    </div>
     <table #table mat-table matSort [dataSource]="dataSource">
-
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
-                <mat-checkbox 
+                <mat-checkbox #masterCheckbox
                     (change)="toggleTableMaster($event)" 
-                    [checked]="selectionModels[pageIndex] != null && selectionModels[pageIndex].hasValue() && areAllStudentsSelected()"
-                    [indeterminate]="selectionModels[pageIndex] != null && selectionModels[pageIndex].hasValue() && !areAllStudentsSelected()"
+                    [checked]="selectionModels[pageIndex] != null && selectionModels[pageIndex].hasValue() && areAllPageStudentsSelected()"
+                    [indeterminate]="selectionModels[pageIndex] != null && selectionModels[pageIndex].hasValue() && !areAllPageStudentsSelected()"
                     [disabled]="dataSource.data.length===0">
                 </mat-checkbox>
             </th>
