@@ -1,1 +1,48 @@
-<p>assigments works!</p>
+<mat-form-field appearance="legacy">
+    <mat-select [(value)]="selectedAssignment" (selectionChange)="onSelectChange()">
+        <mat-option *ngFor="let assignment of assignments" [value]="assignment.id">
+          {{ assignment.id }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<button class="filter-button" mat-stroked-button (click)="filter()">
+    <mat-icon>filter_list</mat-icon>
+    <span class="button-text">Status</span>
+</button>
+
+<table #table mat-table [dataSource]="dataSource">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let row"> {{ row.student.name }} </td>
+    </ng-container>
+
+    <!-- firstName Column -->
+    <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef> Fist Name </th>
+        <td mat-cell *matCellDef="let row"> {{ row.student.firstName }} </td>
+    </ng-container>
+
+    <!-- studentId (serial) Column -->
+    <ng-container matColumnDef="serial">
+        <th mat-header-cell *matHeaderCellDef> Student ID </th>
+        <td mat-cell *matCellDef="let row"> {{ row.student.serial }} </td>
+    </ng-container>
+
+    <!-- status Column -->
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let row"> {{ row.status }} </td>
+    </ng-container>
+
+    <!-- statusDate Column -->
+    <ng-container matColumnDef="statusDate">
+        <th mat-header-cell *matHeaderCellDef> Status Date </th>
+        <td mat-cell *matCellDef="let row"> {{ row.statusDate  }} </td>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="colsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: colsToDisplay"></tr>
+    
+</table>
