@@ -42,6 +42,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatBadgeModule} from '@angular/material/badge';
 import { ShareDialogComponent } from './student/vm/share-dialog.component';
 import { CreateVmDialogComponent } from './student/vm/create-vm-dialog.component';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { CreateVmDialogComponent } from './student/vm/create-vm-dialog.component
         MatCardModule,
         MatGridListModule,
         MatExpansionModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatSelectModule
     ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

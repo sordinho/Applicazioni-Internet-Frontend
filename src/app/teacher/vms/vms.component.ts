@@ -5,6 +5,8 @@ import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
 import {FormControl} from '@angular/forms';
+import {osTypes, VmModel, vmModelLinux, vmModelMac, vmModelWin10, vmModelWin7} from '../../models/vmModel.model';
+import {MatOption} from '@angular/material/core';
 
 @Component({
     selector: 'app-vms',
@@ -16,12 +18,12 @@ export class VmsComponent implements OnInit {
     _filteredGroups: Group[] = [];
     _allGroups: Group[] = [];
     selectedGroup: Group = null;
+    editModel = false;
+    osModelSelected = false;
     vms: Vm[] = [];
-    vmModel = {
-        os: 'WIN',
-        ver: '10',
-        type: 'pro'
-    };
+    osTypes = osTypes;
+    vmModel: VmModel = vmModelWin10;
+
 
     // Form data from resources limits
     cpuLimit = new FormControl();
@@ -29,6 +31,7 @@ export class VmsComponent implements OnInit {
     diskLimit = new FormControl();
     activesLimit = new FormControl();
     maxLimit = new FormControl();
+    osTypeSelect = new FormControl();
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
@@ -37,6 +40,7 @@ export class VmsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getAllGroups();
+        this.osTypeSelect.setValue(this.vmModel.os);
     }
 
     displayFn(group: Group) {
@@ -94,9 +98,9 @@ export class VmsComponent implements OnInit {
 
     checkResourcesLimits(): boolean {
         const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        let actualCpu = this.vms.map(vm => vm.cpu).reduce(reducer);
+        let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
         let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
-        let actualDisk = this.vms.map(vm => vm.disk).reduce(reducer);
+        let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
         let actualMax = this.vms.length;
         let actualActives = this.vms.filter(vm => {
             return vm.status === 'RUNNING';
@@ -123,4 +127,47 @@ export class VmsComponent implements OnInit {
     closeAll() {
         this.accordion.closeAll();
     }
+
+    saveModel() {
+        this.editModel = false;
+        this.osModelSelected = false;
+        console.log(this.osTypeSelect);
+        console.log(osTypes[0]['name']);
+        switch (this.osTypeSelect.value) {
+            case osTypes[0]['value']:
+                this.vmModel = vmModelWin10;
+                break;
+            case osTypes[1]['value']:
+                this.vmModel = vmModelWin7;
+                break;
+            case osTypes[2]['value']:
+                this.vmModel = vmModelLinux;
+                break;
+            case osTypes[3]['value']:
+                this.vmModel = vmModelMac;
+                break;
+        }
+        // TODO delete all vms of the course!!!
+    }
+
+    getOsNameFromValue(value: string) {
+        let name = '';
+        switch (value) {
+            case osTypes[0]['value']:
+                name = osTypes[0]['name'];
+                break;
+            case osTypes[1]['value']:
+                name = osTypes[1]['name'];
+                break;
+            case osTypes[2]['value']:
+                name = osTypes[2]['name'];
+                break;
+            case osTypes[3]['value']:
+                name = osTypes[3]['name'];
+                break;
+        }
+        return name;
+    }
+
+
 }
