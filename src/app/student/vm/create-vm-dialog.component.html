@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>Create a new VM</h1>
+<div mat-dialog-content class="full-width">
+	<mat-form-field>
+		<mat-label>CPU</mat-label>
+		<input [formControl]="newVmCpu" matInput type="number" min="1" required>
+	</mat-form-field>
+	<br>
+	<mat-form-field>
+		<mat-label>RAM</mat-label>
+		<input [formControl]="newVmRam" matInput type="number" min="256" required>
+		<span matSuffix>MB</span>
+	</mat-form-field>
+	<br>
+	<mat-form-field>
+		<mat-label>DISK</mat-label>
+		<input [formControl]="newVmDisk" matInput type="number" min="512" required>
+		<span matSuffix>MB</span>
+	</mat-form-field>
+	<br>
+	<button mat-stroked-button color="primary" (click)="saveNewVm()"
+			[disabled]="!checkResourcesLimits()">
+		<mat-icon>add</mat-icon>
+		<label> Save</label>
+	</button>
+	<button style="margin-left: 5px" mat-stroked-button color="warn" (click)="resetNewValues()">
+		<mat-icon>clear</mat-icon>
+		<label> Reset</label>
+	</button>
+	<button style="margin-left: 5px" mat-stroked-button color="warn"
+			(click)="closeDialog()">
+		Close
+	</button>
+	<p *ngIf="!checkResourcesLimits()" class="error">Error. Exceeded resources limit!</p>
+	<br><br>
+
+</div>

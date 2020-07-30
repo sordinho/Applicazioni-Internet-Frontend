@@ -1,14 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 a.home-link {
-    color:#FFFFFF;
+    color: #FFFFFF;
     text-decoration: none;
 }
 
-mat-sidenav-container{ height: 100%; }
+mat-sidenav-container {
+    height: 100%;
+}
 
 .container-small {
     padding: 8px;
@@ -19,7 +27,41 @@ mat-sidenav-container{ height: 100%; }
 }
 
 .fill-remaining-space {
-    /* This fills the remaining space, by using flexbox. 
+    /* This fills the remaining space, by using flexbox.
        Every toolbar row uses a flexbox row layout. */
     flex: 1 1 auto;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.expand-collapse-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+}
+
+.vm-info-data {
+    justify-content: space-between;
+    align-items: center;
+}
+
+p.error {
+    text-align: center;
+    border: 1px solid tomato;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.warning-tooltip {
+    background: #b71c1c;
 }

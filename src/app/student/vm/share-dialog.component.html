@@ -1,0 +1,53 @@
+<h1 mat-dialog-title>Share VM with selected mates</h1>
+<div mat-dialog-content class="full-width">
+	<button mat-stroked-button color="primary"
+			(click)="shareWithSelected()"
+			[disabled]="!selectionModel.hasValue()">Share VM
+	</button>
+	<br><br>
+	<table style="width: 100%" #table mat-table [dataSource]="dataSource">
+		<!-- Checkbox Column -->
+		<ng-container matColumnDef="select">
+			<th mat-header-cell *matHeaderCellDef>
+				<mat-checkbox
+						(change)="toggleTableMaster($event)"
+						[checked]="selectionModel.hasValue() && isAllSelected()"
+						[indeterminate]="selectionModel.hasValue() && !isAllSelected()"
+						[disabled]="dataSource.data.length===0">
+				</mat-checkbox>
+			</th>
+			<td mat-cell *matCellDef="let row">
+				<mat-checkbox
+						(change)="toggleTableRow($event, row)"
+						[checked]="selectionModel.isSelected(row)">
+				</mat-checkbox>
+			</td>
+		</ng-container>
+
+		<!-- Id Column -->
+		<ng-container matColumnDef="serial">
+			<th mat-header-cell *matHeaderCellDef> Student ID</th>
+			<td mat-cell *matCellDef="let row"> {{row.serial}} </td>
+		</ng-container>
+
+		<!-- Name Column -->
+		<ng-container matColumnDef="name">
+			<th mat-header-cell *matHeaderCellDef> Name</th>
+			<td mat-cell *matCellDef="let row"> {{row.name}} </td>
+		</ng-container>
+
+		<!-- firstName Column -->
+		<ng-container matColumnDef="firstName">
+			<th mat-header-cell *matHeaderCellDef> First Name</th>
+			<td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="colsToDisplay"></tr>
+		<tr mat-row *matRowDef="let row; columns: colsToDisplay"></tr>
+	</table>
+	<br><br>
+	<button mat-stroked-button color="warn"
+			(click)="closeDialog()">
+		Close
+	</button>
+</div>
