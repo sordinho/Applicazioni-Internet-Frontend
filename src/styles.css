@@ -1,14 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 a.home-link {
-    color:#FFFFFF;
+    color: #FFFFFF;
     text-decoration: none;
 }
 
-mat-sidenav-container{ height: 100%; }
+mat-sidenav-container {
+    height: 100%;
+}
 
 .container-small {
     padding: 8px;
@@ -42,7 +50,7 @@ mat-sidenav-container{ height: 100%; }
     margin-left: 8px;
 }
 
-.vm-info-data{
+.vm-info-data {
     justify-content: space-between;
     align-items: center;
 }
@@ -52,4 +60,8 @@ p.error {
     border: 1px solid tomato;
     padding: 8px;
     border-radius: 6px;
+}
+
+.warning-tooltip {
+    background: #b71c1c;
 }

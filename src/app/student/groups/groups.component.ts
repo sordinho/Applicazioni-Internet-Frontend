@@ -24,7 +24,7 @@ export class GroupsComponent implements OnInit {
     colsToDisplay = ['select'].concat('serial', 'name', 'firstName');
     proposedGroupName = new FormControl();
     expiryProposal = new FormControl();
-    proposals = [TEST_GROUP,TEST_GROUP];
+    proposals = [TEST_GROUP, TEST_GROUP];
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -50,7 +50,7 @@ export class GroupsComponent implements OnInit {
     initStudentGroup() {
         this.groupService.getStudentGroup('1234', '1')
             .subscribe((data) => {
-                this.group = data; //data;
+                this.group = null; //data;
             });
     }
 

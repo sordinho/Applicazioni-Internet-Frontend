@@ -8,7 +8,9 @@
 		</mat-select>
 	</mat-form-field>
 	&nbsp;&nbsp;
-	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="editModel=true">
+	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="editModel=true"
+			matTooltip="By changing the model, ALL the VMs based on the previous one will be deleted!!!"
+			matTooltipClass="warning-tooltip">
 		<mat-icon>warning</mat-icon>
 		<label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
 		<mat-icon>warning</mat-icon>
@@ -131,7 +133,7 @@
 					<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<a mat-stroked-button color="primary" (click)="connectToVm(vm)">
+					<a *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
 						<mat-icon>link</mat-icon>
 						<label> Connect</label>
 					</a>
