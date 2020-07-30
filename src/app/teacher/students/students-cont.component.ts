@@ -41,7 +41,7 @@ export class StudentsContComponent implements OnInit {
   enrollStudents(students: Student[]) {
     this.studentService.enroll(students, courseId)
                           .subscribe( _ => {
-                            console.dir("enrollStudents(" + students + ")");
+                            //console.dir("enrollStudents(" + students + ")");
                             this.getEnrolledStudents();
                             this.getAllStudents();
                           });
@@ -50,7 +50,7 @@ export class StudentsContComponent implements OnInit {
   unenrollStudents(students: Student[]) {
     this.studentService.unenroll(students)
                           .subscribe( _ => {
-                            console.dir("unenrollStudents(" + students +")");
+                            //console.dir("unenrollStudents(" + students +")");
                             this.getEnrolledStudents();
                             this.getAllStudents();
                           });

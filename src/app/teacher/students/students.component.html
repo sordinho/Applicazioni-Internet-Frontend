@@ -18,23 +18,32 @@
 
     <button mat-raised-button color="primary" 
             (click)="removeSelectedRows()"
-            [disabled]="!selectionModel.hasValue()">Delete Selected</button>
+            [disabled]="!areStudentsSelected()">Delete Selected</button>
     <br><br>
-    <table #table mat-table matSort [dataSource]="dataSource">
-
+    <div *ngIf="areAllCurrentPageStudentsSelected() && !areAllStudentsSelected()" class="toggle-message"> 
+        <p class="message">All <strong>{{ getCurrentPageSelectedStudentsNumber() }}</strong> students on this page are selected. 
+            <span class="message-button" (click)="selectAllStudents()">Select all {{ dataSource.data.length }} students</span>
+        </p>
+    </div>
+    <div *ngIf="areAllStudentsSelected()" class="toggle-message"> 
+        <p class="message">All <strong>{{ dataSource.data.length }}</strong> students are selected. 
+            <span class="message-button" (click)="clearAllSelections()">Clear selection</span>
+        </p>
+    </div>
+    <table #table mat-table matSort [dataSource]="dataSource" (matSortChange)="onSortChanged()">
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
-                <mat-checkbox 
-                    (change)="toggleTableMaster($event)" 
-                    [checked]="selectionModel.hasValue() && isAllSelected()"
-                    [indeterminate]="selectionModel.hasValue() && !isAllSelected()"
+                <mat-checkbox #masterCheckbox
+                    (change)="toggleTableMaster()" 
+                    [checked]="areAllCurrentPageStudentsSelected()"
+                    [indeterminate]="getCurrentPageSelectedStudentsNumber() !== 0 && !areAllCurrentPageStudentsSelected()"
                     [disabled]="dataSource.data.length===0">
                 </mat-checkbox>
             </th>
             <td mat-cell *matCellDef="let row">
                 <mat-checkbox 
-                    (change)="toggleTableRow($event, row)"
+                    (change)="toggleTableRow(row)"
                     [checked]="selectionModel.isSelected(row)">
                 </mat-checkbox>
             </td>
@@ -68,6 +77,5 @@
         <tr mat-row *matRowDef="let row; columns: colsToDisplay"></tr>
         
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" 
-                (page)="pageEvent($event)"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" (page)="onPageChanged()"></mat-paginator>
 </div>

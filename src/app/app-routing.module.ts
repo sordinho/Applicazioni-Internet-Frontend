@@ -34,6 +34,7 @@ const routes: Routes = [
                 path: 'assignments',
                 component: AssigmentsComponent
             },
+            
             /* student */
             { // group
                 path: 'groups',

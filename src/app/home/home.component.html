@@ -1,52 +1,67 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button (click)="toggleForMenuClick()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    &nbsp;&nbsp;
-    <a class="home-link" routerLink="/courses">VirtualLabs</a>
-    <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
-    <p class="user-email">{{ email }}</p>
-    <button mat-button (click)="logout()">Logout</button>
-  </mat-toolbar>
+  <button mat-icon-button (click)="toggleForMenuClick()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  &nbsp;&nbsp;
+  <a class="home-link" routerLink="/courses">VirtualLabs</a>
+  <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
+  <p class="user-email">{{ email }}</p>
+  <button mat-button (click)="logout()">Logout</button>
+</mat-toolbar>
   
-  <mat-toolbar *ngIf="courseSelected"> 
-    {{ courseName }}
-  </mat-toolbar>
-  
-  <mat-sidenav-container class="example-container">
+<mat-toolbar *ngIf="courseSelected"> 
+  {{ courseName }}
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened position="start" #sidenav>
+    <mat-nav-list>
+
+      <mat-list-item class="list-item" *ngFor="let course of courses" [routerLink]="['/courses/' + course.id]" routerLinkActive="active-list-item">
+        <span mat-line>{{ course.name }}</span>
+        &nbsp;
+        <button mat-icon-button *ngIf="isTeacher" class="menu-button" [matMenuTriggerFor]="menu" (click)="openMenu($event, course.id)">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-list-item>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editCourse()">
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item (click)="deleteCourse()">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
     
-    <mat-sidenav mode="side" opened position="start" #sidenav>
-      <div class="container-small">
-        <mat-nav-list>
-          <p class="nav-list-header">Courses
-            <button class="nav-list-icon" mat-icon-button (click)="addCourse()">
-              <mat-icon>add</mat-icon>
-            </button>
-          </p>
-          
-          <mat-list-item (click)="courseNavigate('AI')">
-            Applicazioni internet
-          </mat-list-item>
-          <mat-list-item (click)="courseNavigate('PdS')">
-            Programmazione di sistema
-          </mat-list-item>
-        </mat-nav-list>
-      </div>
-    </mat-sidenav>
-  
-    <mat-sidenav-content>
-      <nav mat-tab-nav-bar>
-        <a mat-tab-link
-          [disabled]='!courseSelected'
-          *ngFor="let link of navLinks"
-          [routerLink]="[link.path]"
-          routerLinkActive #rla="routerLinkActive"
-          [active]="rla.isActive">
-          {{link.label}}
-        </a>
-      </nav>
-      <div class="container">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+      <mat-list-item *ngIf="isTeacher" class="list-header" (click)="addCourse()">
+        <button mat-icon-button class="add-course-button">
+          <mat-icon>add</mat-icon>
+        </button>
+        Create new course 
+      </mat-list-item>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+        [disabled]='!courseSelected'
+        *ngFor="let link of navLinks"
+        [routerLink]="[link.path]"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

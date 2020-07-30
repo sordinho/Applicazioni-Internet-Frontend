@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Delete course</h1>
+
+<p>Delete the course "<span class="bold">{{ course.name }}</span>"?</p>
+
+<br>
+
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="deleteCourse()">Delete</button>
+</mat-dialog-actions>
