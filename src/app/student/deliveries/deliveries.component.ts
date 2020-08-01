@@ -20,7 +20,7 @@ import {Student} from '../../models/student.model';
 })
 export class DeliveriesComponent implements OnInit {
 
-    columnsToDisplay = ['id'].concat('releaseDate', 'expireDate');
+    columnsToDisplay = ['id'].concat('releaseDate', 'expireDate', 'download');
     dataSource: MatTableDataSource<Assignment>;
     expandedElement: Assignment | null;
 
@@ -51,4 +51,16 @@ export class DeliveriesComponent implements OnInit {
         this.dataSource = new MatTableDataSource<Assignment>(this.assignments);
     }
 
+    downloadAssignment(event: any, assignment: any) {
+        event.stopPropagation();
+        console.log('Download: ' + assignment);
+    }
+
+    uploadTask(assignment: any) {
+        console.log('Upload: ' + assignment);
+    }
+
+    downloadDelivered(paper: Paper) {
+        console.log('Download: ' + paper.id + ' ' + paper.status);
+    }
 }
