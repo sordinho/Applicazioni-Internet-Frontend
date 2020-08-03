@@ -16,6 +16,6 @@ export class Paper {
     }
 
     toString(): string {
-        return this.id + ' (name: ' + this.student.name + ', fistName: ' + this.student.firstName + ')';
+        return this.id + ' (name: ' + this.student.lastName + ', fistName: ' + this.student.firstName + ')';
     }
 }

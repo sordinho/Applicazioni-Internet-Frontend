@@ -77,11 +77,16 @@ export class AuthService {
     }
 
     public isLoggedIn() {
-        return moment().isBefore(moment.unix(+localStorage.getItem('expires_at')));
+        let loggedIn = moment().isBefore(moment.unix(+localStorage.getItem('expires_at')))
+        if(!loggedIn) {
+            // clean the token
+            this.logout()
+        }
+        return loggedIn
     }
 
     isLoggedOut() {
-        return !this.isLoggedIn();
+        return !this.isLoggedIn()
     }
 
 }

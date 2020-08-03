@@ -27,10 +27,10 @@
 </mat-menu>
 
 <table #table mat-table [dataSource]="dataSource" multiTemplateDataRows>
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let paper"> {{ paper.student.name }} </td>
+    <!-- lastName Column -->
+    <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef> Last Name </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.student.lastName }} </td>
     </ng-container>
 
     <!-- firstName Column -->
@@ -39,10 +39,10 @@
         <td mat-cell *matCellDef="let paper"> {{ paper.student.firstName }} </td>
     </ng-container>
 
-    <!-- studentId (serial) Column -->
-    <ng-container matColumnDef="serial">
+    <!-- studentId (id) Column -->
+    <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> Student ID </th>
-        <td mat-cell *matCellDef="let paper"> {{ paper.student.serial }} </td>
+        <td mat-cell *matCellDef="let paper"> {{ paper.student.id }} </td>
     </ng-container>
 
     <!-- status Column -->

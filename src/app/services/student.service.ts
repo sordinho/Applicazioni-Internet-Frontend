@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Student } from '../models/student.model';
 import { Observable, throwError, forkJoin } from 'rxjs';
-import { map, catchError, retry } from 'rxjs/operators';
+import { map, catchError, retry, tap, shareReplay } from 'rxjs/operators';
 
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
 
@@ -18,12 +18,13 @@ const httpOptions = {
 })
 export class StudentService {
 
-  private API_PATH = 'http://localhost:3000/students';
+  private API_PATH = 'API/students';
 
   constructor(private http: HttpClient) { }
 
   create(student: Student) {
     /* create student */
+    return this.http.post<any>(`${this.API_PATH}`, student)
   }
 
   update(student: Student): Observable<Student> {
@@ -61,9 +62,12 @@ export class StudentService {
                   }),
                   map( data => {
                     var allStudents: Student[] = [];
-                    data.forEach( student => {
-                      allStudents.push(new Student(student.id, student.serial, student.name, student.firstName, student.courseId, student.groupId));
-                    });
+                    console.dir("data: " + data[0])
+                    if(data !== null) {
+                      data.forEach( student => {
+                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.groupId));
+                      });
+                    }
                     return allStudents;
                   })
                 )
@@ -81,7 +85,7 @@ export class StudentService {
                   map( data => {
                     var enrolledStudents: Student[] = [];
                     data.forEach( student => {
-                      enrolledStudents.push(new Student(student.id, student.serial, student.name, student.firstName, student.courseId, student.groupId));
+                      enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.groupId));
                     });
                     return enrolledStudents;
                   })

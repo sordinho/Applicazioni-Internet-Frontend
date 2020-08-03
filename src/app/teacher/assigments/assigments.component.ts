@@ -54,7 +54,7 @@ export class AssigmentsComponent implements OnInit {
 
   dataSource: MatTableDataSource<Paper>
   
-  colsToDisplay = ['name', 'firstName', 'serial', 'status', 'statusDate']
+  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'statusDate']
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 

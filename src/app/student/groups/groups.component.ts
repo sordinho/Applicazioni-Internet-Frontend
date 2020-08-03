@@ -21,7 +21,7 @@ export class GroupsComponent implements OnInit {
     group: Group = null;
     selectionModel: SelectionModel<Student> = new SelectionModel<Student>(true, []);
     dataSource: MatTableDataSource<Student>;
-    colsToDisplay = ['select'].concat('serial', 'name', 'firstName');
+    colsToDisplay = ['select'].concat('id', 'lastName', 'firstName');
     proposedGroupName = new FormControl();
     expiryProposal = new FormControl();
     proposals = [TEST_GROUP, TEST_GROUP];

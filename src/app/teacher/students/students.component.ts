@@ -22,7 +22,7 @@ export class StudentsComponent implements AfterViewInit {
 
   dataSource: MatTableDataSource<Student>
   
-  colsToDisplay = ['select'].concat('serial', 'name', 'firstName', 'group');
+  colsToDisplay = ['select'].concat('id', 'lastName', 'firstName', 'group');
 
   // ViewChilds
   @ViewChild(MatSort, { static: true }) sort: MatSort
@@ -37,7 +37,8 @@ export class StudentsComponent implements AfterViewInit {
   // component Input interfaces 
   @Input() set students(allStudents: Student[]) {
     this._students = allStudents;
-    this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1");
+    // TODO this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1"); 
+    this._filteredStudents = allStudents;
     //console.dir("_filteredStudents" + this._filteredStudents);
   }
   @Input() set enrolledStudents(students: Student[]) {

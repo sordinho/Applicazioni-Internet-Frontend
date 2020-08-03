@@ -7,6 +7,8 @@ import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { NewCourseDialogComponent } from '../dialogs/new-course-dialog/new-course-dialog.component';
 import { EditCourseDialogComponent } from '../dialogs/edit-course-dialog/edit-course-dialog.component';
 import { DeleteCourseDialogComponent } from '../dialogs/delete-course-dialog/delete-course-dialog.component';
+import { StudentService } from '../services/student.service';
+import { Student } from '../models/student.model';
 
 @Component({
   selector: 'app-home',
@@ -36,8 +38,15 @@ export class HomeComponent implements OnInit, OnDestroy{
   
   navLinks: any[];
 
-  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router, private matDialog: MatDialog) { 
+  constructor(private authService: AuthService, private studentS: StudentService, private activatedRoute: ActivatedRoute, private router: Router, private matDialog: MatDialog) { 
     this.isTeacher = authService.isTeacher();
+  
+    this.studentS.find("s267562").subscribe((stud) => {
+      console.dir("found: " + stud.lastName)
+    })
+    this.studentS.queryAll().subscribe((data) => { 
+      console.dir("getAllStudents() -> " + data);
+    })
   }
 
   ngOnInit() { 

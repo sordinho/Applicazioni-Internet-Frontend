@@ -14,7 +14,7 @@ export class ShareDialogComponent implements OnInit {
 
     selectionModel: SelectionModel<Student> = new SelectionModel<Student>(true, []);
     dataSource: MatTableDataSource<Student>;
-    colsToDisplay = ['select'].concat('serial', 'name', 'firstName');
+    colsToDisplay = ['select'].concat('id', 'lastName', 'firstName');
 
     constructor(@Inject(MAT_DIALOG_DATA) public data, private dialogRef: MatDialogRef<ShareDialogComponent>) {
     }
