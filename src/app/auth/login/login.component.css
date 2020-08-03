@@ -17,3 +17,7 @@ h2 {
 a.register-link {
     text-decoration: none;
 }
+
+a.register-link:visited {
+    color: #3F51B5;
+} 

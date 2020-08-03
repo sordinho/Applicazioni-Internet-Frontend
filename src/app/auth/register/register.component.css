@@ -19,3 +19,12 @@ p.error {
 h2 {
     text-align: center;
 }
+
+a.login-link {
+    text-decoration: none;
+    color: #3F51B5;
+}
+
+a.login-link:visited {
+    color: #3F51B5;
+} 
