@@ -56,7 +56,6 @@ export class StudentsComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort
     this.dataSource.paginator = this.paginator
-
   }
 
   onSortChanged() {

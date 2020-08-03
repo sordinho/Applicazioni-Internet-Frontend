@@ -1,0 +1,38 @@
+table {
+    width: 100%;
+}
+
+.filter-button {
+    margin: 0px 25px;  
+    padding-right: 10px;
+}
+
+
+tr.detail-row {
+    height: 0;
+}
+  
+tr.paper-row:not(.expanded-row):hover {
+    background: whitesmoke;
+}
+  
+tr.paper-row:not(.expanded-row):active {
+    background: #efefef;
+}
+  
+
+.paper-row td {
+    border-bottom-width: 0;
+}
+  
+.paper-detail {
+    overflow: hidden;
+}
+  
+.paper-history-list {
+    padding: 16px 0px;
+}
+
+.upload-button {
+    margin-bottom: 16px;
+}

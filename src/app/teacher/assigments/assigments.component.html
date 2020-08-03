@@ -1,1 +1,83 @@
-<p>assigments works!</p>
+<mat-form-field appearance="legacy">
+    <mat-select [(value)]="selectedAssignment" (selectionChange)="onSelectChange()">
+        <mat-option *ngFor="let assignment of assignments" [value]="assignment.id">
+          {{ assignment.id }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<button class="filter-button" mat-stroked-button [matMenuTriggerFor]="menu">
+    Status
+    <mat-icon>keyboard_arrow_down</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" xPosition="after">
+    <mat-checkbox #masterCheckbox class="mat-menu-item" (click)="$event.stopPropagation()"
+                    (change)="toggleTableMaster(); filter()" 
+                    [checked]="areAllStatusSelected()"
+                    [indeterminate]="selectedStatus.selected.length !== 0 && !areAllStatusSelected()">
+        Select All
+    </mat-checkbox>
+    <mat-divider></mat-divider>
+    <mat-checkbox class="mat-menu-item" *ngFor="let status of status_list" (click)="$event.stopPropagation()"    
+                    (change)="toggleTableRow(status); filter()"
+                    [checked]="selectedStatus.isSelected(status)">
+        {{ status }}
+    </mat-checkbox>
+</mat-menu>
+
+<table #table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.student.name }} </td>
+    </ng-container>
+
+    <!-- firstName Column -->
+    <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef> Fist Name </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.student.firstName }} </td>
+    </ng-container>
+
+    <!-- studentId (serial) Column -->
+    <ng-container matColumnDef="serial">
+        <th mat-header-cell *matHeaderCellDef> Student ID </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.student.serial }} </td>
+    </ng-container>
+
+    <!-- status Column -->
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.status }} </td>
+    </ng-container>
+
+    <!-- statusDate Column -->
+    <ng-container matColumnDef="statusDate">
+        <th mat-header-cell *matHeaderCellDef> Status Date </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.statusDate  }} </td>
+    </ng-container>
+
+
+    <!-- Expanded (Paper) Content -->
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let paper" [attr.colspan]="colsToDisplay.length">
+        <div class="paper-detail"
+            [@detailExpand]="paper == expandedPaper ? 'expanded' : 'collapsed'">
+            <div class="paper-history-list">
+            {{paper.history}}
+            </div>
+            <br>
+            <button class="upload-button" mat-flat-button color="primary" (click)="uploadCorrection(paper)">Upload correction</button>
+        </div>
+        </td>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="colsToDisplay"></tr>
+    <tr mat-row *matRowDef="let paper; columns: colsToDisplay"
+        class="paper-row"
+        [class.expanded-row]="expandedPaper === paper"
+        (click)="expandedPaper = expandedPaper === paper ? null : paper">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+
+</table>

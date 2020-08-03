@@ -42,13 +42,15 @@ import { RegisterComponent } from './auth/register/register.component';
 import { NewCourseDialogComponent } from './dialogs/new-course-dialog/new-course-dialog.component';
 import { EditCourseDialogComponent } from './dialogs/edit-course-dialog/edit-course-dialog.component';
 import { DeleteCourseDialogComponent } from './dialogs/delete-course-dialog/delete-course-dialog.component';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatBadgeModule } from '@angular/material/badge';
 import { ShareDialogComponent } from './student/vm/share-dialog.component';
 import { CreateVmDialogComponent } from './student/vm/create-vm-dialog.component';
-import {MatSelectModule} from '@angular/material/select';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
+import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 
 
 @NgModule({
@@ -70,6 +72,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     DeleteCourseDialogComponent,
     ShareDialogComponent,
     CreateVmDialogComponent,
+    UploadCorrectionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,7 +100,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatExpansionModule,
     MatBadgeModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
