@@ -49,6 +49,7 @@ import { ShareDialogComponent } from './student/vm/share-dialog.component';
 import { CreateVmDialogComponent } from './student/vm/create-vm-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatExpansionModule,
     MatBadgeModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

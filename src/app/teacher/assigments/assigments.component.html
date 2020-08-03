@@ -6,10 +6,25 @@
     </mat-select>
 </mat-form-field>
 
-<button class="filter-button" mat-stroked-button (click)="filter()">
-    <mat-icon>filter_list</mat-icon>
-    <span class="button-text">Status</span>
+<button class="filter-button" mat-stroked-button [matMenuTriggerFor]="menu">
+    Status
+    <mat-icon>keyboard_arrow_down</mat-icon>
 </button>
+
+<mat-menu #menu="matMenu" xPosition="after">
+    <mat-checkbox #masterCheckbox class="mat-menu-item" (click)="$event.stopPropagation()"
+                    (change)="toggleTableMaster(); filter()" 
+                    [checked]="areAllStatusSelected()"
+                    [indeterminate]="selectedStatus.selected.length !== 0 && !areAllStatusSelected()">
+        Select All
+    </mat-checkbox>
+    <mat-divider></mat-divider>
+    <mat-checkbox class="mat-menu-item" *ngFor="let status of status_list" [value]="status" (click)="$event.stopPropagation()"    
+                    (change)="toggleTableRow(status); filter()"
+                    [checked]="selectedStatus.isSelected(status)">
+        {{ status }}
+    </mat-checkbox>
+</mat-menu>
 
 <table #table mat-table [dataSource]="dataSource">
     <!-- Name Column -->
