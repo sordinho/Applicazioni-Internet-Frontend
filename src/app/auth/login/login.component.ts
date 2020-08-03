@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from './../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -10,11 +10,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  email = new FormControl('olivier@studenti.polito.it', {
+  email = new FormControl('d123456@polito.it', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.email]
   });
-  password = new FormControl('bestPassw0rd', {
+  password = new FormControl('password', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.minLength(6)]
   });
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     if(!this.email.invalid && !this.password.invalid){
       this.loading = true;
 
-      this.authService.loginUser(this.email.value, this.password.value)
+      this.authService.signinUser(this.email.value, this.password.value)
                       .subscribe(
                         suc => {
                           //console.dir("LoginComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);

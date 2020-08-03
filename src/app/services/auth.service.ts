@@ -9,59 +9,44 @@ import {Router} from '@angular/router';
     providedIn: 'root'
 })
 export class AuthService {
-
-    private API_PATH = 'http://localhost:3000';
+    private API_PATH = '/auth';
 
     constructor(private http: HttpClient, private router: Router) {
     }
 
-    loginUser(email: string, password: string): Observable<any> {
-        let role: string;
-        if (email.endsWith('@studenti.polito.it')) {
-            role = 'ROLE_STUDENT';
-        } else if (email.endsWith('@polito.it')) {
-            role = 'ROLE_TEACHER';
-        }
-
-        return this.http.post<any>(`${this.API_PATH}/login`, {email, password})
+    signinUser(username: string, password: string): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}/sign-in`, {username, password})
             .pipe(
                 tap(res => {
-                    //console.dir("AuthService - loginUser() - .tap() --> token: " + res.accessToken);
-                    this.setSession(res, role);
+                    //console.dir("AuthService - signinUser() - .tap() --> token: " + res.token);
+                    this.setSession(res);
                 }),
                 shareReplay()
             );
     }
 
-    registerUser(email: string, password: string): Observable<any> {
-        let role: string;
-        if (email.endsWith('@studenti.polito.it')) {
-            role = 'ROLE_STUDENT';
-        } else if (email.endsWith('@polito.it')) {
-            role = 'ROLE_TEACHER';
-        }
-        return this.http.post<any>(`${this.API_PATH}/register`, {email, password})
+    registerUser(username: string, password: string): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}/register`, {username, password})
             .pipe(
                 tap(res => {
-                    //console.dir("AuthService - registerUser() - .tap() --> token: " + res.accessToken);
-                    this.setSession(res, role);
+                    //console.dir("AuthService - registerUser() - .tap() --> token: " + res.token);
+                    this.setSession(res);
                 }),
                 shareReplay()
-            );
-
-
+            )
     }
 
-    private setSession(authResult: any, role: string) {
-        const token = JSON.parse(atob(authResult.accessToken.split('.')[1]));
+    private setSession(authResult: any) {
+        const token = JSON.parse(atob(authResult.token.split('.')[1]));
 
-        localStorage.setItem('token', authResult.accessToken);
-        localStorage.setItem('role', role);
-        //console.log('ruolo: ' + role);
-        localStorage.setItem('email', token.email);
+        localStorage.setItem('token', authResult.token);
+        // console.log('ruolo: ' + token.roles);
+        localStorage.setItem('role', token.roles);
+        // console.log('email: ' + authResult.username);
+        localStorage.setItem('email', authResult.username);
         // json-server-auth token field exp contains epoch of exportation (last 1 hour)
         localStorage.setItem('expires_at', token.exp);
-
+        // console.dir("exp_at: " + token.exp)
     }
 
     logout() {
