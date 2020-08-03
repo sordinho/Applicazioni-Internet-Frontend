@@ -7,11 +7,21 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel, SelectionChange } from '@angular/cdk/collections';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { UploadCorrectionDialogComponent } from 'src/app/dialogs/upload-correction-dialog/upload-correction-dialog.component';
 
 @Component({
   selector: 'app-assigments',
   templateUrl: './assigments.component.html',
-  styleUrls: ['./assigments.component.css']
+  styleUrls: ['./assigments.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class AssigmentsComponent implements OnInit {
   
@@ -32,6 +42,8 @@ export class AssigmentsComponent implements OnInit {
              new Paper("P12", new Student("902030", "260342", "Francesco", "Verdi"), "null", "10/05/2020") ]],
   ]) 
 
+  expandedPaper: Paper | null;
+
   status_list = [ "null", "read", "delivered", "revised" ];
 
   /* selectedStatus used to keep track of selected status */
@@ -47,7 +59,7 @@ export class AssigmentsComponent implements OnInit {
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 
-  constructor() { 
+  constructor(private matDialog: MatDialog) { 
     this.dataSource = new MatTableDataSource<Paper>(this.papers.get(this.selectedAssignment))
   }
 
@@ -96,15 +108,33 @@ export class AssigmentsComponent implements OnInit {
       // filter papers by their status
       filteredPapers = this.papers.get(this.selectedAssignment).filter((paper: Paper) => {
         for(let status of this.selectedStatus.selected) {
-          console.dir("paper.status: " + paper.status + " status: " + status)
+          //console.dir("paper.status: " + paper.status + " status: " + status)
           if(paper.status === status) return true
         }
         return false 
       })
     }
 
-    console.dir("filteredPapers: " + filteredPapers)
+    //console.dir("filteredPapers: " + filteredPapers)
     this.dataSource.data = filteredPapers    
+  }
+
+  uploadCorrection(paper: Paper) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "500px";
+
+    const dialogRef = this.matDialog.open(UploadCorrectionDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res) {
+        //console.dir("uploadCorrection() - success ");
+        console.dir("uploadCorrection(paper: " + paper.id + ") - TODO") 
+      } else {
+        // user pressed cancel (?)
+        console.dir("uploadCorrection() - unsuccess");
+      }
+    });
   }
 
 }

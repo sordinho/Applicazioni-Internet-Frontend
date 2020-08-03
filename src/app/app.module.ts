@@ -50,6 +50,7 @@ import { CreateVmDialogComponent } from './student/vm/create-vm-dialog.component
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import { MatChipsModule } from '@angular/material/chips';
     DeleteCourseDialogComponent,
     ShareDialogComponent,
     CreateVmDialogComponent,
+    UploadCorrectionDialogComponent,
   ],
   imports: [
     BrowserModule,
