@@ -48,7 +48,6 @@ export class AssigmentsComponent implements OnInit {
 
   /* selectedStatus used to keep track of selected status */
   selectedStatus: SelectionModel<string> = new SelectionModel<string>(true, [])
-  selectedChangeSubscription: Subscription
 
   // select last assignment as default
   selectedAssignment: string = this.assignments[this.assignments.length-1].id 
@@ -69,6 +68,10 @@ export class AssigmentsComponent implements OnInit {
   onSelectChange() {
     //console.dir("this.selectedAssignment: " + this.selectedAssignment)
     this.dataSource = new MatTableDataSource<Paper>(this.papers.get(this.selectedAssignment))
+    /* reset status filter */
+    this.selectedStatus.clear()
+    /* reset the expanded paper (if any) */
+    this.expandedPaper = null
   }
 
   toggleTableRow(row: string) {
