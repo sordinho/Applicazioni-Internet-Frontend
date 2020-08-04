@@ -54,21 +54,14 @@ export class StudentService {
   queryAll(): Observable<Student[]> { 
     /* return students list */
     return this.http
-                .get<Student[]>(`${this.API_PATH}`)
+                .get<any>(`${this.API_PATH}`)
                 .pipe(
                   catchError( err => {
                     console.error(err);
                     return throwError(`StudentService.queryAll error: ${err.message}`);
                   }),
                   map( data => {
-                    var allStudents: Student[] = [];
-                    console.dir("data: " + data[0])
-                    if(data !== null) {
-                      data.forEach( student => {
-                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.groupId));
-                      });
-                    }
-                    return allStudents;
+                    return data._embedded.studentDTOList
                   })
                 )
   }
