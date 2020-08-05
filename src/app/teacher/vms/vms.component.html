@@ -44,7 +44,7 @@
 		<mat-expansion-panel>
 			<mat-expansion-panel-header>
 				<mat-panel-title>
-					<p>ID: {{selectedGroup.groupId}}</p>
+					<p>ID: {{selectedGroup.id}}</p>
 				</mat-panel-title>
 				<mat-panel-description>
 					<p>Name: {{selectedGroup.name}}</p>
@@ -113,15 +113,15 @@
 
 			<mat-grid-list cols="3" rowHeight="55px">
 				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: 0 / {{selectedGroup.cpu}}</mat-grid-tile>
+					<mat-icon>developer_board</mat-icon>&nbsp; CPU: 0 / {{selectedGroup.resources.maxVcpu}}</mat-grid-tile>
 				<mat-grid-tile>
-					<mat-icon>memory</mat-icon>&nbsp; RAM: 0 / {{selectedGroup.ram}} &nbsp;MB
+					<mat-icon>memory</mat-icon>&nbsp; RAM: 0 / {{selectedGroup.resources.maxRam}} &nbsp;MB
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: 0 / {{selectedGroup.disk}} &nbsp;MB
+					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: 0 / {{selectedGroup.resources.maxDiskSpace}} &nbsp;MB
 				</mat-grid-tile>
-				<mat-grid-tile>Max actives VMs: 0 / {{selectedGroup.actives}}</mat-grid-tile>
-				<mat-grid-tile>Total max VMs: 0 / {{selectedGroup.max}}</mat-grid-tile>
+				<mat-grid-tile>Max actives VMs: 0 / {{selectedGroup.resources.maxOn}}</mat-grid-tile>
+				<mat-grid-tile>Total max VMs: 0 / {{selectedGroup.resources.maxTot}}</mat-grid-tile>
 			</mat-grid-list>
 		</mat-expansion-panel>
 	</mat-accordion>
