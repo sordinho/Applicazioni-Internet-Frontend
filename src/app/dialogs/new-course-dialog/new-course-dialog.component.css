@@ -1,3 +1,8 @@
+.mat-dialog-content {
+    min-height: 390px;
+    height: 'auto';
+}
+
 .full-width {
     width: 100%;
 }
@@ -8,3 +13,22 @@ p.error {
     padding: 8px;
     border-radius: 6px;
 }
+
+.groups-size-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.groups-size-title {
+    margin-right: 10px;
+}
+
+.groups-size-input {
+    margin: 0px 10px;
+}
+
+.mat-dialog-actions {
+      justify-content: flex-end;
+}
+

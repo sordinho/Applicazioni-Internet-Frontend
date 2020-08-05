@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 
 import { Student } from '../models/student.model';
-import { Observable, throwError, forkJoin } from 'rxjs';
-import { map, catchError, retry, tap, shareReplay } from 'rxjs/operators';
+import { Observable, throwError, forkJoin, of } from 'rxjs';
+import { map, catchError, retry, tap, shareReplay, flatMap } from 'rxjs/operators';
 
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { Group } from '../models/group.model';
+import { GroupService } from './group.service';
+import { group } from 'console';
+import { Resources } from '../models/resources.model';
 
 
 const httpOptions = {
@@ -20,7 +24,7 @@ export class StudentService {
 
   private API_PATH = 'API/students';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private groupService: GroupService) { }
 
   create(student: Student) {
     /* create student */
@@ -46,7 +50,7 @@ export class StudentService {
                 .pipe(
                   catchError( err => {
                     console.error(err);
-                    return throwError(`StudentService.queryAll error: ${err.message}`);
+                    return throwError(`StudentService.find error: ${err.message}`);
                   })
                 );
   }
@@ -87,7 +91,7 @@ export class StudentService {
                   map( data => {
                     var enrolledStudents: Student[] = [];
                     data.forEach( student => {
-                      enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.groupId));
+                      enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.id));
                     });
                     return enrolledStudents;
                   })
@@ -134,4 +138,16 @@ export class StudentService {
     return forkJoin(requests$);*/
   }
 
+  getTeamByCourse(studentId: string, courseId: string): Observable<Group> {
+    /* find student (by studentId) */
+    return this.http
+                .get<Group>(`${this.API_PATH}/${studentId}/courses//${courseId}/team`)
+                .pipe(
+                  catchError( err => {
+                    console.error(err);
+                    return throwError(`StudentService.find error: ${err.message}`);
+                  })
+                )
+  }
+  
 }
