@@ -109,7 +109,7 @@ export class StudentService {
 
 
   enroll(students: Student[], courseId: string) {
-    const requests$ = new Array<Observable<Student>>();
+    /*const requests$ = new Array<Observable<Student>>();
 
     students.forEach( student => {
       if(student.courseId != courseId) {
@@ -118,11 +118,11 @@ export class StudentService {
       }
     });
     
-    return forkJoin(requests$);
+    return forkJoin(requests$);*/
   }
 
   unenroll(students: Student[]) {
-    const requests$ = new Array<Observable<Student>>();
+    /*const requests$ = new Array<Observable<Student>>();
 
     students.forEach( student => {
       if(student.courseId != "0") {
@@ -131,7 +131,7 @@ export class StudentService {
       }
     });
     
-    return forkJoin(requests$);
+    return forkJoin(requests$);*/
   }
 
 }
