@@ -43,11 +43,23 @@ export class VmComponent implements OnInit {
 
 
     initGroupVms() {
-        this.vmService.getVmsByGroupId(this.group.groupId)
+        this.vmService.getVmsByGroupId(this.group.id)
             .subscribe((data) => {
                 this.vms = data;
             });
     }
+
+    /*initStudentGroup() {
+        this.studentService.getTeamByCourse("s1", "p").subscribe((group: Group) => {
+            this.groupService.getMembers(group.id).subscribe((members: Student[]) => {
+                group.members = members
+                this.groupService.getResources(group.id).subscribe((resources: Resources) => {
+                    group.resources = resources
+                    this.group = group
+                })
+            })
+        })
+    }*/
 
     deleteVM(vm: Vm) {
         console.log('Delete vm: ' + vm.id);

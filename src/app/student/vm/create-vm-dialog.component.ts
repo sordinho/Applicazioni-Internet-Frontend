@@ -41,10 +41,10 @@ export class CreateVmDialogComponent implements OnInit {
         let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
 
         return (
-            this.group.cpu >= actualCpu + this.newVmCpu.value &&
-            this.group.ram >= actualRam + this.newVmRam.value &&
-            this.group.disk >= actualDisk + this.newVmDisk.value &&
-            this.group.max >= this.vms.length + 1
+            this.group.resources.maxVcpu >= actualCpu + this.newVmCpu.value &&
+            this.group.resources.maxRam >= actualRam + this.newVmRam.value &&
+            this.group.resources.maxDiskSpace >= actualDisk + this.newVmDisk.value &&
+            this.group.resources.maxTot >= this.vms.length + 1
         );
     }
 
