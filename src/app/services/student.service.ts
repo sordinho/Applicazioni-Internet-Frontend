@@ -7,7 +7,6 @@ import { map, catchError, retry, tap, shareReplay, flatMap } from 'rxjs/operator
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Group } from '../models/group.model';
 import { GroupService } from './group.service';
-import { group } from 'console';
 import { Resources } from '../models/resources.model';
 
 
@@ -24,7 +23,7 @@ export class StudentService {
 
   private API_PATH = 'API/students';
 
-  constructor(private http: HttpClient, private groupService: GroupService) { }
+  constructor(private http: HttpClient) { }
 
   create(student: Student) {
     /* create student */
