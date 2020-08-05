@@ -40,16 +40,6 @@ export class HomeComponent implements OnInit, OnDestroy{
 
   constructor(private authService: AuthService, private studentS: StudentService, private activatedRoute: ActivatedRoute, private router: Router, private matDialog: MatDialog) { 
     this.isTeacher = authService.isTeacher();
-  
-    //this.studentS.create(new Student(...))
-    
-    this.studentS.find("s267562").subscribe((stud) => {
-      console.dir("found: " + stud.lastName)
-    })
-
-    this.studentS.queryAll().subscribe((students: Student[]) => { 
-      console.dir("getAllStudents() -> " + students.length);
-    })
   }
 
   ngOnInit() { 

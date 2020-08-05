@@ -61,13 +61,22 @@ export class StudentService {
                     return throwError(`StudentService.queryAll error: ${err.message}`);
                   }),
                   map( data => {
-                    return data._embedded.studentDTOList
+                    /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
+                       otherwise it would be shown [Object, Object] */
+                    var allStudents: Student[] = [];
+                    if(data !== null) {
+                      data._embedded.studentDTOList.forEach( (student: Student) => {
+                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
+                      });
+                    }
+                    return allStudents;
                   })
                 )
   }
 
   queryEnrolled(courseId: string): Observable<Student[]> { 
-    /* return enrolled students list (by courseId) */
+    return this.queryAll()
+    /* return enrolled students list (by courseId) 
     return this.http
                 .get<Student[]>(`${this.API_PATH}?courseId=${courseId}`)
                 .pipe(
@@ -83,7 +92,8 @@ export class StudentService {
                     return enrolledStudents;
                   })
                 )
-  }
+  */
+ }
 
   delete(studentId: string): Observable<Student[]> {
     /* delete student (by studentId) */

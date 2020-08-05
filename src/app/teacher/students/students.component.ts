@@ -179,10 +179,6 @@ export class StudentsComponent implements AfterViewInit {
     this.selectionModel.clear()
   }
 
-  displayFn(student: Student) {
-    return student.toString();
-  }
-
   filter(filterValue: string = '') {
     filterValue = filterValue.trim(); // remove whitespace
     filterValue = filterValue.toLowerCase();

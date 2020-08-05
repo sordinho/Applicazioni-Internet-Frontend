@@ -3,10 +3,9 @@
     <input type="search" matInput placeholder="Name of the student" 
             [matAutocomplete]="auto"
             (keyup)="filter(searchInput.value)" #searchInput/>
-    <mat-autocomplete #auto [displayWith]="displayFn"
-                    (optionSelected)="updateAddSelection($event)">
+    <mat-autocomplete #auto (optionSelected)="updateAddSelection($event)">
         <mat-option *ngFor="let student of _filteredStudents" [value]="student">
-            {{ student }}
+            {{student}}
         </mat-option>
     </mat-autocomplete>
 </mat-form-field>

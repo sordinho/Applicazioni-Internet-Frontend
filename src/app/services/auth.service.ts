@@ -90,3 +90,12 @@ export class AuthService {
     }
 
 }
+
+export interface UserInformationRequest {
+    id: string
+    email: string
+    lastName: string
+    firstName: string
+    password: string
+    repeatPassword: string 
+}

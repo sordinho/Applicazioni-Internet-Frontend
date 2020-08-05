@@ -25,7 +25,6 @@ export class StudentsContComponent implements OnInit {
   getAllStudents() {
     this.studentService.queryAll()
                         .subscribe((data) => { 
-                          //console.dir("getAllStudents() -> " + data);
                           this.allStudents = data;
                         })
   }
@@ -33,27 +32,28 @@ export class StudentsContComponent implements OnInit {
   getEnrolledStudents() {
     this.studentService.queryEnrolled(`${courseId}`)
                         .subscribe((data) => { 
-                          //console.dir("getEnrolledStudents() -> " + data);
                           this.enrolledStudents = data; 
                         });
   }
 
   enrollStudents(students: Student[]) {
-    this.studentService.enroll(students, courseId)
+    console.dir("enrollStudent - TODO (courseService)")
+    /*this.studentService.enroll(students, courseId)
                           .subscribe( _ => {
                             //console.dir("enrollStudents(" + students + ")");
                             this.getEnrolledStudents();
                             this.getAllStudents();
-                          });
+                          });*/
   }
 
   unenrollStudents(students: Student[]) {
-    this.studentService.unenroll(students)
+    console.dir("unenrollStudent - TODO (courseService)")
+    /*this.studentService.unenroll(students)
                           .subscribe( _ => {
                             //console.dir("unenrollStudents(" + students +")");
                             this.getEnrolledStudents();
                             this.getAllStudents();
-                          });
+                          });*/
   }
 
 }
