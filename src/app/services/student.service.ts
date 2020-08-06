@@ -67,7 +67,7 @@ export class StudentService {
                     /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
-                    if(data !== null) {
+                    if(data !== undefined && data._embedded !== undefined) {
                       data._embedded.studentDTOList.forEach( (student: Student) => {
                         allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                       });
@@ -76,27 +76,6 @@ export class StudentService {
                   })
                 )
   }
-
-  queryEnrolled(courseId: string): Observable<Student[]> { 
-    return this.queryAll()
-    /* return enrolled students list (by courseId) 
-    return this.http
-                .get<Student[]>(`${this.API_PATH}?courseId=${courseId}`)
-                .pipe(
-                  catchError( err => {
-                    console.error(err);
-                    return throwError(`StudentService.queryAll ${courseId} error: ${err.message}`);
-                  }),
-                  map( data => {
-                    var enrolledStudents: Student[] = [];
-                    data.forEach( student => {
-                      enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.id));
-                    });
-                    return enrolledStudents;
-                  })
-                )
-  */
- }
 
   enroll(students: Student[], courseId: string) {
     /*const requests$ = new Array<Observable<Student>>();

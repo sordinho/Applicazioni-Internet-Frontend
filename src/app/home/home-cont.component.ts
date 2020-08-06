@@ -23,8 +23,14 @@ export class HomeContComponent implements OnInit, OnDestroy {
   constructor(private courseService: CourseService, private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getActivatedRouteCourseId()
-    this.getAllCourse()
+    this.paramMapSub = this.activatedRoute.paramMap.subscribe(
+      (params: ParamMap) => {
+        //console.dir("activatedRoute change - " + params.get('courseId'))
+        this.courseId = params.get('courseId')
+        // get all courses each time the activated route change
+        this.getAllCourse()
+      });
+
     this.getUsername()
     this.getUserRole()
   }
@@ -34,15 +40,6 @@ export class HomeContComponent implements OnInit, OnDestroy {
       //console.dir("AppComponent - ngOnDestroy() - this.paramMapSub.unsubscribe()");
       this.paramMapSub.unsubscribe();
     }
-  }
-
-  getActivatedRouteCourseId() {
-    this.paramMapSub = this.activatedRoute.paramMap.subscribe(
-      (params: ParamMap) => {
-        //console.dir("activatedRoute change - " + params.get('courseId'))
-        this.courseId = params.get('courseId')
-        this.getAllCourse()
-      });
   }
 
   getAllCourse() {
