@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
     updateOn: 'blur',
     validators: [Validators.required, Validators.email]
   });
-  password = new FormControl('password', {
+  password = new FormControl('Password#02', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.minLength(6)]
   });

@@ -45,15 +45,15 @@ export class CourseService {
                     console.error(err);
                     return throwError(`CourseService.queryAll error: ${err.message}`)
                   }),
-                  /*map( data => {
-                    var allStudents: Student[] = [];
+                  map( data => {
+                    var courses: Course[] = [];
                     if(data !== null) {
-                      data._embedded.studentDTOList.forEach( (student: Student) => {
-                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                      });
+                      data._embedded.courseDTOList.forEach( (course: Course) => {
+                        courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId))
+                      })
                     }
-                    return allStudents;
-                  })*/
+                    return courses;
+                  })
                 )
   }
 

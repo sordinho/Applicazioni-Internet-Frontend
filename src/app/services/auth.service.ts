@@ -43,7 +43,7 @@ export class AuthService {
         // console.log('ruolo: ' + token.roles);
         localStorage.setItem('role', token.roles);
         // console.log('email: ' + authResult.username);
-        localStorage.setItem('email', authResult.username);
+        localStorage.setItem('username', authResult.username);
         // json-server-auth token field exp contains epoch of exportation (last 1 hour)
         localStorage.setItem('expires_at', token.exp);
         // console.dir("exp_at: " + token.exp)
@@ -60,12 +60,8 @@ export class AuthService {
         return moment(expiresAt);
     }
 
-    public getEmail() {
-        return localStorage.getItem('email');
-    }
-
     public getUserId() {
-        return localStorage.getItem('userId')
+        return localStorage.getItem('username')
     }
 
     isStudent() {
