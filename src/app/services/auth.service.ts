@@ -40,13 +40,17 @@ export class AuthService {
         const token = JSON.parse(atob(authResult.token.split('.')[1]));
 
         localStorage.setItem('token', authResult.token);
-        // console.log('ruolo: ' + token.roles);
+        
+        //console.log('ruolo: ' + token.roles);
         localStorage.setItem('role', token.roles);
-        // console.log('email: ' + authResult.username);
-        localStorage.setItem('email', authResult.username);
-        // json-server-auth token field exp contains epoch of exportation (last 1 hour)
-        localStorage.setItem('expires_at', token.exp);
-        // console.dir("exp_at: " + token.exp)
+        
+        //console.log('username: ' + authResult.username);
+        localStorage.setItem('userId', authResult.username);
+        
+        // token field exp contains epoch of exportation 
+        //console.dir("exp_at: " + token.exp)
+        localStorage.setItem('expires_at', token.exp)
+        
     }
 
     logout() {

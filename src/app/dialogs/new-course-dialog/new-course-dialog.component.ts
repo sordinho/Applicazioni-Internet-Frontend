@@ -64,7 +64,7 @@ export class NewCourseDialogComponent implements OnInit {
       /* all fields are valid */
       this.courseService.create(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
         .subscribe((createdCourse: Course) => {
-          console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
+          // console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
           this.dialogRef.close(createdCourse)        
         },
         err => {
