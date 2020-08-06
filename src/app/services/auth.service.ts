@@ -14,8 +14,8 @@ export class AuthService {
     constructor(private http: HttpClient, private router: Router) {
     }
 
-    signinUser(username: string, password: string): Observable<any> {
-        return this.http.post<any>(`${this.API_PATH}/sign-in`, {username, password})
+    signinUser(userId: string, password: string): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}/sign-in`, {userId, password})
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - signinUser() - .tap() --> token: " + res.token);
@@ -25,8 +25,8 @@ export class AuthService {
             );
     }
 
-    registerUser(username: string, password: string): Observable<any> {
-        return this.http.post<any>(`${this.API_PATH}/register`, {username, password})
+    registerUser(userInformation: UserInformation): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}/sign-up`, userInformation)
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - registerUser() - .tap() --> token: " + res.token);
@@ -56,6 +56,8 @@ export class AuthService {
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('expires_at');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
     }
 
     getExpiration() {
@@ -99,11 +101,20 @@ export class AuthService {
 
 }
 
-export interface UserInformationRequest {
+export class UserInformation {
     id: string
     email: string
     lastName: string
     firstName: string
     password: string
     repeatPassword: string 
+
+    constructor(id: string, email: string, lastName: string, firstName: string, password: string, repeatPassword: string) {
+        this.id = id
+        this,email = email
+        this.lastName = lastName
+        this.firstName = firstName
+        this.password = password
+        this.repeatPassword = repeatPassword
+    }
 }
