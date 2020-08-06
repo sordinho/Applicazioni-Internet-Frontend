@@ -84,17 +84,7 @@ export class HomeComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = "500px";
     
-    const dialogRef = this.matDialog.open(NewCourseDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(course => {
-      if(course) {
-        //console.dir("addCourse() - success ");
-        this._courses.push(course) 
-      } else {
-        // user pressed cancel (?)
-        console.dir("addCourse() - unsuccess");
-      }
-    });
+    this.matDialog.open(NewCourseDialogComponent, dialogConfig)
   }
   
   editCourse() {
@@ -138,8 +128,7 @@ export class HomeComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(success => {
       if(success) {
-        //console.dir("removeCourse() - success ");    
-        this._courses.splice(index, 1)
+        console.dir("removeCourse() - success ");
       } else {
         // user pressed cancel (?)
         console.dir("deleteCourse() - unsuccess");

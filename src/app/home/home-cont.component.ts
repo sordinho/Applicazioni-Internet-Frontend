@@ -39,10 +39,9 @@ export class HomeContComponent implements OnInit, OnDestroy {
   getActivatedRouteCourseId() {
     this.paramMapSub = this.activatedRoute.paramMap.subscribe(
       (params: ParamMap) => {
+        //console.dir("activatedRoute change - " + params.get('courseId'))
         this.courseId = params.get('courseId')
-        if(this.allCourses.length !== 0) {
-          this.setCourseName()
-        }
+        this.getAllCourse()
       });
   }
 

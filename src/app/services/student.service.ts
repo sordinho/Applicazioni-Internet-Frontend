@@ -98,19 +98,6 @@ export class StudentService {
   */
  }
 
-  delete(studentId: string): Observable<Student[]> {
-    /* delete student (by studentId) */
-    return this.http
-                .delete<Student[]>(`${this.API_PATH}/${studentId}`)
-                .pipe(
-                  catchError( err => {
-                    console.error(err);
-                    return throwError(`StudentService.delete ${studentId} error: ${err.message}`);
-                })
-              );
-  }  
-
-
   enroll(students: Student[], courseId: string) {
     /*const requests$ = new Array<Observable<Student>>();
 

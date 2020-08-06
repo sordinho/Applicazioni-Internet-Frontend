@@ -79,4 +79,16 @@ export class CourseService {
                 )
   }
 
+  delete(courseId: string): Observable<any> {
+    /* delete course (by courseId) */
+    return this.http
+                .delete<any>(`${this.API_PATH}/${courseId}`)
+                .pipe(
+                  catchError( err => {
+                    console.error(err);
+                    return throwError(`CourseService.delete ${courseId} error: ${err.message}`);
+                })
+              );
+  }  
+
 }
