@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import {MatAccordion} from '@angular/material/expansion';
 import { StudentService } from 'src/app/services/student.service';
 import { Resources } from 'src/app/models/resources.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-groups',
@@ -50,13 +51,13 @@ export class GroupsComponent implements OnInit {
     }
 
     initStudentGroup() {
-        this.studentService.getTeamByCourse("s1", "p").subscribe((group: Group) => {
-            this.groupService.getMembers(group.id).subscribe((members: Student[]) => {
-                group.members = members
-                this.groupService.getResources(group.id).subscribe((resources: Resources) => {
-                    group.resources = resources
-                    this.group = group
-                })
+        this.studentService.getTeamByCourse("s1", "p").subscribe((team: Group) => {
+            this.group = team
+            let members$ = this.groupService.getMembers(team.id)
+            let resources$ = this.groupService.getResources(team.id)
+            forkJoin([members$, resources$]).subscribe(data => {
+                this.group.members = data[0]
+                this.group.resources = data[1]
             })
         })
     }
