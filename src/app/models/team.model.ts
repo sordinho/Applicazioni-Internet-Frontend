@@ -12,11 +12,11 @@ export class Team {
     resources: Resources;
     members: Student[];
 
-    constructor(id?: string, name?: string, vmModel?: string, status?: string, resources?: Resources, members?: Student[]) {
+    constructor(id?: string, name?: string, status?: string, vmModel?: string, resources?: Resources, members?: Student[]) {
         this.id = id;
         this.name = name;
-        this.vmModel = vmModel;
         this.status = status;
+        this.vmModel = vmModel;
         this.resources = resources;
         this.members = members;
     }

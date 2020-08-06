@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {GroupService} from '../../services/group.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {Student} from '../../models/student.model';
@@ -10,9 +10,9 @@ import {FormControl} from '@angular/forms';
 import * as moment from 'moment';
 import {MatAccordion} from '@angular/material/expansion';
 import {StudentService} from 'src/app/services/student.service';
-import {Resources} from 'src/app/models/resources.model';
 import {forkJoin} from 'rxjs';
 import {Team, TEST_GROUP} from '../../models/team.model';
+import {CourseService} from '../../services/course.service';
 
 @Component({
     selector: 'app-groups',
@@ -28,20 +28,22 @@ export class GroupsComponent implements OnInit {
     colsToDisplay = ['select'].concat('id', 'lastName', 'firstName');
     proposedGroupName = new FormControl();
     expiryProposal = new FormControl();
-    proposals = [TEST_GROUP, TEST_GROUP];
+    proposals = []; // [TEST_GROUP, TEST_GROUP];
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatPaginator) set matPaginator( paginator: MatPaginator){
+        this.dataSource.paginator = paginator;
+    }
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor(private groupService: GroupService, private studentService: StudentService) {
+    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService) {
     }
 
     ngOnInit(): void {
-        this.initStudentGroup();
-        this.initStudentsWithoutGroup();
-
+        this.initStudentTeam();
+        this.initStudentsWithoutTeam();
     }
+
 
     openAll() {
         this.accordion.openAll();
@@ -51,10 +53,14 @@ export class GroupsComponent implements OnInit {
         this.accordion.closeAll();
     }
 
-    initStudentGroup() {
-        this.studentService.getTeamByCourse('s1', 'p').subscribe((team: Team) => {
+    initStudentTeam() {
+        this.studentService.getTeamByCourse('s1', 'c1').subscribe((team: Team) => {
             this.team = team;
             this.dataReady = true;
+            console.log('Team: ' + team);
+            if (team == null) {
+                return;
+            }
             let members$ = this.groupService.getMembers(team.id);
             let resources$ = this.groupService.getResources(team.id);
             forkJoin([members$, resources$]).subscribe(data => {
@@ -64,11 +70,15 @@ export class GroupsComponent implements OnInit {
         });
     }
 
-    initStudentsWithoutGroup() {
-        /*this.courseService.queryAvailableStudents("").subscribe(data => {
+    initTeamProposals() {
+// todo initialize all team proposals for the student. remember to get memebers
+    }
+
+    initStudentsWithoutTeam() {
+        this.dataSource = new MatTableDataSource<Student>([]);
+        this.courseService.queryAvailableStudents('c1').subscribe(data => {
             this.dataSource = new MatTableDataSource<Student>(data);
-            this.dataSource.paginator = this.paginator;
-        });*/
+        });
     }
 
     toggleTableRow(event: MatCheckboxChange, row: Student) {

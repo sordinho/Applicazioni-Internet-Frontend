@@ -3,6 +3,7 @@ import { Course } from '../models/course.model';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import {Student} from '../models/student.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -14,7 +15,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class CourseService {
-  
+
   private API_PATH = 'API/courses';
 
   constructor(private http: HttpClient) { }
@@ -36,7 +37,7 @@ export class CourseService {
                 )
   }
 
-  queryAll(): Observable<Course[]> { 
+  queryAll(): Observable<Course[]> {
     /* return courses list */
     return this.http
                 .get<any>(`${this.API_PATH}`)
@@ -77,6 +78,29 @@ export class CourseService {
                     return throwError(`CourseService.disable error: ${err.message}`)
                   })
                 )
+  }
+
+  queryAvailableStudents(courseId:string):Observable<Student[]>{
+      /* return students list */
+      return this.http
+          .get<any>(`${this.API_PATH}/${courseId}/teams/available-students`)
+          .pipe(
+              catchError(err => {
+                  console.error(err);
+                  return throwError(`StudentService.queryAll error: ${err.message}`);
+              }),
+              map(data => {
+                  /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
+                     otherwise it would be shown [Object, Object] */
+                  var allStudents: Student[] = [];
+                  if (data !== null) {
+                      data._embedded.studentDToes.forEach((student: Student) => {
+                          allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
+                      });
+                  }
+                  return allStudents;
+              })
+          );
   }
 
 }

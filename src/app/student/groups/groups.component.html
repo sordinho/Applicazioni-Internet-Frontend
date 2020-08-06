@@ -1,5 +1,5 @@
 <!-- Group information-->
-<div *ngIf="dataReady && team.status==='CONFIRMED'">
+<div *ngIf="dataReady && team!==null">
 	<h3>Your group</h3>
 	<br>
 	<mat-list style="width: fit-content">
@@ -19,7 +19,7 @@
 </div>
 
 <!-- Group creation/proposal-->
-<div *ngIf="dataReady && team.status==='UNCONFIRMED'">
+<div *ngIf="dataReady && team===null">
 	<div>
 		<h3>Propose Group</h3>
 		<br>
