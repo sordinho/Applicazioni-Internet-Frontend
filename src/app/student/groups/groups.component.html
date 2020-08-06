@@ -1,16 +1,16 @@
 <!-- Group information-->
-<div *ngIf="group!==null">
+<div *ngIf="dataReady && team.status==='CONFIRMED'">
 	<h3>Your group</h3>
 	<br>
 	<mat-list style="width: fit-content">
 		<div mat-subheader>Name</div>
 		<mat-list-item>
 			<mat-icon mat-list-icon>class</mat-icon>
-			<div mat-line>{{group.name}}</div>
+			<div mat-line>{{team.name}}</div>
 		</mat-list-item>
 		<mat-divider></mat-divider>
 		<div mat-subheader>Members</div>
-		<mat-list-item *ngFor="let member of group.members">
+		<mat-list-item *ngFor="let member of team.members">
 			<mat-icon mat-list-icon>person</mat-icon>
 			<div mat-line>{{member.id}}</div>
 			<div mat-line> {{member.lastName}} {{member.firstName}}</div>
@@ -19,7 +19,7 @@
 </div>
 
 <!-- Group creation/proposal-->
-<div *ngIf="group===null">
+<div *ngIf="dataReady && team.status==='UNCONFIRMED'">
 	<div>
 		<h3>Propose Group</h3>
 		<br>

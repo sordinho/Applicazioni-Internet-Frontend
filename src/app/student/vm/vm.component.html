@@ -4,15 +4,15 @@
 <h4>Group resources limits</h4>
 <mat-grid-list cols="3" rowHeight="55px">
 	<mat-grid-tile>
-		<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{group.resources.maxVcpu}}</mat-grid-tile>
+		<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{team.resources.maxVcpu}}</mat-grid-tile>
 	<mat-grid-tile>
-		<mat-icon>memory</mat-icon>&nbsp; RAM: {{group.resources.maxRam}} &nbsp;MB
+		<mat-icon>memory</mat-icon>&nbsp; RAM: {{team.resources.maxRam}} &nbsp;MB
 	</mat-grid-tile>
 	<mat-grid-tile>
-		<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{group.resources.maxDiskSpace}} &nbsp;MB
+		<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{team.resources.maxDiskSpace}} &nbsp;MB
 	</mat-grid-tile>
-	<mat-grid-tile>Max actives VMs: {{group.resources.maxOn}}</mat-grid-tile>
-	<mat-grid-tile>Total max VMs: {{group.resources.maxTot}}</mat-grid-tile>
+	<mat-grid-tile>Max actives VMs: {{team.resources.maxOn}}</mat-grid-tile>
+	<mat-grid-tile>Total max VMs: {{team.resources.maxTot}}</mat-grid-tile>
 </mat-grid-list>
 
 

@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {GroupService} from '../../services/group.service';
-import {Group, TEST_GROUP} from '../../models/group.model';
 import {SelectionModel} from '@angular/cdk/collections';
 import {Student} from '../../models/student.model';
 import {MatTableDataSource} from '@angular/material/table';
@@ -10,9 +9,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {FormControl} from '@angular/forms';
 import * as moment from 'moment';
 import {MatAccordion} from '@angular/material/expansion';
-import { StudentService } from 'src/app/services/student.service';
-import { Resources } from 'src/app/models/resources.model';
-import { forkJoin } from 'rxjs';
+import {StudentService} from 'src/app/services/student.service';
+import {Resources} from 'src/app/models/resources.model';
+import {forkJoin} from 'rxjs';
+import {Team, TEST_GROUP} from '../../models/team.model';
 
 @Component({
     selector: 'app-groups',
@@ -21,7 +21,8 @@ import { forkJoin } from 'rxjs';
 })
 export class GroupsComponent implements OnInit {
 
-    group: Group = null;
+    team: Team = null;
+    dataReady = false;
     selectionModel: SelectionModel<Student> = new SelectionModel<Student>(true, []);
     dataSource: MatTableDataSource<Student>;
     colsToDisplay = ['select'].concat('id', 'lastName', 'firstName');
@@ -51,15 +52,16 @@ export class GroupsComponent implements OnInit {
     }
 
     initStudentGroup() {
-        this.studentService.getTeamByCourse("s1", "p").subscribe((team: Group) => {
-            this.group = team
-            let members$ = this.groupService.getMembers(team.id)
-            let resources$ = this.groupService.getResources(team.id)
+        this.studentService.getTeamByCourse('s1', 'p').subscribe((team: Team) => {
+            this.team = team;
+            this.dataReady = true;
+            let members$ = this.groupService.getMembers(team.id);
+            let resources$ = this.groupService.getResources(team.id);
             forkJoin([members$, resources$]).subscribe(data => {
-                this.group.members = data[0]
-                this.group.resources = data[1]
-            })
-        })
+                this.team.members = data[0];
+                this.team.resources = data[1];
+            });
+        });
     }
 
     initStudentsWithoutGroup() {

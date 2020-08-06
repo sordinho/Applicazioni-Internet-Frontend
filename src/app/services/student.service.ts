@@ -5,9 +5,7 @@ import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { map, catchError, retry, tap, shareReplay, flatMap } from 'rxjs/operators';
 
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { Group } from '../models/group.model';
-import { GroupService } from './group.service';
-import { Resources } from '../models/resources.model';
+import {Team} from '../models/team.model';
 
 
 const httpOptions = {
@@ -15,7 +13,7 @@ const httpOptions = {
     'Content-Type': 'application/json'
   })
 }
-  
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,7 +52,7 @@ export class StudentService {
                 );
   }
 
-  queryAll(): Observable<Student[]> { 
+  queryAll(): Observable<Student[]> {
     /* return students list */
     return this.http
                 .get<any>(`${this.API_PATH}`)
@@ -77,9 +75,9 @@ export class StudentService {
                 )
   }
 
-  queryEnrolled(courseId: string): Observable<Student[]> { 
+  queryEnrolled(courseId: string): Observable<Student[]> {
     return this.queryAll()
-    /* return enrolled students list (by courseId) 
+    /* return enrolled students list (by courseId)
     return this.http
                 .get<Student[]>(`${this.API_PATH}?courseId=${courseId}`)
                 .pipe(
@@ -108,7 +106,7 @@ export class StudentService {
                     return throwError(`StudentService.delete ${studentId} error: ${err.message}`);
                 })
               );
-  }  
+  }
 
 
   enroll(students: Student[], courseId: string) {
@@ -120,7 +118,7 @@ export class StudentService {
         requests$.push(this.update(student));
       }
     });
-    
+
     return forkJoin(requests$);*/
   }
 
@@ -133,14 +131,14 @@ export class StudentService {
         requests$.push(this.update(student));
       }
     });
-    
+
     return forkJoin(requests$);*/
   }
 
-  getTeamByCourse(studentId: string, courseId: string): Observable<Group> {
+  getTeamByCourse(studentId: string, courseId: string): Observable<Team> {
     /* find student (by studentId) */
     return this.http
-                .get<Group>(`${this.API_PATH}/${studentId}/courses//${courseId}/team`)
+                .get<Team>(`${this.API_PATH}/${studentId}/courses//${courseId}/team`)
                 .pipe(
                   catchError( err => {
                     console.error(err);
@@ -148,5 +146,5 @@ export class StudentService {
                   })
                 )
   }
-  
+
 }
