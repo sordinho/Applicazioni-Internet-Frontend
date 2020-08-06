@@ -64,6 +64,10 @@ export class AuthService {
         return localStorage.getItem('email');
     }
 
+    public getUserId() {
+        return localStorage.getItem('userId')
+    }
+
     isStudent() {
         return localStorage.getItem('role') === 'ROLE_STUDENT';
     }
