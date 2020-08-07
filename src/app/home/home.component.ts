@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   @ViewChild('sidenav') sidenav: MatSidenav;
   
   paramMapSub: Subscription;
-  email = this.authService.getEmail();
+  userId = this.authService.getUserId();
   courseName: string = '';
 
   // courseId of the course with the menu opened
@@ -86,11 +86,7 @@ export class HomeComponent implements OnInit, OnDestroy{
       this.router.navigate(['/login']);
     }
   }
-
-  getEmail() {
-    return this.authService.getEmail();
-  }
-
+  
   setCourse(courseId: string) {
     this.courseSelected = true;
     let name: string

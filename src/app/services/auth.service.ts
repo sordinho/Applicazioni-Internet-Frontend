@@ -14,8 +14,8 @@ export class AuthService {
     constructor(private http: HttpClient, private router: Router) {
     }
 
-    signinUser(userId: string, password: string): Observable<any> {
-        return this.http.post<any>(`${this.API_PATH}/sign-in`, {userId, password})
+    signinUser(username: string, password: string): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}/sign-in`, {username, password})
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - signinUser() - .tap() --> token: " + res.token);
@@ -67,7 +67,7 @@ export class AuthService {
     }
 
     public getEmail() {
-        return localStorage.getItem('email');
+        return localStorage.getItem('email'); // TO DO - REMOVE getEmail
     }
 
     public getUserId() {
