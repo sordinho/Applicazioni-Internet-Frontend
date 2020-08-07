@@ -27,19 +27,6 @@ export class GroupService {
         return of([TEST_GROUP]);
     }
 
-    getGroupsByCourse(courseID: string): Observable<Team[]> {
-        return EMPTY;
-    }
-
-    getStudentGroup(studentID: string, courseID): Observable<Team> {
-        return of(TEST_GROUP);
-    }
-
-    getStudentWithoutGroup(courseID): Observable<Student[]> {
-        return this.studentService.queryAll();
-    }
-
-
     getMembers(teamId: string): Observable<Student[]> {
         /* find members (by teamId) */
         return this.http

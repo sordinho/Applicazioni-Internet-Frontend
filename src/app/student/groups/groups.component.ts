@@ -13,6 +13,7 @@ import {StudentService} from 'src/app/services/student.service';
 import {forkJoin} from 'rxjs';
 import {Team, TEST_GROUP} from '../../models/team.model';
 import {CourseService} from '../../services/course.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
     selector: 'app-groups',
@@ -31,14 +32,13 @@ export class GroupsComponent implements OnInit {
     proposals: Team[] = [];
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
+    @ViewChild(MatAccordion) accordion: MatAccordion;
 
     @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
         this.dataSource.paginator = paginator;
     }
 
-    @ViewChild('vmsAccordion') accordion: MatAccordion;
-
-    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService) {
+    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService, private authService:AuthService) {
     }
 
     ngOnInit(): void {
@@ -88,7 +88,8 @@ export class GroupsComponent implements OnInit {
 
     initStudentsWithoutTeam() {
         this.dataSource = new MatTableDataSource<Student>([]);
-        this.courseService.queryAvailableStudents('c1').subscribe(data => {
+        this.courseService.queryAvailableStudents('c1').subscribe((data:Student[]) => {
+            data = data.filter((s:Student) => s.id !== this.authService.)
             this.dataSource = new MatTableDataSource<Student>(data);
         });
     }
@@ -101,9 +102,18 @@ export class GroupsComponent implements OnInit {
     proposeGroup() {
         console.log(this.proposedGroupName.value);
         console.log(this.expiryProposal.value);
+        let expiry = moment(this.expiryProposal.value, 'YYYY-MM-DD');
+        let members: string[] = this.selectionModel.selected.map((student) => student.id);
+        console.log(members);
+        console.log(expiry.format());
+        this.courseService.createTeam('c1', this.proposedGroupName.value, members, 's1', expiry.format())
+            .subscribe((proposed: Team) => {
+                console.log(proposed);
+            });
     }
 
     disableProposalForm() {
+        return false;
         // Return true if proposal button need to be disabled
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0 || this.expiryProposal === null
             || this.expiryProposal.value === '' || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid();

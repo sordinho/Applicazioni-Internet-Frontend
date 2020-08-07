@@ -81,8 +81,8 @@
 		<mat-divider></mat-divider>
 		<h4>Group Proposals</h4>
 		<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
-			<button mat-button (click)="openAll()">Expand All</button>
-			<button mat-button (click)="closeAll()">Collapse All</button>
+			<button mat-button (click)="accordion.openAll()">Expand All</button>
+			<button mat-button (click)="accordion.closeAll()">Collapse All</button>
 		</div>
 		<mat-accordion class="example-headers-align" multi>
 			<mat-expansion-panel *ngFor="let prop of proposals">
@@ -94,9 +94,14 @@
 						{{prop.status}}
 					</mat-panel-description>
 				</mat-expansion-panel-header>
-				<mat-grid-list cols="3" rowHeight="55px">
+				<mat-grid-list cols="3">
 					<mat-grid-tile colspan="2">
-						{{prop.members}}
+						<mat-list>
+							<mat-list-item *ngFor="let m of prop.members">
+								<mat-icon mat-list-icon>person</mat-icon>
+								{{m}}
+							</mat-list-item>
+						</mat-list>
 					</mat-grid-tile>
 					<mat-grid-tile>
 						<button mat-stroked-button style="margin-left: 5px" color="primary">Accept</button>
