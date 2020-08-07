@@ -3,7 +3,9 @@ import { CourseService } from '../services/course.service';
 import { Course } from '../models/course.model';
 import { AuthService } from '../services/auth.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { StudentService } from '../services/student.service';
+import { TeacherService } from '../services/teacher.service';
 
 @Component({
   selector: 'app-home-cont',
@@ -17,22 +19,29 @@ export class HomeContComponent implements OnInit, OnDestroy {
   userRole: string
   courseId: string
   courseName: string
+  userId: string
 
   paramMapSub: Subscription
 
-  constructor(private courseService: CourseService, private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private courseService: CourseService, private authService: AuthService, private studentService: StudentService, private teacherService: TeacherService, private router: Router, private activatedRoute: ActivatedRoute) {
+    this.userId = authService.getUserId()
+  }
 
   ngOnInit(): void {
     this.paramMapSub = this.activatedRoute.paramMap.subscribe(
       (params: ParamMap) => {
         //console.dir("activatedRoute change - " + params.get('courseId'))
         this.courseId = params.get('courseId')
-        // get all courses each time the activated route change
-        this.getAllCourse()
       });
 
-    this.getUsername()
     this.getUserRole()
+    this.getUsername()
+
+    this.getAllCourses().subscribe((data) => {
+                          this.allCourses = data
+                          if(this.courseId !== null) 
+                            this.setCourseName()
+                        })
   }
 
   ngOnDestroy() {
@@ -42,13 +51,12 @@ export class HomeContComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllCourse() {
-    this.courseService.queryAll()
-                        .subscribe((data) => {
-                          this.allCourses = data
-                          if(this.courseId !== null) 
-                            this.setCourseName()
-                        })
+  getAllCourses(): Observable<Course[]>  {
+    if(this.userRole === "ROLE_STUDENT") {
+      return this.studentService.queryCourses(this.userId)
+    } else if(this.userRole === "ROLE_TEACHER") {
+      return this.teacherService.queryCourses(this.userId)
+    }
   }
 
   setCourseName() {
@@ -85,7 +93,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
           this.router.navigate(['/courses'])
         }
         else {
-          this.getAllCourse()
+          this.getAllCourses()
         }
       },
       err => {

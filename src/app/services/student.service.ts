@@ -8,6 +8,7 @@ import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angul
 import { Group } from '../models/group.model';
 import { GroupService } from './group.service';
 import { Resources } from '../models/resources.model';
+import { Course } from '../models/course.model';
 
 
 const httpOptions = {
@@ -73,6 +74,27 @@ export class StudentService {
                       });
                     }
                     return allStudents;
+                  })
+                )
+  }
+
+  queryCourses(studentId: string): Observable<Course[]> {
+    /* return courses list */
+    return this.http
+                .get<any>(`${this.API_PATH}/${studentId}/courses`)
+                .pipe(
+                  catchError( err => {
+                    console.error(err);
+                    return throwError(`StudentService.queryCourses error: ${err.message}`)
+                  }),
+                  map( data => {
+                    var courses: Course[] = [];
+                    if(data !== undefined && data._embedded !== undefined) {
+                      data._embedded.courseDTOList.forEach( (course: Course) => {
+                        courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId))
+                      })
+                    }
+                    return courses;
                   })
                 )
   }
