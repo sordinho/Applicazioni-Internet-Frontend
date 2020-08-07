@@ -12,6 +12,7 @@ import { AssigmentsComponent } from './teacher/assigments/assigments.component';
 import { GroupsComponent } from './student/groups/groups.component';
 import { DeliveriesComponent } from './student/deliveries/deliveries.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { HomeContComponent } from './home/home-cont.component';
 
 const routes: Routes = [
     {
@@ -19,7 +20,7 @@ const routes: Routes = [
         path: 'courses/:courseId',
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        component: HomeComponent,
+        component: HomeContComponent,
         children: [
             /* teacher */
             { // students
@@ -53,7 +54,7 @@ const routes: Routes = [
     {
         path: 'courses',
         canActivate: [AuthGuard],
-        component: HomeComponent,
+        component: HomeContComponent,
     },
 
     { // redirect to (default route) 'courses'

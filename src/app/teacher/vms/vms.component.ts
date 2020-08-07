@@ -44,10 +44,10 @@ export class VmsComponent implements OnInit {
     }
 
     displayFn(group: Group) {
-        if (group == null || typeof (group.groupId) == 'undefined') {
+        if (group == null || typeof (group.id) == 'undefined') {
             return '';
         }
-        return group.name + ' (' + group.groupId + ')';
+        return group.name + ' (' + group.id + ')';
     }
 
     filter(event) {
@@ -69,23 +69,23 @@ export class VmsComponent implements OnInit {
     updateAddSelection(value: Group) {
         this.selectedGroup = value;
         console.log('selected: ' + this.selectedGroup.toString());
-        console.log('cpu: ' + this.selectedGroup.cpu);
-        console.log('ram: ' + this.selectedGroup.ram);
+        console.log('cpu: ' + this.selectedGroup.resources.maxVcpu);
+        console.log('ram: ' + this.selectedGroup.resources.maxRam);
         this.updateFormValues();
         this.getGroupVmsData();
 
     }
 
     updateFormValues() {
-        this.cpuLimit.setValue(this.selectedGroup.cpu);
-        this.ramLimit.setValue(this.selectedGroup.ram);
-        this.diskLimit.setValue(this.selectedGroup.disk);
-        this.activesLimit.setValue(this.selectedGroup.actives);
-        this.maxLimit.setValue(this.selectedGroup.max);
+        this.cpuLimit.setValue(this.selectedGroup.resources.maxVcpu);
+        this.ramLimit.setValue(this.selectedGroup.resources.maxRam);
+        this.diskLimit.setValue(this.selectedGroup.resources.maxDiskSpace);
+        this.activesLimit.setValue(this.selectedGroup.resources.maxOn);
+        this.maxLimit.setValue(this.selectedGroup.resources.maxTot);
     }
 
     getGroupVmsData() {
-        this.vmService.getVmsByGroupId(this.selectedGroup.groupId).subscribe((data) => {
+        this.vmService.getVmsByGroupId(this.selectedGroup.id).subscribe((data) => {
             this.vms = data;
         });
     }

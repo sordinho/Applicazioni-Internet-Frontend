@@ -10,6 +10,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {FormControl} from '@angular/forms';
 import * as moment from 'moment';
 import {MatAccordion} from '@angular/material/expansion';
+import { StudentService } from 'src/app/services/student.service';
+import { Resources } from 'src/app/models/resources.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-groups',
@@ -30,7 +33,7 @@ export class GroupsComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor(private groupService: GroupService) {
+    constructor(private groupService: GroupService, private studentService: StudentService) {
     }
 
     ngOnInit(): void {
@@ -48,17 +51,22 @@ export class GroupsComponent implements OnInit {
     }
 
     initStudentGroup() {
-        this.groupService.getStudentGroup('1234', '1')
-            .subscribe((data) => {
-                this.group = null; //data;
-            });
+        this.studentService.getTeamByCourse("s1", "p").subscribe((team: Group) => {
+            this.group = team
+            let members$ = this.groupService.getMembers(team.id)
+            let resources$ = this.groupService.getResources(team.id)
+            forkJoin([members$, resources$]).subscribe(data => {
+                this.group.members = data[0]
+                this.group.resources = data[1]
+            })
+        })
     }
 
     initStudentsWithoutGroup() {
-        this.groupService.getStudentWithoutGroup('1').subscribe(data => {
+        /*this.courseService.queryAvailableStudents("").subscribe(data => {
             this.dataSource = new MatTableDataSource<Student>(data);
             this.dataSource.paginator = this.paginator;
-        });
+        });*/
     }
 
     toggleTableRow(event: MatCheckboxChange, row: Student) {
