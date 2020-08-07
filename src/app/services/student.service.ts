@@ -138,7 +138,7 @@ export class StudentService {
 
     getUnconfirmedTeamsByCourse(studentId: string, courseId: string): Observable<Team[]> {
         return this.http
-            .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/propose-team`)
+            .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/unconfirmed-team`)
             .pipe(
                 catchError(err => {
                     console.error(err);
@@ -148,8 +148,9 @@ export class StudentService {
                     /* convert explicitly the result to Team[]: important to be shown in the mat autocomplete (StudentComponent),
                        otherwise it would be shown [Object, Object] */
                     var allTeams: Team[] = [];
+                    console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
-                        data._embedded.studentDTOList.forEach((team:
+                        data._embedded.teamDToes.forEach((team:
                                                                    Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });

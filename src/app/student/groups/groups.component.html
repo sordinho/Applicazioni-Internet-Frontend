@@ -77,33 +77,33 @@
 		<mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 	</div>
 	<br>
-	<mat-divider></mat-divider>
-	<h4>Group Proposals</h4>
-	<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
-		<button mat-button (click)="openAll()">Expand All</button>
-		<button mat-button (click)="closeAll()">Collapse All</button>
+	<div *ngIf="proposals.length>0">
+		<mat-divider></mat-divider>
+		<h4>Group Proposals</h4>
+		<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
+			<button mat-button (click)="openAll()">Expand All</button>
+			<button mat-button (click)="closeAll()">Collapse All</button>
+		</div>
+		<mat-accordion class="example-headers-align" multi>
+			<mat-expansion-panel *ngFor="let prop of proposals">
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						{{prop.name}}
+					</mat-panel-title>
+					<mat-panel-description>
+						{{prop.status}}
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+				<mat-grid-list cols="3" rowHeight="55px">
+					<mat-grid-tile colspan="2">
+						{{prop.members}}
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<button mat-stroked-button style="margin-left: 5px" color="primary">Accept</button>
+						<button mat-stroked-button style="margin-left: 5px" color="warn">Reject</button>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</mat-expansion-panel>
+		</mat-accordion>
 	</div>
-	<mat-accordion class="example-headers-align" multi>
-		<!--		TODO inserire multipli-->
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					Group1-Name
-				</mat-panel-title>
-				<mat-panel-description>
-					31/07/2020
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile colspan="2">
-					proposed members
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<button mat-stroked-button style="margin-left: 5px" color="primary">Accept</button>
-					<button mat-stroked-button style="margin-left: 5px" color="warn">Reject</button>
-				</mat-grid-tile>
-			</mat-grid-list>
-		</mat-expansion-panel>
-	</mat-accordion>
-
 </div>

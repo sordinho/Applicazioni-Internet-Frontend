@@ -50,7 +50,15 @@ export class GroupService {
                 return throwError(`GroupService.getMembers error: ${err.message}`);
             }),
             map( data => {
-            return data._embedded.studentDTOList
+                /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
+                       otherwise it would be shown [Object, Object] */
+                var allStudents: Student[] = [];
+                if (data !== null) {
+                    data._embedded.studentDToes.forEach((student: Student) => {
+                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
+                    });
+                }
+                return allStudents;
         }))
     }
 

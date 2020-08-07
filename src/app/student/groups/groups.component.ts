@@ -28,12 +28,14 @@ export class GroupsComponent implements OnInit {
     colsToDisplay = ['select'].concat('id', 'lastName', 'firstName');
     proposedGroupName = new FormControl();
     expiryProposal = new FormControl();
-    proposals = []; // [TEST_GROUP, TEST_GROUP];
+    proposals: Team[] = [];
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
-    @ViewChild(MatPaginator) set matPaginator( paginator: MatPaginator){
+
+    @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
         this.dataSource.paginator = paginator;
     }
+
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService) {
@@ -59,6 +61,8 @@ export class GroupsComponent implements OnInit {
             this.dataReady = true;
             console.log('Team: ' + team);
             if (team == null) {
+                console.log('team nullo');
+                this.initTeamProposals();
                 return;
             }
             let members$ = this.groupService.getMembers(team.id);
@@ -71,7 +75,15 @@ export class GroupsComponent implements OnInit {
     }
 
     initTeamProposals() {
-// todo initialize all team proposals for the student. remember to get memebers
+        this.studentService.getUnconfirmedTeamsByCourse('s1', 'c1').subscribe((teams: Team[]) => {
+            this.proposals = teams;
+            this.proposals.forEach((team: Team) => {
+                this.groupService.getMembers(team.id).subscribe(data => {
+                    team.members = data;
+                    console.log('Membri ' + team.id + data[0].id);
+                });
+            });
+        });
     }
 
     initStudentsWithoutTeam() {
