@@ -48,6 +48,7 @@ export class DeleteCourseDialogComponent implements OnInit, OnDestroy {
   }
 
   deleteCourse() {
+    console.dir("delete course - emit: (courseId: " + this.course.id + ")")
     this.emitter.emit(this.course.id)
   }
 

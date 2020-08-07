@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
     }
     
     this.matDialog.open(NewCourseDialogComponent, dialogConfig)
-}
+  }
   
   editCourse() {
     //console.dir("[home.components.ts] editCourse()");

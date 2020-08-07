@@ -37,11 +37,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
     this.getUserRole()
     this.getUsername()
 
-    this.getAllCourses().subscribe((data) => {
-                          this.allCourses = data
-                          if(this.courseId !== null) 
-                            this.setCourseName()
-                        })
+    this.getAllCourses()
   }
 
   ngOnDestroy() {
@@ -51,11 +47,19 @@ export class HomeContComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllCourses(): Observable<Course[]>  {
+  getAllCourses() {
     if(this.userRole === "ROLE_STUDENT") {
-      return this.studentService.queryCourses(this.userId)
+      this.studentService.queryCourses(this.userId).subscribe((data) => {
+                                                                this.allCourses = data
+                                                                if(this.courseId !== null) 
+                                                                  this.setCourseName()
+                                                              })
     } else if(this.userRole === "ROLE_TEACHER") {
-      return this.teacherService.queryCourses(this.userId)
+      this.teacherService.queryCourses(this.userId).subscribe((data) => {
+                                                                this.allCourses = data
+                                                                if(this.courseId !== null) 
+                                                                  this.setCourseName()
+                                                              })
     }
   }
 
@@ -77,22 +81,24 @@ export class HomeContComponent implements OnInit, OnDestroy {
 
   addCourse(course: Course) {
     this.courseService.create(course)
-    .subscribe((createdCourse: Course) => {
-      this.router.navigate(['/courses/' + createdCourse.id])
-    })
+      .subscribe((createdCourse: Course) => {
+        this.router.navigate(['/courses/' + createdCourse.id])
+      })
   }
 
   delelteCourse(selectedCourseId: string) {
     this.courseService.delete(selectedCourseId).subscribe(
       succ => {
-        //console.dir("course " + selectedCourseId + " delete successfully - succ: " + succ)
+        console.dir("course " + selectedCourseId + " delete successfully - succ: " + succ)
 
         if(this.courseId !== null && this.courseId === selectedCourseId) {
           // the current "routed" course is the deleted one --> redirect to /courses  
-          //console.dir("navigate to /courses")
+          console.dir("navigate to /courses")
           this.router.navigate(['/courses'])
         }
         else {
+          // the current "routed" course is not the deleted one --> no redirect --> reload all courses...  
+          console.dir("reload all courses...")
           this.getAllCourses()
         }
       },
