@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { CourseService } from 'src/app/services/course.service';
 import { Course } from 'src/app/models/course.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-new-course-dialog',
@@ -37,11 +38,15 @@ export class NewCourseDialogComponent implements OnInit {
     ]
   })
 
-  enable = true
+  enabled = true
+
+  teacherId: string
 
   error = false
 
-  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, private courseService: CourseService) { }
+  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, private courseService: CourseService, private authService: AuthService) { 
+    this.teacherId = authService.getUserId()
+  }
 
   ngOnInit(): void {
   }
@@ -57,10 +62,10 @@ export class NewCourseDialogComponent implements OnInit {
       this.min.setErrors({'invalid': true})
     } else if (!this.id.invalid && !this.name.invalid && !this.min.invalid && !this.max.invalid) { 
       /* all fields are valid */
-      this.courseService.create(new Course(this.id.value, this.name.value, this.min.value, this.max.value))
+      this.courseService.create(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
         .subscribe((createdCourse: Course) => {
-          if(this.enable === true) 
-          this.dialogRef.close({ id: this.id.value, name: this.name.value })        
+          // console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
+          this.dialogRef.close(createdCourse)        
         },
         err => {
           console.dir("addCourse (error) - err: " + err)
@@ -71,22 +76,24 @@ export class NewCourseDialogComponent implements OnInit {
 
   enableCourse() {
     this.courseService.enable(this.id.value)
-      .subscribe(res => {
-        console.dir("course enabled: " + res)
-      },
-      err => {
-        console.dir("course enable error: " + err)
-      })
+      .subscribe(
+        res => {
+          console.dir("course enabled: " + res)
+        },
+        err => {
+          console.dir("course enable error: " + err)
+        })
   }
 
   disableCourse() {
     this.courseService.disable(this.id.value)
-    .subscribe(res => {
-      console.dir("course disabled: " + res)
-    },
-    err => {
-      console.dir("course disable error: " + err)
-    })
+    .subscribe(
+      res => {
+        console.dir("course disabled: " + res)
+      },
+      err => {
+        console.dir("course disable error: " + err)
+      })
   }
 
   getIdErrorMessage() {
