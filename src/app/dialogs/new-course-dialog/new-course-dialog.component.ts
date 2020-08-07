@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy, EventEmitter, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { CourseService } from 'src/app/services/course.service';
 import { Course } from 'src/app/models/course.model';
@@ -44,11 +44,25 @@ export class NewCourseDialogComponent implements OnInit {
 
   error = false
 
-  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, private courseService: CourseService, authService: AuthService, private router: Router) { 
+  sub: Subscription
+  emitter: EventEmitter<Course>
+
+  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, authService: AuthService, @Inject(MAT_DIALOG_DATA) public data) { 
+    this.emitter = data.emitter
     this.teacherId = authService.getUserId()
   }
 
   ngOnInit(): void {
+    this.sub = this.emitter.subscribe(
+      (createdCourse: Course) => {
+        //console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
+        this.dialogRef.close(createdCourse)
+      },
+      err => {
+        //console.dir("addCourse (error) - err: " + err)
+        this.error = true   
+      }
+    )
   }
 
   onNameChange(value: string) {
@@ -58,7 +72,8 @@ export class NewCourseDialogComponent implements OnInit {
 
   getInitials(str: string) {
     var matches = str.match(/\b(\w)/g)
-    return matches.join('')
+    if(matches !== null) return matches.join('')
+    else return ''
   }
 
   cancel() {
@@ -74,16 +89,7 @@ export class NewCourseDialogComponent implements OnInit {
         return
       } 
       /* all fields are valid */
-      this.courseService.create(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
-        .subscribe((createdCourse: Course) => {
-          //console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
-          this.dialogRef.close(createdCourse)        
-          this.router.navigate(['/courses/' + createdCourse.id])
-        },
-        err => {
-          //console.dir("addCourse (error) - err: " + err)
-          this.error = true
-        })
+      this.emitter.emit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
     } else {
       this.id.markAsTouched({onlySelf: true})
       this.name.markAsTouched({onlySelf: true})

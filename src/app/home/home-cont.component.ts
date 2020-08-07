@@ -67,6 +67,32 @@ export class HomeContComponent implements OnInit, OnDestroy {
     this.userRole = this.authService.getRole()
   }
 
+  addCourse(course: Course) {
+    this.courseService.create(course)
+    .subscribe((createdCourse: Course) => {
+      this.router.navigate(['/courses/' + createdCourse.id])
+    })
+  }
+
+  delelteCourse(selectedCourseId: string) {
+    this.courseService.delete(selectedCourseId).subscribe(
+      succ => {
+        //console.dir("course " + selectedCourseId + " delete successfully - succ: " + succ)
+
+        if(this.courseId !== null && this.courseId === selectedCourseId) {
+          // the current "routed" course is the deleted one --> redirect to /courses  
+          //console.dir("navigate to /courses")
+          this.router.navigate(['/courses'])
+        }
+        else {
+          this.getAllCourse()
+        }
+      },
+      err => {
+        console.dir("removeCourse (error) - err: " + err) 
+      })
+  }
+
   logout() {
     this.authService.logout()
     if(this.authService.isLoggedOut()) {

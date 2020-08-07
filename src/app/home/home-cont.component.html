@@ -3,5 +3,7 @@
     [userId]="username"
     [isTeacher]="userRole" 
     [courseName]="courseName"
+    (addCourseEmitter)="addCourse($event)"
+    (deleteCourseEmitter)="delelteCourse($event)"
     (logoutEmitter)="logout()" >
 </app-home>

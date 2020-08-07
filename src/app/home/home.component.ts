@@ -36,6 +36,8 @@ export class HomeComponent implements OnInit {
 
   // component Output interfaces 
   @Output() logoutEmitter = new EventEmitter<void>()
+  @Output() addCourseEmitter = new EventEmitter<Course>()
+  @Output() deleteCourseEmitter = new EventEmitter<string>()
 
   title = 'VirtualLabs'
   @ViewChild('sidenav') sidenav: MatSidenav
@@ -81,11 +83,14 @@ export class HomeComponent implements OnInit {
     //console.dir("[home.components.ts] addCourse()");
     
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
+    dialogConfig.autoFocus = false;
     dialogConfig.width = "500px";
+    dialogConfig.data = { 
+      emitter: this.addCourseEmitter
+    }
     
     this.matDialog.open(NewCourseDialogComponent, dialogConfig)
-  }
+}
   
   editCourse() {
     //console.dir("[home.components.ts] editCourse()");
@@ -122,18 +127,12 @@ export class HomeComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.width = "500px";
-    dialogConfig.data = this._courses[index];
+    dialogConfig.data = { 
+      course: this._courses[index],
+      emitter: this.deleteCourseEmitter
+    }
     
-    const dialogRef = this.matDialog.open(DeleteCourseDialogComponent, dialogConfig)
-    
-    dialogRef.afterClosed().subscribe(success => {
-      if(success) {
-        console.dir("removeCourse() - success ");
-      } else {
-        // user pressed cancel (?)
-        console.dir("deleteCourse() - unsuccess");
-      }
-    });
+    this.matDialog.open(DeleteCourseDialogComponent, dialogConfig)
   }
 
 }
