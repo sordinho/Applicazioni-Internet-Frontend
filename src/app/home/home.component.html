@@ -5,22 +5,22 @@
   &nbsp;&nbsp;
   <a class="home-link" routerLink="/courses">VirtualLabs</a>
   <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
-  <p class="user-email">{{ email }}</p>
+  <p class="username">{{ _userId }}</p>
   <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>
   
-<mat-toolbar *ngIf="courseSelected"> 
-  {{ courseName }}
+<mat-toolbar *ngIf="_courseSelected"> 
+  {{ _courseName }}
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav mode="side" opened position="start" #sidenav>
     <mat-nav-list>
 
-      <mat-list-item class="list-item" *ngFor="let course of courses" [routerLink]="['/courses/' + course.id]" routerLinkActive="active-list-item">
+      <mat-list-item class="list-item" *ngFor="let course of _courses" [routerLink]="['/courses/' + course.id]" routerLinkActive="active-list-item">
         <span mat-line>{{ course.name }}</span>
         &nbsp;
-        <button mat-icon-button *ngIf="isTeacher" class="menu-button" [matMenuTriggerFor]="menu" (click)="openMenu($event, course.id)">
+        <button mat-icon-button *ngIf="_isTeacher" class="menu-button" [matMenuTriggerFor]="menu" (click)="openMenu($event, course.id)">
           <mat-icon>more_vert</mat-icon>
         </button>
       </mat-list-item>
@@ -36,7 +36,7 @@
         </button>
       </mat-menu>
     
-      <mat-list-item *ngIf="isTeacher" class="list-header" (click)="addCourse()">
+      <mat-list-item *ngIf="_isTeacher" class="list-header" (click)="addCourse()">
         <button mat-icon-button class="add-course-button">
           <mat-icon>add</mat-icon>
         </button>
@@ -49,7 +49,7 @@
   <mat-sidenav-content>
     <nav mat-tab-nav-bar>
       <a mat-tab-link
-        [disabled]='!courseSelected'
+        [disabled]='!_courseSelected'
         *ngFor="let link of navLinks"
         [routerLink]="[link.path]"
         routerLinkActive #rla="routerLinkActive"

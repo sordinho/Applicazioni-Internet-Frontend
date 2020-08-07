@@ -66,10 +66,6 @@ export class AuthService {
         return moment(expiresAt);
     }
 
-    public getEmail() {
-        return localStorage.getItem('email'); // TO DO - REMOVE getEmail
-    }
-
     public getUserId() {
         return localStorage.getItem('userId')
     }
