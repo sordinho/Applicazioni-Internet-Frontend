@@ -51,6 +51,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
+import { HomeContComponent } from './home/home-cont.component';
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dia
     ShareDialogComponent,
     CreateVmDialogComponent,
     UploadCorrectionDialogComponent,
+    HomeContComponent,
   ],
   imports: [
     BrowserModule,

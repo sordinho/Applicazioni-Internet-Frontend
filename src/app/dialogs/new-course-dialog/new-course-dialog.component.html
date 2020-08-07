@@ -2,21 +2,22 @@
 <mat-dialog-content>
   <h1 mat-dialog-title>New course</h1>
 
-  <p *ngIf="error" class="error">Error...</p>
+  <p *ngIf="error" class="error">Conflict... For example there is already another course with the same id.</p>
+
+  <!-- course name -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Name</mat-label>
+    <input matInput #nameInput [formControl]="name" (keyup)="onNameChange(nameInput.value)">
+    <mat-error>{{ getNameErrorMessage() }}</mat-error>
+  </mat-form-field>
 
   <!-- course id -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>ID</mat-label>
-    <input matInput [formControl]="id">
+    <input matInput [formControl]="id"> 
     <mat-error>{{ getIdErrorMessage() }}</mat-error>
   </mat-form-field>
-  <!-- course name -->
-  <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Name</mat-label>
-    <input matInput [formControl]="name">
-    <mat-error>{{ getNameErrorMessage() }}</mat-error>
-  </mat-form-field>
-
+  
   <!-- groups size -->
   <div class="groups-size-container full-width">
     <span class="groups-size-title">Groups</span>  
@@ -34,8 +35,8 @@
     </mat-form-field>
   </div>
  
-  <!-- course enable -->
-  <mat-checkbox [(ngModel)]="enable" color="primary">Enable</mat-checkbox>
+  <!-- course enabled -->
+  <mat-checkbox [(ngModel)]="enabled" color="primary">Enabled</mat-checkbox>
 
   <br>
 

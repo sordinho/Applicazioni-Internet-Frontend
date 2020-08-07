@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { Student } from '../../models/student.model';
 import { StudentService } from '../../services/student.service';
+import { CourseService } from 'src/app/services/course.service';
+import { ActivatedRoute } from '@angular/router';
 
-const courseId = "1"; // we have only one course: [ { "id": 1, "name": "Applicazioni Internet", "path": "applicazioni-internet" } ]
 
 @Component({
   selector: 'app-students-cont',
@@ -12,14 +13,17 @@ const courseId = "1"; // we have only one course: [ { "id": 1, "name": "Applicaz
 })
 export class StudentsContComponent implements OnInit {
 
-  enrolledStudents: Student[] = [];
-  allStudents: Student[] = [];
+  enrolledStudents: Student[] = []
+  allStudents: Student[] = []
 
-  constructor(private studentService: StudentService) { }
+  courseId: string
+
+  constructor(private studentService: StudentService, private courseService: CourseService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getEnrolledStudents();
-    this.getAllStudents();
+    this.courseId = this.route.snapshot.parent.url[1].toString()
+    this.getAllStudents()
+    this.getEnrolledStudents()
   }
 
   getAllStudents() {
@@ -30,9 +34,10 @@ export class StudentsContComponent implements OnInit {
   }
 
   getEnrolledStudents() {
-    this.studentService.queryEnrolled(`${courseId}`)
+    //console.dir("getEnrolledStudents (courseId: " + this.courseId + ")")
+    this.courseService.queryEnrolledStudent(`${this.courseId}`)
                         .subscribe((data) => { 
-                          this.enrolledStudents = data; 
+                          this.enrolledStudents = data
                         });
   }
 

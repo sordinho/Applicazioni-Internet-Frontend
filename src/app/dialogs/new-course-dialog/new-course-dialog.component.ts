@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy, EventEmitter, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { CourseService } from 'src/app/services/course.service';
 import { Course } from 'src/app/models/course.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-course-dialog',
@@ -11,18 +14,17 @@ import { Course } from 'src/app/models/course.model';
 })
 export class NewCourseDialogComponent implements OnInit {
 
-  id = new FormControl('', {
-    updateOn: 'blur',
-    validators: [Validators.required]
-  })
-
   name = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required]
   })
-  
+
+  id = new FormControl('', {
+    updateOn: 'submit',
+    validators: [Validators.required]
+  })
+
   min = new FormControl('1', {
-    updateOn: 'blur',
     validators: [
       Validators.required,
       Validators.pattern("^[0-9]*$")
@@ -30,20 +32,48 @@ export class NewCourseDialogComponent implements OnInit {
   })
 
   max = new FormControl('1', {
-    updateOn: 'blur',
     validators: [
       Validators.required,
       Validators.pattern("^[0-9]*$")
     ]
   })
 
-  enable = true
+  enabled = true
+
+  teacherId: string
 
   error = false
 
-  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, private courseService: CourseService) { }
+  sub: Subscription
+  emitter: EventEmitter<Course>
+
+  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, authService: AuthService, @Inject(MAT_DIALOG_DATA) public data) { 
+    this.emitter = data.emitter
+    this.teacherId = authService.getUserId()
+  }
 
   ngOnInit(): void {
+    this.sub = this.emitter.subscribe(
+      (createdCourse: Course) => {
+        //console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
+        this.dialogRef.close(createdCourse)
+      },
+      err => {
+        //console.dir("addCourse (error) - err: " + err)
+        this.error = true   
+      }
+    )
+  }
+
+  onNameChange(value: string) {
+    if(value === '') this.id.setValue('')
+    else this.id.setValue(this.getInitials(value))
+  }
+
+  getInitials(str: string) {
+    var matches = str.match(/\b(\w)/g)
+    if(matches !== null) return matches.join('')
+    else return ''
   }
 
   cancel() {
@@ -51,42 +81,21 @@ export class NewCourseDialogComponent implements OnInit {
   }
 
   addCourse() {
-    if(this.min.value >= this.max.value) {
-      /* error in min and max values */
-      this.max.setErrors({'invalid': true})
-      this.min.setErrors({'invalid': true})
-    } else if (!this.id.invalid && !this.name.invalid && !this.min.invalid && !this.max.invalid) { 
+    if (!this.id.invalid && !this.name.invalid && !this.min.invalid && !this.max.invalid) { 
+      if(this.min.value > this.max.value) {
+        /* error in min and max values */
+        this.max.setErrors({'invalid': true})
+        this.min.setErrors({'invalid': true})
+        return
+      } 
       /* all fields are valid */
-      this.courseService.create(new Course(this.id.value, this.name.value, this.min.value, this.max.value))
-        .subscribe((createdCourse: Course) => {
-          if(this.enable === true) 
-          this.dialogRef.close({ id: this.id.value, name: this.name.value })        
-        },
-        err => {
-          console.dir("addCourse (error) - err: " + err)
-          this.error = true
-        })
-    } 
-  }
-
-  enableCourse() {
-    this.courseService.enable(this.id.value)
-      .subscribe(res => {
-        console.dir("course enabled: " + res)
-      },
-      err => {
-        console.dir("course enable error: " + err)
-      })
-  }
-
-  disableCourse() {
-    this.courseService.disable(this.id.value)
-    .subscribe(res => {
-      console.dir("course disabled: " + res)
-    },
-    err => {
-      console.dir("course disable error: " + err)
-    })
+      this.emitter.emit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
+    } else {
+      this.id.markAsTouched({onlySelf: true})
+      this.name.markAsTouched({onlySelf: true})
+      this.min.markAsTouched({onlySelf: true})
+      this.max.markAsTouched({onlySelf: true})
+    }
   }
 
   getIdErrorMessage() {
@@ -110,7 +119,7 @@ export class NewCourseDialogComponent implements OnInit {
       return 'Min is required'
     }  else if (this.max.hasError('pattern')) {
       return 'Min is a number!'
-    } else return 'a'
+    } else return 'min <= max'
   }
 
   getMaxErrorMessage() {
@@ -118,7 +127,7 @@ export class NewCourseDialogComponent implements OnInit {
       return 'Max is required'
     } else if (this.max.hasError('pattern')) {
       return 'Max is a number!'
-    } else return 'b'
+    } else return 'max >= min'
   }
 
 }

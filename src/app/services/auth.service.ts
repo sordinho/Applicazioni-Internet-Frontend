@@ -25,8 +25,8 @@ export class AuthService {
             );
     }
 
-    registerUser(username: string, password: string): Observable<any> {
-        return this.http.post<any>(`${this.API_PATH}/register`, {username, password})
+    registerUser(userInformation: UserInformation): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}/sign-up`, userInformation)
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - registerUser() - .tap() --> token: " + res.token);
@@ -40,18 +40,24 @@ export class AuthService {
         const token = JSON.parse(atob(authResult.token.split('.')[1]));
 
         localStorage.setItem('token', authResult.token);
-        // console.log('ruolo: ' + token.roles);
+        
+        //console.log('ruolo: ' + token.roles);
         localStorage.setItem('role', token.roles);
-        // console.log('email: ' + authResult.username);
-        localStorage.setItem('email', authResult.username);
-        // json-server-auth token field exp contains epoch of exportation (last 1 hour)
-        localStorage.setItem('expires_at', token.exp);
-        // console.dir("exp_at: " + token.exp)
+        
+        //console.log('username: ' + authResult.username);
+        localStorage.setItem('userId', authResult.username);
+        
+        // token field exp contains epoch of exportation 
+        //console.dir("exp_at: " + token.exp)
+        localStorage.setItem('expires_at', token.exp)
+        
     }
 
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('expires_at');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
     }
 
     getExpiration() {
@@ -60,8 +66,8 @@ export class AuthService {
         return moment(expiresAt);
     }
 
-    public getEmail() {
-        return localStorage.getItem('email');
+    public getUserId() {
+        return localStorage.getItem('userId')
     }
 
     isStudent() {
@@ -91,11 +97,20 @@ export class AuthService {
 
 }
 
-export interface UserInformationRequest {
+export class UserInformation {
     id: string
     email: string
     lastName: string
     firstName: string
     password: string
     repeatPassword: string 
+
+    constructor(id: string, email: string, lastName: string, firstName: string, password: string, repeatPassword: string) {
+        this.id = id
+        this,email = email
+        this.lastName = lastName
+        this.firstName = firstName
+        this.password = password
+        this.repeatPassword = repeatPassword
+    }
 }
