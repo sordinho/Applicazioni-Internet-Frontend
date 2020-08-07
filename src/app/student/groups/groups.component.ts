@@ -38,7 +38,7 @@ export class GroupsComponent implements OnInit {
         this.dataSource.paginator = paginator;
     }
 
-    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService, private authService:AuthService) {
+    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService, private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -56,7 +56,7 @@ export class GroupsComponent implements OnInit {
     }
 
     initStudentTeam() {
-        this.studentService.getTeamByCourse('s1', 'c1').subscribe((team: Team) => {
+        this.studentService.getTeamByCourse(this.authService.getUserId(), 'c1').subscribe((team: Team) => {
             this.team = team;
             this.dataReady = true;
             console.log('Team: ' + team);
@@ -75,7 +75,7 @@ export class GroupsComponent implements OnInit {
     }
 
     initTeamProposals() {
-        this.studentService.getUnconfirmedTeamsByCourse('s1', 'c1').subscribe((teams: Team[]) => {
+        this.studentService.getUnconfirmedTeamsByCourse(this.authService.getUserId(), 'c1').subscribe((teams: Team[]) => {
             this.proposals = teams;
             this.proposals.forEach((team: Team) => {
                 this.groupService.getMembers(team.id).subscribe(data => {
@@ -88,8 +88,8 @@ export class GroupsComponent implements OnInit {
 
     initStudentsWithoutTeam() {
         this.dataSource = new MatTableDataSource<Student>([]);
-        this.courseService.queryAvailableStudents('c1').subscribe((data:Student[]) => {
-            data = data.filter((s:Student) => s.id !== this.authService.)
+        this.courseService.queryAvailableStudents('c1').subscribe((data: Student[]) => {
+            // data.filter((s: Student) => s.id === this.authService.getUserId()); // TODO per evitare che uno studente debba selezionarsi per un gruppo
             this.dataSource = new MatTableDataSource<Student>(data);
         });
     }
@@ -106,7 +106,7 @@ export class GroupsComponent implements OnInit {
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         console.log(members);
         console.log(expiry.format());
-        this.courseService.createTeam('c1', this.proposedGroupName.value, members, 's1', expiry.format())
+        this.courseService.createTeam('c1', this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format())
             .subscribe((proposed: Team) => {
                 console.log(proposed);
             });
