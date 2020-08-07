@@ -11,11 +11,10 @@ import { Subscription } from 'rxjs';
   templateUrl: './delete-course-dialog.component.html',
   styleUrls: ['./delete-course-dialog.component.css']
 })
-export class DeleteCourseDialogComponent implements OnInit, OnDestroy {
+export class DeleteCourseDialogComponent implements OnInit {
 
   id: FormControl
   name: FormControl
-  sub: Subscription
 
   course: Course
   emitter: EventEmitter<string>
@@ -29,18 +28,6 @@ export class DeleteCourseDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub = this.emitter.subscribe(
-      succ => {
-        this.dialogRef.close(true)
-      },
-      err => {
-        this.dialogRef.close(false)   
-      }
-    )
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe()
   }
 
   cancel() {
@@ -48,8 +35,9 @@ export class DeleteCourseDialogComponent implements OnInit, OnDestroy {
   }
 
   deleteCourse() {
-    console.dir("delete course - emit: (courseId: " + this.course.id + ")")
+    //console.dir("delete course - emit: (courseId: " + this.course.id + ")")
     this.emitter.emit(this.course.id)
+    this.dialogRef.close(true)
   }
 
 }

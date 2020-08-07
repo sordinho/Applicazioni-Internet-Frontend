@@ -30,8 +30,8 @@ export class HomeContComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.paramMapSub = this.activatedRoute.paramMap.subscribe(
       (params: ParamMap) => {
-        //console.dir("activatedRoute change - " + params.get('courseId'))
         this.courseId = params.get('courseId')
+        this.setCourseName()
       });
 
     this.getUserRole()
@@ -79,26 +79,19 @@ export class HomeContComponent implements OnInit, OnDestroy {
     this.userRole = this.authService.getRole()
   }
 
-  addCourse(course: Course) {
-    this.courseService.create(course)
-      .subscribe((createdCourse: Course) => {
-        this.router.navigate(['/courses/' + createdCourse.id])
-      })
-  }
-
   delelteCourse(selectedCourseId: string) {
     this.courseService.delete(selectedCourseId).subscribe(
       succ => {
-        console.dir("course " + selectedCourseId + " delete successfully - succ: " + succ)
+        //console.dir("course " + selectedCourseId + " delete successfully - succ: " + succ)
 
         if(this.courseId !== null && this.courseId === selectedCourseId) {
           // the current "routed" course is the deleted one --> redirect to /courses  
-          console.dir("navigate to /courses")
+          //console.dir("navigate to /courses")
           this.router.navigate(['/courses'])
         }
         else {
           // the current "routed" course is not the deleted one --> no redirect --> reload all courses...  
-          console.dir("reload all courses...")
+          //console.dir("reload all courses...")
           this.getAllCourses()
         }
       },

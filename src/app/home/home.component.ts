@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
 
   // component Output interfaces 
   @Output() logoutEmitter = new EventEmitter<void>()
-  @Output() addCourseEmitter = new EventEmitter<Course>()
+  @Output() reloadCoursesEmitter = new EventEmitter<void>()
   @Output() deleteCourseEmitter = new EventEmitter<string>()
 
   title = 'VirtualLabs'
@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit {
     dialogConfig.autoFocus = false;
     dialogConfig.width = "500px";
     dialogConfig.data = { 
-      emitter: this.addCourseEmitter
+      emitter: this.reloadCoursesEmitter
     }
     
     this.matDialog.open(NewCourseDialogComponent, dialogConfig)

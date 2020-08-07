@@ -44,25 +44,14 @@ export class NewCourseDialogComponent implements OnInit {
 
   error = false
 
-  sub: Subscription
-  emitter: EventEmitter<Course>
+  emitter: EventEmitter<void>
 
-  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, authService: AuthService, @Inject(MAT_DIALOG_DATA) public data) { 
+  constructor(private dialogRef: MatDialogRef<NewCourseDialogComponent>, @Inject(MAT_DIALOG_DATA) public data, authService: AuthService, private courseService: CourseService) { 
     this.emitter = data.emitter
     this.teacherId = authService.getUserId()
   }
 
   ngOnInit(): void {
-    this.sub = this.emitter.subscribe(
-      (createdCourse: Course) => {
-        //console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
-        this.dialogRef.close(createdCourse)
-      },
-      err => {
-        //console.dir("addCourse (error) - err: " + err)
-        this.error = true   
-      }
-    )
   }
 
   onNameChange(value: string) {
@@ -89,7 +78,19 @@ export class NewCourseDialogComponent implements OnInit {
         return
       } 
       /* all fields are valid */
-      this.emitter.emit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
+      this.courseService.create(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
+            .subscribe(
+              (createdCourse: Course) => {
+                // console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
+                this.emitter.emit()
+                this.dialogRef.close(createdCourse)
+              },
+              err => {
+                // console.dir("addCourse (error) - err: " + err)
+                this.error = true   
+              }
+            )
+
     } else {
       this.id.markAsTouched({onlySelf: true})
       this.name.markAsTouched({onlySelf: true})
