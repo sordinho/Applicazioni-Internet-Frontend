@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, UserInformation } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -10,13 +10,41 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
+  id = new FormControl('', {
+    updateOn: 'blur',
+    validators: [Validators.required]
+  });
+
   email = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.email]
   });
+  
+  lastName = new FormControl('', {
+    updateOn: 'blur',
+    validators: [Validators.required]
+  });
+
+  firstName = new FormControl('', {
+    updateOn: 'blur',
+    validators: [Validators.required]
+  });
+
+  /** Password must be:
+    * At least 8 chars
+    * Contains at least one digit
+    * Contains at least one lower alpha char and one upper alpha char
+    * Contains at least one char within a set of special chars (@#%$^ etc.)
+    * Does not contain space, tab, etc.
+    * */
   password = new FormControl('', {
     updateOn: 'blur',
-    validators: [Validators.required, Validators.minLength(6)]
+    validators: [Validators.required, Validators.minLength(8), Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])([a-zA-Z0-9@#$%^&+=]+)$")]
+  })
+
+  repeatPassword = new FormControl('', {
+    updateOn: 'blur',
+    validators: [Validators.required]
   });
 
   loading = false;
@@ -36,12 +64,15 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    //console.log("email: " + this.email.value);
-    //console.log("pass: " + this.password.value);
-    if(!this.email.invalid && !this.password.invalid){
+    if(this.password.value !== this.repeatPassword.value) {
+      this.loginError = true
+      this.password.reset()
+      this.repeatPassword.reset()
+    } else if(this.id.valid && this.email.valid && this.lastName.valid && this.firstName.valid && this.password.valid && this.repeatPassword.valid){
       this.loading = true;
 
-      this.authService.registerUser(this.email.value, this.password.value)
+      console.dir("id: " + this.id.value + " email: " + this.email.value + " lastName: " + this.lastName.value + " fistName: " + this.firstName.value + " password: " + this.password.value + " repeatPassword: " + this.repeatPassword.value)
+      this.authService.registerUser(new UserInformation(this.id.value, this.email.value, this.lastName.value, this.firstName.value, this.password.value, this.repeatPassword.value))
                       .subscribe(
                         suc => {
                           //console.dir("LoginComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);
@@ -49,14 +80,27 @@ export class RegisterComponent implements OnInit {
                         },
                         err => {
                           //console.dir(".subscribe (error) - result.accessToken: " + err.accessToken);
-                          this.loading = false;
-                          this.loginError = true;
-                          this.password.reset();
+                          this.loading = false
+                          this.loginError = true
+                          this.password.reset()
+                          this.repeatPassword.reset()
                         }
                       );
     } else {
-      this.email.markAsTouched({onlySelf: true});
-      this.password.markAsTouched({onlySelf: true});
+      this.id.markAsTouched({onlySelf: true})
+      this.email.markAsTouched({onlySelf: true})
+      this.lastName.markAsTouched({onlySelf: true})
+      this.firstName.markAsTouched({onlySelf: true})
+      this.password.markAsTouched({onlySelf: true})
+      this.repeatPassword.markAsTouched({onlySelf: true})
+    }
+  }
+
+  getIdErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'Id is required';
+    } else {
+      return '';
     }
   }
 
@@ -70,14 +114,40 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  getPasswordErrorMessage() {
-    if (this.password.hasError('required')) {
-      return 'Password is required';
-    } else if(this.password.hasError('minlength')) {
-      return 'Password must be at least 6 characters';
+  getLastNameErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'Last name is required';
     } else {
       return '';
     }
   }
 
+  getFirstNameErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'First name is required';
+    } else {
+      return '';
+    }
+  }
+
+  getPasswordErrorMessage() {
+    if (this.password.hasError('required')) {
+      return 'Password is required';
+    } else if(this.password.hasError('minlength')) {
+      return 'Password must be at least 8 characters';
+    } else if(this.password.hasError('pattern')) {
+      return 'Password must have 1+ digit, lower and upper char, special char'
+    } else {
+      return '';
+    }
+  }
+
+  getRepeatPasswordErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'Repeat password is required';
+    } else {
+      return '';
+    }
+  }
+  
 }

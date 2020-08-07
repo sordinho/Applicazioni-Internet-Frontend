@@ -1,19 +1,52 @@
 <mat-card class="home-card mat-elevation-z6">    
+    
     <mat-card-content>
         <h2 class="center">Create an account</h2>
-        <p *ngIf="loginError" class="error">Unauthorized. Please check the email address and password and try again.</p>
+        <p *ngIf="loginError" class="error">Please check the email address and password and try again.</p>
+        
+        <!-- id -->
+        <mat-form-field class="full-width" appearance="standard">
+            <mat-label>Id</mat-label>
+            <input matInput [formControl]="id">
+            <mat-error>{{ getIdErrorMessage() }}</mat-error>
+        </mat-form-field>
+
         <!-- email -->
         <mat-form-field class="full-width" appearance="standard">
             <mat-label>Email</mat-label>
             <input matInput [formControl]="email">
             <mat-error>{{ getEmailErrorMessage() }}</mat-error>
         </mat-form-field>
+        
+        <!-- last name -->
+        <mat-form-field class="full-width" appearance="standard">
+            <mat-label>Last Name</mat-label>
+            <input matInput [formControl]="lastName">
+            <mat-error>{{ getLastNameErrorMessage() }}</mat-error>
+        </mat-form-field>
+
+        <!-- first name -->
+        <mat-form-field class="full-width" appearance="standard">
+            <mat-label>First Name</mat-label>
+            <input matInput [formControl]="firstName">
+            <mat-error>{{ getFirstNameErrorMessage() }}</mat-error>
+        </mat-form-field>
+
         <!-- password -->
         <mat-form-field class="full-width" appearance="standard">
             <mat-label>Password</mat-label>
             <input matInput [formControl]="password" type="password">
             <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
         </mat-form-field>
+
+        <!-- repeat password -->
+        <mat-form-field class="full-width" appearance="standard">
+            <mat-label>Repeat Password</mat-label>
+            <input matInput [formControl]="repeatPassword" type="password">
+            <mat-error>{{ getRepeatPasswordErrorMessage() }}</mat-error>
+        </mat-form-field>
+
+
     </mat-card-content>
 
     <mat-card-actions>
