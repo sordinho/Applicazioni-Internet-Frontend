@@ -14,6 +14,7 @@ import {forkJoin} from 'rxjs';
 import {Team, TEST_GROUP} from '../../models/team.model';
 import {CourseService} from '../../services/course.service';
 import {AuthService} from '../../services/auth.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-groups',
@@ -30,6 +31,7 @@ export class GroupsComponent implements OnInit {
     proposedGroupName = new FormControl();
     expiryProposal = new FormControl();
     proposals: Team[] = [];
+    courseId: string = '';
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -38,25 +40,18 @@ export class GroupsComponent implements OnInit {
         this.dataSource.paginator = paginator;
     }
 
-    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService, private authService: AuthService) {
+    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService, private authService: AuthService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
+        this.courseId = this.route.snapshot.parent.url[1].toString();
+        this.dataSource = new MatTableDataSource<Student>([]);
         this.initStudentTeam();
         this.initStudentsWithoutTeam();
     }
 
-
-    openAll() {
-        this.accordion.openAll();
-    }
-
-    closeAll() {
-        this.accordion.closeAll();
-    }
-
     initStudentTeam() {
-        this.studentService.getTeamByCourse(this.authService.getUserId(), 'c1').subscribe((team: Team) => {
+        this.studentService.getTeamByCourse(this.authService.getUserId(), this.courseId).subscribe((team: Team) => {
             this.team = team;
             this.dataReady = true;
             console.log('Team: ' + team);
@@ -75,7 +70,7 @@ export class GroupsComponent implements OnInit {
     }
 
     initTeamProposals() {
-        this.studentService.getUnconfirmedTeamsByCourse(this.authService.getUserId(), 'c1').subscribe((teams: Team[]) => {
+        this.studentService.getUnconfirmedTeamsByCourse(this.authService.getUserId(), this.courseId).subscribe((teams: Team[]) => {
             this.proposals = teams;
             this.proposals.forEach((team: Team) => {
                 this.groupService.getMembers(team.id).subscribe(data => {
@@ -87,10 +82,9 @@ export class GroupsComponent implements OnInit {
     }
 
     initStudentsWithoutTeam() {
-        this.dataSource = new MatTableDataSource<Student>([]);
-        this.courseService.queryAvailableStudents('c1').subscribe((data: Student[]) => {
-            // data.filter((s: Student) => s.id === this.authService.getUserId()); // TODO per evitare che uno studente debba selezionarsi per un gruppo
-            this.dataSource = new MatTableDataSource<Student>(data);
+        this.courseService.queryAvailableStudents(this.courseId).subscribe((data: Student[]) => {
+            let filtered: Student[] = data.filter((s: Student) => s.id != this.authService.getUserId());
+            this.dataSource = new MatTableDataSource<Student>(filtered);
         });
     }
 
@@ -105,8 +99,8 @@ export class GroupsComponent implements OnInit {
         let expiry = moment(this.expiryProposal.value, 'YYYY-MM-DD');
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         console.log(members);
-        console.log(expiry.format());
-        this.courseService.createTeam('c1', this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format())
+        console.log(expiry.format("DD/MM/YYYY"));
+        this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format("DD/MM/YYYY"))
             .subscribe((proposed: Team) => {
                 console.log(proposed);
             });

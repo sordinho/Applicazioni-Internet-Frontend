@@ -4,10 +4,10 @@ import {Student} from '../models/student.model';
 import {Observable, throwError, forkJoin, of} from 'rxjs';
 import {map, catchError, retry, tap, shareReplay, flatMap} from 'rxjs/operators';
 
-import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { GroupService } from './group.service';
-import { Resources } from '../models/resources.model';
-import { Course } from '../models/course.model';
+import {HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders} from '@angular/common/http';
+import {GroupService} from './group.service';
+import {Resources} from '../models/resources.model';
+import {Course} from '../models/course.model';
 import {Team} from '../models/team.model';
 
 
@@ -69,48 +69,48 @@ export class StudentService {
                     /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
-                    if(data !== undefined && data._embedded !== undefined) {
-                      data._embedded.studentDTOList.forEach( (student: Student) => {
-                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                      });
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.studentDTOList.forEach((student: Student) => {
+                            allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
+                        });
                     }
                     return allStudents;
                 })
             );
     }
 
-  queryCourses(studentId: string): Observable<Course[]> {
-    /* return courses list */
-    return this.http
-                .get<any>(`${this.API_PATH}/${studentId}/courses`)
-                .pipe(
-                  catchError( err => {
+    queryCourses(studentId: string): Observable<Course[]> {
+        /* return courses list */
+        return this.http
+            .get<any>(`${this.API_PATH}/${studentId}/courses`)
+            .pipe(
+                catchError(err => {
                     console.error(err);
-                    return throwError(`StudentService.queryCourses error: ${err.message}`)
-                  }),
-                  map( data => {
+                    return throwError(`StudentService.queryCourses error: ${err.message}`);
+                }),
+                map(data => {
                     var courses: Course[] = [];
-                    if(data !== undefined && data._embedded !== undefined) {
-                      data._embedded.courseDTOList.forEach( (course: Course) => {
-                        courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId))
-                      })
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.courseDToes.forEach((course: Course) => {
+                            courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
+                        });
                     }
                     return courses;
-                  })
-                )
-  }
+                })
+            );
+    }
 
-  enroll(students: Student[], courseId: string) {
-    /*const requests$ = new Array<Observable<Student>>();
+    enroll(students: Student[], courseId: string) {
+        /*const requests$ = new Array<Observable<Student>>();
 
-        students.forEach( student => {
-          if(student.courseId != courseId) {
-            student.courseId = courseId;
-            requests$.push(this.update(student));
-          }
-        });
+            students.forEach( student => {
+              if(student.courseId != courseId) {
+                student.courseId = courseId;
+                requests$.push(this.update(student));
+              }
+            });
 
-        return forkJoin(requests$);*/
+            return forkJoin(requests$);*/
     }
 
     unenroll(students: Student[]) {
@@ -141,7 +141,7 @@ export class StudentService {
                     console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
                         data._embedded.teamDToes.forEach((team:
-                                                                   Team) => {
+                                                              Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });
                     }
@@ -156,9 +156,11 @@ export class StudentService {
             .get<Team>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
             .pipe(
                 catchError(err => {
-                    console.error(err);
-                    return of(null); // return null so i can handle the 404
-                    // return throwError(`StudentService.find error: ${err.message}`);
+                    console.error('CODE: ' + err.status);
+                    if (err.status == '404') {
+                        return of(null);
+                    } // return null so i can handle the 404
+                    return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
                 })
             );
     }

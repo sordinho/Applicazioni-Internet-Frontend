@@ -22,6 +22,7 @@
 <div *ngIf="dataReady && team===null">
 	<div>
 		<h3>Propose Group</h3>
+		<h5>You're automatically added to a new proposed group</h5>
 		<br>
 		<div>
 			<mat-form-field style="width: 50%">
@@ -94,7 +95,7 @@
 						{{prop.status}}
 					</mat-panel-description>
 				</mat-expansion-panel-header>
-				<mat-grid-list cols="3">
+				<mat-grid-list cols="3" rowHeight="{{75*prop.members.length}}px">
 					<mat-grid-tile colspan="2">
 						<mat-list>
 							<mat-list-item *ngFor="let m of prop.members">
