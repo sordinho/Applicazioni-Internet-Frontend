@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Course } from '../models/course.model';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Student } from '../models/student.model';
 
@@ -114,4 +114,35 @@ export class CourseService {
                 )
   }
 
+  enroll(students: Student[], courseId: string): Observable<Student[]> {
+    const requests$ = new Array<Observable<Student>>();
+
+    students.forEach( student => {
+      requests$.push(
+        this.http.post<Student>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id })
+          .pipe(
+            catchError( err => {
+            console.error(err);
+            return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`);
+          })
+        )
+      )
+    });
+    
+    return forkJoin(requests$)
+  }
+
+  unenroll(students: Student[]) {
+    /*const requests$ = new Array<Observable<Student>>();
+
+    students.forEach( student => {
+      if(student.courseId != "0") {
+        student.courseId = "0";
+        requests$.push(this.update(student));
+      }
+    });
+    
+    return forkJoin(requests$);*/
+  }
+  
 }

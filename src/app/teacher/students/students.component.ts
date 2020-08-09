@@ -36,9 +36,9 @@ export class StudentsComponent implements AfterViewInit {
 
   // component Input interfaces 
   @Input() set students(allStudents: Student[]) {
-    this._students = allStudents;
+    this._students = allStudents
     // TODO this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1"); 
-    this._filteredStudents = allStudents;
+    this._filteredStudents = allStudents // available students to be enrolled (search bar) 
     //console.dir("_filteredStudents" + this._filteredStudents);
   }
   @Input() set enrolledStudents(students: Student[]) {

@@ -22,6 +22,7 @@ export class StudentsContComponent implements OnInit {
 
   ngOnInit(): void {
     this.courseId = this.route.snapshot.parent.url[1].toString()
+    
     this.getAllStudents()
     this.getEnrolledStudents()
   }
@@ -38,27 +39,27 @@ export class StudentsContComponent implements OnInit {
     this.courseService.queryEnrolledStudent(`${this.courseId}`)
                         .subscribe((data) => { 
                           this.enrolledStudents = data
-                        });
+                        })
   }
 
   enrollStudents(students: Student[]) {
-    console.dir("enrollStudent - TODO (courseService)")
-    /*this.studentService.enroll(students, courseId)
+    console.dir("enrollStudent")
+    this.courseService.enroll(students, this.courseId)
                           .subscribe( _ => {
                             //console.dir("enrollStudents(" + students + ")");
                             this.getEnrolledStudents();
                             this.getAllStudents();
-                          });*/
+                          })
   }
 
   unenrollStudents(students: Student[]) {
     console.dir("unenrollStudent - TODO (courseService)")
-    /*this.studentService.unenroll(students)
+    /*this.studentService.unenroll(students, this.courseId)
                           .subscribe( _ => {
                             //console.dir("unenrollStudents(" + students +")");
                             this.getEnrolledStudents();
                             this.getAllStudents();
-                          });*/
+                          })*/
   }
 
 }
