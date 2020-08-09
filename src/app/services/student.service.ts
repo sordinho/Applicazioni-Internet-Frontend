@@ -4,8 +4,11 @@ import {Student} from '../models/student.model';
 import {Observable, throwError, forkJoin, of} from 'rxjs';
 import {map, catchError, retry, tap, shareReplay, flatMap} from 'rxjs/operators';
 
-import {HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders} from '@angular/common/http';
-import {Team} from '../models/team.model';
+import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { Group } from '../models/group.model';
+import { GroupService } from './group.service';
+import { Resources } from '../models/resources.model';
+import { Course } from '../models/course.model';
 
 
 const httpOptions = {
@@ -66,52 +69,39 @@ export class StudentService {
                     /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
-                    if (data !== null) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
-                            allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                        });
+                    if(data !== undefined && data._embedded !== undefined) {
+                      data._embedded.studentDTOList.forEach( (student: Student) => {
+                        allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
+                      });
                     }
                     return allStudents;
                 })
             );
     }
 
-    queryEnrolled(courseId: string): Observable<Student[]> {
-        return this.queryAll();
-        /* return enrolled students list (by courseId)
-        return this.http
-                    .get<Student[]>(`${this.API_PATH}?courseId=${courseId}`)
-                    .pipe(
-                      catchError( err => {
-                        console.error(err);
-                        return throwError(`StudentService.queryAll ${courseId} error: ${err.message}`);
-                      }),
-                      map( data => {
-                        var enrolledStudents: Student[] = [];
-                        data.forEach( student => {
-                          enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.courseId, student.id));
-                        });
-                        return enrolledStudents;
-                      })
-                    )
-      */
-    }
-
-    delete(studentId: string): Observable<Student[]> {
-        /* delete student (by studentId) */
-        return this.http
-            .delete<Student[]>(`${this.API_PATH}/${studentId}`)
-            .pipe(
-                catchError(err => {
+  queryCourses(studentId: string): Observable<Course[]> {
+    /* return courses list */
+    return this.http
+                .get<any>(`${this.API_PATH}/${studentId}/courses`)
+                .pipe(
+                  catchError( err => {
                     console.error(err);
-                    return throwError(`StudentService.delete ${studentId} error: ${err.message}`);
-                })
-            );
-    }
+                    return throwError(`StudentService.queryCourses error: ${err.message}`)
+                  }),
+                  map( data => {
+                    var courses: Course[] = [];
+                    if(data !== undefined && data._embedded !== undefined) {
+                      data._embedded.courseDTOList.forEach( (course: Course) => {
+                        courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId))
+                      })
+                    }
+                    return courses;
+                  })
+                )
+  }
 
-
-    enroll(students: Student[], courseId: string) {
-        /*const requests$ = new Array<Observable<Student>>();
+  enroll(students: Student[], courseId: string) {
+    /*const requests$ = new Array<Observable<Student>>();
 
         students.forEach( student => {
           if(student.courseId != courseId) {

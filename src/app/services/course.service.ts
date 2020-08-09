@@ -1,10 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Course} from '../models/course.model';
-import {HttpHeaders, HttpClient} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {Student} from '../models/student.model';
-import {Team} from '../models/team.model';
+import { Injectable } from '@angular/core';
+import { Course } from '../models/course.model';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Student } from '../models/student.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -46,64 +45,19 @@ export class CourseService {
             .pipe(
                 catchError(err => {
                     console.error(err);
-                    return throwError(`CourseService.queryAll error: ${err.message}`);
-                }),
-                /*map( data => {
-                  var allStudents: Student[] = [];
-                  if(data !== null) {
-                    data._embedded.studentDTOList.forEach( (student: Student) => {
-                      allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                    });
-                  }
-                  return allStudents;
-                })*/
-            );
-    }
-
-    enable(courseId: string): Observable<any> {
-        return this.http
-            .post<any>(`${this.API_PATH}/${courseId}/enable`, courseId)
-            .pipe(
-                catchError(err => {
-                    console.error(err);
-                    return throwError(`CourseService.enable error: ${err.message}`);
-                })
-            );
-    }
-
-    disable(courseId: string): Observable<any> {
-        return this.http
-            .post<any>(`${this.API_PATH}/${courseId}/disable`, courseId)
-            .pipe(
-                catchError(err => {
-                    console.error(err);
-                    return throwError(`CourseService.disable error: ${err.message}`);
-                })
-            );
-    }
-
-    queryAvailableStudents(courseId: string): Observable<Student[]> {
-        /* return students list */
-        return this.http
-            .get<any>(`${this.API_PATH}/${courseId}/teams/available-students`)
-            .pipe(
-                catchError(err => {
-                    console.error(err);
-                    return throwError(`StudentService.queryAll error: ${err.message}`);
-                }),
-                map(data => {
-                    /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
-                       otherwise it would be shown [Object, Object] */
-                    var allStudents: Student[] = [];
-                    if (data !== null) {
-                        data._embedded.studentDToes.forEach((student: Student) => {
-                            allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                        });
+                    return throwError(`CourseService.queryAll error: ${err.message}`)
+                  }),
+                  map( data => {
+                    var courses: Course[] = [];
+                    if(data !== undefined && data._embedded !== undefined) {
+                      data._embedded.courseDTOList.forEach( (course: Course) => {
+                        courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId))
+                      })
                     }
-                    return allStudents;
-                })
-            );
-    }
+                    return courses;
+                  })
+                )
+  }
 
     createTeam(courseId: string, teamName: string, memberIds: string[], studentId: string, timeout: string) {
         // propose a new team
@@ -121,6 +75,40 @@ export class CourseService {
             );
 
     }
+
+  delete(courseId: string): Observable<any> {
+    /* delete course (by courseId) */
+    return this.http
+                .delete<any>(`${this.API_PATH}/${courseId}`)
+                .pipe(
+                  catchError( err => {
+                    console.error(err);
+                    return throwError(`CourseService.delete ${courseId} error: ${err.message}`);
+                })
+              );
+  }  
+
+  queryEnrolledStudent(courseId: string): Observable<Student[]> { 
+    /* return enrolled students list (by courseId) */
+    return this.http
+                .get<any>(`${this.API_PATH}/${courseId}/enrolled`)
+                .pipe(
+                  catchError( err => {
+                    console.error(err);
+                    return throwError(`CourseService.queryEnrolledStudent ${courseId} error: ${err.message}`);
+                  }),
+                  map( data => {
+                    /* convert explicitly the result to Student[] */
+                    var enrolledStudents: Student[] = [];
+                    if(data !== undefined && data._embedded !== undefined) {
+                      data._embedded.studentDTOList.forEach( (student: Student) => {
+                        enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
+                      });
+                    }
+                    return enrolledStudents;
+                  })
+                )
+  }
 
 }
 
