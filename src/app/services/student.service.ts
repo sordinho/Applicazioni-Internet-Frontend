@@ -5,10 +5,10 @@ import {Observable, throwError, forkJoin, of} from 'rxjs';
 import {map, catchError, retry, tap, shareReplay, flatMap} from 'rxjs/operators';
 
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { Group } from '../models/group.model';
 import { GroupService } from './group.service';
 import { Resources } from '../models/resources.model';
 import { Course } from '../models/course.model';
+import {Team} from '../models/team.model';
 
 
 const httpOptions = {
