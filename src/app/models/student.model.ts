@@ -4,6 +4,7 @@ export class Student {
     firstName: string;
     email: string;
     image: string[];
+    status: string; // temporary save here status of the student inside a group
 
     constructor(id: string, lastName: string, firstName: string, email: string, image = []) {
         this.id = id;

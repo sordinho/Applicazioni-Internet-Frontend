@@ -92,21 +92,14 @@
 						{{prop.name}}
 					</mat-panel-title>
 					<mat-panel-description>
-						{{prop.status}}
+						{{prop.proposer}}
 					</mat-panel-description>
 				</mat-expansion-panel-header>
-				<mat-grid-list cols="3" rowHeight="{{75*prop.members.length}}px">
-					<mat-grid-tile colspan="2">
-						<mat-list>
-							<mat-list-item *ngFor="let m of prop.members">
-								<mat-icon mat-list-icon>person</mat-icon>
-								{{m}}
-							</mat-list-item>
-						</mat-list>
-					</mat-grid-tile>
-					<mat-grid-tile>
-						<button mat-stroked-button style="margin-left: 5px" color="primary">Accept</button>
-						<button mat-stroked-button style="margin-left: 5px" color="warn">Reject</button>
+				<mat-grid-list cols="3" rowHeight="55px">
+					<mat-grid-tile *ngFor="let m of prop.members">
+						<mat-icon mat-list-icon>person</mat-icon>
+						{{m}} &nbsp;&nbsp;&nbsp;
+						<mat-icon mat-list-icon *ngIf="m.status==='ACCEPTED'">done</mat-icon>
 					</mat-grid-tile>
 				</mat-grid-list>
 			</mat-expansion-panel>

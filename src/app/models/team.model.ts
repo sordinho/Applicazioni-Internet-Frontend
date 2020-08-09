@@ -11,14 +11,16 @@ export class Team {
 
     resources: Resources;
     members: Student[];
+    proposer: Student;
 
-    constructor(id?: string, name?: string, status?: string, vmModel?: string, resources?: Resources, members?: Student[]) {
+    constructor(id?: string, name?: string, status?: string, vmModel?: string, resources?: Resources, members?: Student[], proposer?: Student) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.vmModel = vmModel;
         this.resources = resources;
         this.members = members;
+        this.proposer = proposer;
     }
 
     toString(): string {
