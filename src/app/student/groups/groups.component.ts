@@ -73,10 +73,13 @@ export class GroupsComponent implements OnInit {
         this.studentService.getUnconfirmedTeamsByCourse(this.authService.getUserId(), this.courseId).subscribe((teams: Team[]) => {
             this.proposals = teams;
             this.proposals.forEach((team: Team) => {
-                this.groupService.getMembers(team.id).subscribe(data => {
-                    team.members = data;
-                    console.log('Membri ' + team.id + data[0].id);
+                this.groupService.getMembersStatus(team.id).subscribe(data => {
+                    console.log('ciao');
                 });
+                // this.groupService.getMembers(team.id).subscribe(data => {
+                //     team.members = data;
+                //     console.log('Membri ' + team.id + data[0].id);
+                // });
             });
         });
     }
@@ -99,8 +102,8 @@ export class GroupsComponent implements OnInit {
         let expiry = moment(this.expiryProposal.value, 'YYYY-MM-DD');
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         console.log(members);
-        console.log(expiry.format("DD/MM/YYYY"));
-        this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format("DD/MM/YYYY"))
+        console.log(expiry.format('DD/MM/YYYY'));
+        this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
                 console.log(proposed);
             });
