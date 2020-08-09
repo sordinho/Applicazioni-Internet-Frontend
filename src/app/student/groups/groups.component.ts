@@ -112,7 +112,6 @@ export class GroupsComponent implements OnInit {
     }
 
     disableProposalForm() {
-        return false;
         // Return true if proposal button need to be disabled
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0 || this.expiryProposal === null
             || this.expiryProposal.value === '' || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid();
