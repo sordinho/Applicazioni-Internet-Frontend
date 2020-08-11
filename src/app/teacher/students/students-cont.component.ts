@@ -4,6 +4,8 @@ import { Student } from '../../models/student.model';
 import { StudentService } from '../../services/student.service';
 import { CourseService } from 'src/app/services/course.service';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, forkJoin } from 'rxjs';
+import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
 
 
 @Component({
@@ -15,6 +17,9 @@ export class StudentsContComponent implements OnInit {
 
   enrolledStudents: Student[] = []
   allStudents: Student[] = []
+  unenrolledStudents: Student[] = []
+
+  snackbarMessage: SnackbarMessage
 
   courseId: string
 
@@ -22,44 +27,59 @@ export class StudentsContComponent implements OnInit {
 
   ngOnInit(): void {
     this.courseId = this.route.snapshot.parent.url[1].toString()
-    
-    this.getAllStudents()
-    this.getEnrolledStudents()
+
+    this.initStudentsLists()
   }
 
-  getAllStudents() {
-    this.studentService.queryAll()
-                        .subscribe((data) => { 
-                          this.allStudents = data;
-                        })
+  initStudentsLists() {
+    const allStudentsReq$: Observable<Student[]> = this.studentService.queryAll()
+    const enrolledStudentsReq$ = this.courseService.queryEnrolledStudent(`${this.courseId}`)
+
+    forkJoin(allStudentsReq$, enrolledStudentsReq$).subscribe( res => {
+      this.allStudents = res[0]
+      this.enrolledStudents = res[1]
+      //console.dir("allStudents: " + this.allStudents)
+      //console.dir("enrolledStudents: " + this.enrolledStudents)
+      this.unenrolledStudents = this.allStudents.filter((stud: Student) => {
+        //console.dir("student: " + stud.id + " filter: " + (this.enrolledStudents.find(s => s.id === stud.id) !== undefined))
+        return this.enrolledStudents.find(s => s.id === stud.id) === undefined
+      })
+    })
+
   }
 
-  getEnrolledStudents() {
-    //console.dir("getEnrolledStudents (courseId: " + this.courseId + ")")
-    this.courseService.queryEnrolledStudent(`${this.courseId}`)
-                        .subscribe((data) => { 
-                          this.enrolledStudents = data
-                        })
+  reloadEnrolledStudents() {
+    this.courseService.queryEnrolledStudent(`${this.courseId}`).subscribe( (enrolledStudents: Student[]) => {
+      this.enrolledStudents = enrolledStudents
+      this.unenrolledStudents = this.allStudents.filter((stud: Student) => {
+        return this.enrolledStudents.find(s => s.id === stud.id) === undefined
+      })
+    })
   }
 
   enrollStudents(students: Student[]) {
-    console.dir("enrollStudent")
     this.courseService.enroll(students, this.courseId)
                           .subscribe( _ => {
-                            //console.dir("enrollStudents(" + students + ")");
-                            this.getEnrolledStudents();
-                            this.getAllStudents();
+                            //console.dir("enrolledStudents :" + students);
+                            this.reloadEnrolledStudents() // reload students list
                           })
   }
 
   unenrollStudents(students: Student[]) {
-    console.dir("unenrollStudent - TODO (courseService)")
-    /*this.studentService.unenroll(students, this.courseId)
-                          .subscribe( _ => {
-                            //console.dir("unenrollStudents(" + students +")");
-                            this.getEnrolledStudents();
-                            this.getAllStudents();
-                          })*/
+    this.courseService.unenroll(students, this.courseId)
+                          .subscribe( 
+                            res => {
+                              for(let error of res)
+                                if(error !== null) {
+                                  /* look at course.service unenroll function to understand why I managed 
+                                     error in this way (the res is the result of a forkJoin operation */ 
+                                  // console.dir("error.message: " + error.message)
+                                  this.snackbarMessage = new SnackbarMessage(error.message)
+                                }
+                              this.reloadEnrolledStudents() // reload students list
+                            }
+                          )
   }
 
 }
+

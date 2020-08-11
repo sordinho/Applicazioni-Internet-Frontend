@@ -6,6 +6,8 @@ import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-students',
@@ -13,6 +15,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   styleUrls: ['./students.component.css']
 })
 export class StudentsComponent implements AfterViewInit {
+
+  constructor(private snackBar: MatSnackBar) { }
 
   /* student selected - to be added to enrolled student */
   addStudentSelection: Student = null
@@ -30,16 +34,14 @@ export class StudentsComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 
-  _students: Student[];
+  _unenrolledStudents: Student[];
   _filteredStudents: Student[];
   _enrolledStudents: Student[];
 
   // component Input interfaces 
-  @Input() set students(allStudents: Student[]) {
-    this._students = allStudents
-    // TODO this._filteredStudents = allStudents.filter( (student) => student.courseId !== "1"); 
-    this._filteredStudents = allStudents // available students to be enrolled (search bar) 
-    //console.dir("_filteredStudents" + this._filteredStudents);
+  @Input() set unenrolledStudents(unenrolledStudents: Student[]) {
+    this._unenrolledStudents = unenrolledStudents
+    this._filteredStudents = unenrolledStudents // at the beginning the filtered student list (search bar) is equal to unenrolledStudents 
   }
   @Input() set enrolledStudents(students: Student[]) {
     this._enrolledStudents = students
@@ -49,11 +51,19 @@ export class StudentsComponent implements AfterViewInit {
       this.dataSource = new MatTableDataSource<Student>(students)
     }
   }
+  @Input() set snackbarMessage(snackbarMessage: SnackbarMessage) {
+    let action: string = undefined
+    if(snackbarMessage !== undefined) {
+      this.snackBar.open(snackbarMessage.message, snackbarMessage.action, { duration: 5000 })
+    }
+  }
 
   // component Output interfaces 
-  @Output() addStudentsEmitter = new EventEmitter<Student[]>();
-  @Output() removeStudentsEmitter = new EventEmitter<Student[]>();
+  @Output() addStudentsEmitter = new EventEmitter<Student[]>()
+  @Output() removeStudentsEmitter = new EventEmitter<Student[]>()
   
+
+
   ngAfterViewInit() {
     this.dataSource.sort = this.sort
     this.dataSource.paginator = this.paginator
@@ -183,7 +193,7 @@ export class StudentsComponent implements AfterViewInit {
     filterValue = filterValue.trim(); // remove whitespace
     filterValue = filterValue.toLowerCase();
     //console.dir("'" + filterValue + "'");
-    this._filteredStudents = this._students
+    this._filteredStudents = this._unenrolledStudents
                         .filter( s => {
                           return filterValue === '' ? true : s.toString().toLowerCase().includes(filterValue) 
                         });
@@ -196,8 +206,6 @@ export class StudentsComponent implements AfterViewInit {
   addStudent() {
     this.addStudentsEmitter.emit([this.addStudentSelection]);
     this.addStudentSelection = null; // reset selection
-    // this._students = this._students; // reset options
-    this._filteredStudents = this._filteredStudents.filter(student => student !== this.addStudentSelection)
   }
 
 }

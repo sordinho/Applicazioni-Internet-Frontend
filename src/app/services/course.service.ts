@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Course } from '../models/course.model';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable, throwError, forkJoin } from 'rxjs';
+import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Student } from '../models/student.model';
+import { SnackbarMessage } from '../models/snackbarMessage.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -114,35 +115,47 @@ export class CourseService {
                 )
   }
 
-  enroll(students: Student[], courseId: string): Observable<Student[]> {
-    const requests$ = new Array<Observable<Student>>();
+  enroll(students: Student[], courseId: string): Observable<any[]> {
+    const requests$ = new Array<Observable<any>>()
 
     students.forEach( student => {
       requests$.push(
-        this.http.post<Student>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id })
+        this.http.post<any>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id })
           .pipe(
             catchError( err => {
-            console.error(err);
-            return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`);
+            console.error(err)
+            return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`)
           })
         )
       )
-    });
+    })
     
     return forkJoin(requests$)
   }
 
-  unenroll(students: Student[]) {
-    /*const requests$ = new Array<Observable<Student>>();
+  unenroll(students: Student[], courseId: string): Observable<any> {
+    const requests$ = new Array<Observable<any>>()
 
     students.forEach( student => {
-      if(student.courseId != "0") {
-        student.courseId = "0";
-        requests$.push(this.update(student));
-      }
-    });
+      requests$.push(
+        this.http.delete<any>(`${this.API_PATH}/${courseId}/enrolled/${student.id}`)
+        .pipe(
+          catchError( e =>
+            /* return throwError(`CourseService.unenroll ${student.id} error: ${err.message}`)
+               is not used because if any of the inner observable supplied to forkJoin error, 
+               all other value of any other observables that would or have already completed
+               will be lost. --> it is necessary to return an observable and manage it in the
+               subscribe function!! 
+               
+               the error returned by the backend is an object: error: {some information + message: '...' }
+               --> of(e.error) and in the subscribe function the message is accessed by val.message */
+            of(e.error)
+          )
+        )
+      )
+    })
     
-    return forkJoin(requests$);*/
+    return forkJoin(requests$)
   }
   
 }
