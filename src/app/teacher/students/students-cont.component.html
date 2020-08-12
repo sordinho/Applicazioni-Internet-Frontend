@@ -2,7 +2,9 @@
 <br>
 <app-students 
     [enrolledStudents]="enrolledStudents" 
-    [students]="allStudents"
+    [unenrolledStudents]="unenrolledStudents"
+    [snackbarMessage]="snackbarMessage"
+
     (addStudentsEmitter)="enrollStudents($event)"
     (removeStudentsEmitter)="unenrollStudents($event)" >
 </app-students>

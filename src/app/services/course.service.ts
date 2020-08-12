@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Course} from '../models/course.model';
-import {HttpHeaders, HttpClient} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {Student} from '../models/student.model';
-import {Team} from '../models/team.model';
+import { Injectable } from '@angular/core';
+import { Course } from '../models/course.model';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Observable, throwError, forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Student } from '../models/student.model';
+import { SnackbarMessage } from '../models/snackbarMessage.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -111,29 +111,49 @@ export class CourseService {
             );
     }
 
-    queryAvailableStudents(courseId: string): Observable<Student[]> {
-        /* return students list */
-        return this.http
-            .get<any>(`${this.API_PATH}/${courseId}/teams/available-students`)
-            .pipe(
-                catchError(err => {
-                    console.error(err);
-                    return throwError(`StudentService.queryAll error: ${err.message}`);
-                }),
-                map(data => {
-                    /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
-                       otherwise it would be shown [Object, Object] */
-                    var allStudents: Student[] = [];
-                    if (data !== null) {
-                        data._embedded.studentDToes.forEach((student: Student) => {
-                            allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                        });
-                    }
-                    return allStudents;
-                })
-            );
-    }
+  enroll(students: Student[], courseId: string): Observable<any[]> {
+    const requests$ = new Array<Observable<any>>()
 
+    students.forEach( student => {
+      requests$.push(
+        this.http.post<any>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id })
+          .pipe(
+            catchError( err => {
+            console.error(err)
+            return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`)
+          })
+        )
+      )
+    })
+    
+    return forkJoin(requests$)
+  }
+
+  unenroll(students: Student[], courseId: string): Observable<any> {
+    const requests$ = new Array<Observable<any>>()
+
+    students.forEach( student => {
+      requests$.push(
+        this.http.delete<any>(`${this.API_PATH}/${courseId}/enrolled/${student.id}`)
+        .pipe(
+          catchError( e =>
+            /* return throwError(`CourseService.unenroll ${student.id} error: ${err.message}`)
+               is not used because if any of the inner observable supplied to forkJoin error, 
+               all other value of any other observables that would or have already completed
+               will be lost. --> it is necessary to return an observable and manage it in the
+               subscribe function!! 
+               
+               the error returned by the backend is an object: error: {some information + message: '...' }
+               --> of(e.error) and in the subscribe function the message is accessed by val.message */
+            of(e.error)
+          )
+        )
+      )
+    })
+    
+    return forkJoin(requests$)
+  }
+  
 }
 
 interface groupProposal {

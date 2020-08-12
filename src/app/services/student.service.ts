@@ -100,37 +100,12 @@ export class StudentService {
             );
     }
 
-    enroll(students: Student[], courseId: string) {
-        /*const requests$ = new Array<Observable<Student>>();
-
-            students.forEach( student => {
-              if(student.courseId != courseId) {
-                student.courseId = courseId;
-                requests$.push(this.update(student));
-              }
-            });
-
-            return forkJoin(requests$);*/
-    }
-
-    unenroll(students: Student[]) {
-        /*const requests$ = new Array<Observable<Student>>();
-
-        students.forEach( student => {
-          if(student.courseId != "0") {
-            student.courseId = "0";
-            requests$.push(this.update(student));
-          }
-        });
-
-        return forkJoin(requests$);*/
-    }
-
-    getUnconfirmedTeamsByCourse(studentId: string, courseId: string): Observable<Team[]> {
-        return this.http
-            .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/unconfirmed-team`)
-            .pipe(
-                catchError(err => {
+  getTeamByCourse(studentId: string, courseId: string): Observable<Group> {
+    /* find student (by studentId) */
+    return this.http
+                .get<Group>(`${this.API_PATH}/${studentId}/courses//${courseId}/team`)
+                .pipe(
+                  catchError( err => {
                     console.error(err);
                     return throwError(`StudentService.getProposedTeamsByCourse error: ${err.message}`);
                 }),
