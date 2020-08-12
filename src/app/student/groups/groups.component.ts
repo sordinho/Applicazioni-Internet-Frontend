@@ -15,6 +15,8 @@ import {Team, TEST_GROUP} from '../../models/team.model';
 import {CourseService} from '../../services/course.service';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {catchError} from 'rxjs/operators';
 
 @Component({
     selector: 'app-groups',
@@ -33,6 +35,7 @@ export class GroupsComponent implements OnInit {
     proposals: Team[] = [];
     courseId: string = '';
 
+
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatAccordion) accordion: MatAccordion;
 
@@ -40,7 +43,8 @@ export class GroupsComponent implements OnInit {
         this.dataSource.paginator = paginator;
     }
 
-    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService, private authService: AuthService, private route: ActivatedRoute) {
+    constructor(private groupService: GroupService, private studentService: StudentService, private courseService: CourseService,
+                private authService: AuthService, private route: ActivatedRoute, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -98,22 +102,30 @@ export class GroupsComponent implements OnInit {
     }
 
     proposeGroup() {
-        console.log(this.proposedGroupName.value);
-        console.log(this.expiryProposal.value);
         let expiry = moment(this.expiryProposal.value, 'YYYY-MM-DD');
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
-        console.log(members);
-        console.log(expiry.format('DD/MM/YYYY'));
         this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
-                console.log(proposed);
-            });
+                    this.snackBar.open('New Team proposed', '', {duration: 5000});
+                    this.resetTeamProposalForm();
+                    this.initTeamProposals();
+                },
+                (err) => {
+                    this.snackBar.open('Error creating new proposal', null, {duration: 5000});
+                }
+            );
     }
 
     disableProposalForm() {
         // Return true if proposal button need to be disabled
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0 || this.expiryProposal === null
             || this.expiryProposal.value === '' || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid();
+    }
+
+    resetTeamProposalForm() {
+        this.expiryProposal.reset();
+        this.proposedGroupName.reset();
+        this.selectionModel.clear();
     }
 
 }
