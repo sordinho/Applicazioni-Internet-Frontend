@@ -4,9 +4,10 @@ import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
 import {FormControl} from '@angular/forms';
-import {osTypes, VmModel, vmModelLinux, vmModelMac, vmModelWin10, vmModelWin7} from '../../models/vmModel.model';
+import {VmModel} from '../../models/vmModel.model';
 import {MatOption} from '@angular/material/core';
 import {Team} from '../../models/team.model';
+import {VmModelService} from '../../services/vm-model.service';
 
 @Component({
     selector: 'app-vms',
@@ -21,8 +22,8 @@ export class VmsComponent implements OnInit {
     editModel = false;
     osModelSelected = false;
     vms: Vm[] = [];
-    osTypes = osTypes;
-    vmModel: VmModel = vmModelWin10;
+    osTypes: VmModel[] = [];
+    vmModel: VmModel = null;
 
 
     // Form data from resources limits
@@ -35,12 +36,16 @@ export class VmsComponent implements OnInit {
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor(private groupVMsService: GroupService, private vmService: VmService) {
+    constructor(private groupVMsService: GroupService, private vmService: VmService,
+                private vmModelService: VmModelService) {
     }
 
     ngOnInit(): void {
         this.getAllGroups();
         this.osTypeSelect.setValue(this.vmModel.os);
+        this.vmModelService.getAllModels().subscribe((data) => {
+            this.osTypes = data;
+        });
     }
 
     displayFn(team: Team) {

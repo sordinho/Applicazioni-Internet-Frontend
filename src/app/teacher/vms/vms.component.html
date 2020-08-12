@@ -3,8 +3,8 @@
 	<mat-form-field>
 		<mat-label>OS</mat-label>
 		<mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
-			<mat-option *ngFor="let osType of osTypes" value="{{osType.value}}"
-						(onSelectionChange)="osModelSelected=true">{{osType.name}}</mat-option>
+			<mat-option *ngFor="let osType of osTypes" value="{{osType.id}}"
+						(onSelectionChange)="osModelSelected=true">{{osType.os}}</mat-option>
 		</mat-select>
 	</mat-form-field>
 	&nbsp;&nbsp;
@@ -113,7 +113,8 @@
 
 			<mat-grid-list cols="3" rowHeight="55px">
 				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: 0 / {{selectedTeam.resources.maxVcpu}}</mat-grid-tile>
+					<mat-icon>developer_board</mat-icon>&nbsp; CPU: 0 / {{selectedTeam.resources.maxVcpu}}
+				</mat-grid-tile>
 				<mat-grid-tile>
 					<mat-icon>memory</mat-icon>&nbsp; RAM: 0 / {{selectedTeam.resources.maxRam}} &nbsp;MB
 				</mat-grid-tile>
