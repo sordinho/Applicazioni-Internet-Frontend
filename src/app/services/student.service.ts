@@ -100,12 +100,11 @@ export class StudentService {
             );
     }
 
-  getTeamByCourse(studentId: string, courseId: string): Observable<Group> {
-    /* find student (by studentId) */
-    return this.http
-                .get<Group>(`${this.API_PATH}/${studentId}/courses//${courseId}/team`)
-                .pipe(
-                  catchError( err => {
+    getUnconfirmedTeamsByCourse(studentId: string, courseId: string): Observable<Team[]> {
+        return this.http
+            .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/unconfirmed-team`)
+            .pipe(
+                catchError(err => {
                     console.error(err);
                     return throwError(`StudentService.getProposedTeamsByCourse error: ${err.message}`);
                 }),

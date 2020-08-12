@@ -71,7 +71,7 @@ export class GroupService {
                 }),
                 map(data => {
                         // return data;
-                        console.log(JSON.stringify(data));
+                        // console.log(JSON.stringify(data));
                         /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
                                otherwise it would be shown [Object, Object] */
                         let status: Student[] = [];
@@ -81,8 +81,8 @@ export class GroupService {
                                 let studentData = studStat.student;
                                 let stud = new Student(studentData.id, studentData.lastName, studentData.firstName, studentData.email, null);
                                 stud.status = studStat.status;
-                                console.log(studentData);
-                                console.log(stud.toString());
+                                // console.log(studentData);
+                                // console.log(stud.toString());
                                 status.push(stud);
                             });
                         }
