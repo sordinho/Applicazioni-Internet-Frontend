@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Group, TEST_GROUP} from '../../models/group.model';
 import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from './share-dialog.component';
 import {CreateVmDialogComponent} from './create-vm-dialog.component';
+import {Team, TEST_GROUP} from '../../models/team.model';
 
 @Component({
     selector: 'app-vm',
@@ -14,7 +14,7 @@ import {CreateVmDialogComponent} from './create-vm-dialog.component';
 })
 export class VmComponent implements OnInit {
 
-    group: Group = TEST_GROUP;
+    team: Team = TEST_GROUP;
     vms: Vm[] = [];
 
 
@@ -43,7 +43,7 @@ export class VmComponent implements OnInit {
 
 
     initGroupVms() {
-        this.vmService.getVmsByGroupId(this.group.id)
+        this.vmService.getVmsByGroupId(this.team.id)
             .subscribe((data) => {
                 this.vms = data;
             });
@@ -79,7 +79,7 @@ export class VmComponent implements OnInit {
         this.shareDialog.open(ShareDialogComponent, {
             width: '50%',
             data: {
-                group: this.group,
+                group: this.team,
                 vm: vm
             }
         });
@@ -93,7 +93,7 @@ export class VmComponent implements OnInit {
     createNewVm() {
         this.createVmDialog.open(CreateVmDialogComponent, {
             data: {
-                group: this.group,
+                group: this.team,
                 vms: this.vms
             }
         });

@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
-import {Group} from '../../models/group.model';
 import {Vm} from '../../models/vm.model';
+import {Team} from '../../models/team.model';
 
 @Component({
     selector: 'app-create-vm-dialog',
@@ -16,14 +16,14 @@ export class CreateVmDialogComponent implements OnInit {
     newVmRam = new FormControl(256);
     newVmDisk = new FormControl(512);
 
-    group: Group;
+    team: Team;
     vms: Vm[] = [];
 
     constructor(@Inject(MAT_DIALOG_DATA) public data, private dialogRef: MatDialogRef<CreateVmDialogComponent>) {
     }
 
     ngOnInit(): void {
-        this.group = this.data.group;
+        this.team = this.data.group;
         this.vms = this.data.vms;
     }
 
@@ -41,10 +41,10 @@ export class CreateVmDialogComponent implements OnInit {
         let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
 
         return (
-            this.group.resources.maxVcpu >= actualCpu + this.newVmCpu.value &&
-            this.group.resources.maxRam >= actualRam + this.newVmRam.value &&
-            this.group.resources.maxDiskSpace >= actualDisk + this.newVmDisk.value &&
-            this.group.resources.maxTot >= this.vms.length + 1
+            this.team.resources.maxVcpu >= actualCpu + this.newVmCpu.value &&
+            this.team.resources.maxRam >= actualRam + this.newVmRam.value &&
+            this.team.resources.maxDiskSpace >= actualDisk + this.newVmDisk.value &&
+            this.team.resources.maxTot >= this.vms.length + 1
         );
     }
 

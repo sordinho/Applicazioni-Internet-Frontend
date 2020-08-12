@@ -1,5 +1,4 @@
 import {Student, TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3} from './student.model';
-import {Group, TEST_GROUP} from './group.model';
 
 export class Vm {
     id: string;
