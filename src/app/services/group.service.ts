@@ -42,7 +42,7 @@ export class GroupService {
                     var allStudents: Student[] = [];
                     if (data !== null) {
                         data._embedded.studentDToes.forEach((student: Student) => {
-                            let stud =new Student(student.id, student.lastName, student.firstName, student.email, student.image);
+                            let stud = new Student(student.id, student.lastName, student.firstName, student.email, student.image);
                             // stud.status = 'ACCEPTED'
                             allStudents.push(stud);
                         });
@@ -62,7 +62,7 @@ export class GroupService {
             );
     }
 
-    getMembersStatus(teamId: string): Observable<Map<Student, string>> {
+    getMembersStatus(teamId: string): Observable<Student[]> {
         return this.http.get<any>(`${this.API_PATH}/${teamId}/members/status-list`)
             .pipe(
                 catchError(err => {
@@ -72,40 +72,24 @@ export class GroupService {
                 map(data => {
                         // return data;
                         console.log(JSON.stringify(data));
-                        let json = data.json();
                         /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
                                otherwise it would be shown [Object, Object] */
-                        let status: Map<Student, string> = new Map<Student, string>();
+                        let status: Student[] = [];
                         // let status: Map<string, string> = new Map<string, string>(data);
-
-                        Object.keys(json).forEach(key => {
-                            let stud = JSON.parse(key);
-                            status.set(stud, json[key]);
-                        });
-
-
-                        console.log('MAPPA:' + status);
+                        if (data !== null) {
+                            data.forEach((studStat: any) => {
+                                let studentData = studStat.id;
+                                let stud = new Student(studentData.id, studentData.lastName, studentData.firstName, studentData.email, null);
+                                stud.status = studStat.status;
+                                console.log(studentData);
+                                console.log(stud.toString());
+                                status.push(stud);
+                            });
+                        }
                         return status;
                     }
                 ))
             ;
     }
-
-
-    // getMembersStatus(teamId: string): Observable<Map<Student, string>> {
-    //     return this.http.get<Map<Student, string>>(`${this.API_PATH}/${teamId}/members/status-list`)
-    //         .pipe(
-    //             catchError(err => {
-    //                 console.error(err);
-    //                 return throwError(`GroupService.getMembersStatus error: ${err.message}`);
-    //             }),
-    //             map(data => {
-    //                     let status: Map<Student, string> = new Map<Student, string>(data);
-    //                     return status;
-    //                 }
-    //             ))
-    //         ;
-    // }
-
 }
 

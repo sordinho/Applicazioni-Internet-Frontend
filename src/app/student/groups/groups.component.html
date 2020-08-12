@@ -99,7 +99,7 @@
 					<mat-grid-tile *ngFor="let m of prop.members">
 						<mat-icon mat-list-icon>person</mat-icon>
 						{{m}} &nbsp;&nbsp;&nbsp;
-						<mat-icon mat-list-icon *ngIf="m.status==='ACCEPTED'">done</mat-icon>
+						<mat-icon mat-list-icon *ngIf="m.status==='ACCEPTED' || m.status==='PROPONENT'">done</mat-icon>
 					</mat-grid-tile>
 				</mat-grid-list>
 			</mat-expansion-panel>

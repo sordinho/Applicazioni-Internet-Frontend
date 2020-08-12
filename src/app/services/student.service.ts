@@ -138,7 +138,7 @@ export class StudentService {
                     /* convert explicitly the result to Team[]: important to be shown in the mat autocomplete (StudentComponent),
                        otherwise it would be shown [Object, Object] */
                     var allTeams: Team[] = [];
-                    console.log('Teams: ' + JSON.stringify(data));
+                    // console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
                         data._embedded.teamDToes.forEach((team:
                                                               Team) => {
@@ -156,11 +156,11 @@ export class StudentService {
             .get<Team>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
             .pipe(
                 catchError(err => {
-                    console.error('CODE: ' + err.status);
+                    // console.error('CODE: ' + err.status);
                     if (err.status == '404') {
                         return of(null);
                     } // return null so i can handle the 404
-                    return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                    // return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
                 })
             );
     }

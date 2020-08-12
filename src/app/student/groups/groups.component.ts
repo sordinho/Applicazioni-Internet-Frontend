@@ -73,14 +73,13 @@ export class GroupsComponent implements OnInit {
         this.studentService.getUnconfirmedTeamsByCourse(this.authService.getUserId(), this.courseId).subscribe((teams: Team[]) => {
             this.proposals = teams;
             this.proposals.forEach((team: Team) => {
-                // this.groupService.getMembersStatus(team.id).subscribe((data: Map<Student, string>) => {
-                //     console.log('data' + data);
-                //     console.log('values' + data.values());
-                //
-                // });
-                this.groupService.getMembers(team.id).subscribe(data => {
+                this.groupService.getMembersStatus(team.id).subscribe((data: Student[]) => {
                     team.members = data;
-                    console.log('Membri ' + team.id + data[0].id);
+                    for (let student of team.members) {
+                        if (student.status === 'PROPONENT') {
+                            team.proposer = student;
+                        }
+                    }
                 });
             });
         });
