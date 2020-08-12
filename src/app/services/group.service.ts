@@ -78,7 +78,7 @@ export class GroupService {
                         // let status: Map<string, string> = new Map<string, string>(data);
                         if (data !== null) {
                             data.forEach((studStat: any) => {
-                                let studentData = studStat.id;
+                                let studentData = studStat.student;
                                 let stud = new Student(studentData.id, studentData.lastName, studentData.firstName, studentData.email, null);
                                 stud.status = studStat.status;
                                 console.log(studentData);
