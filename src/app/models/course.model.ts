@@ -1,17 +1,18 @@
 export class Course {
-    id: string
-    name: string
-    min: number
-    max: number
-    enabled: boolean
-    teacherId: string // course owner
+    id: string;
+    name: string;
+    min: number;
+    max: number;
+    enabled: boolean;
+    teacherId: string; // course owner
+    vmModelLink: string;
 
     constructor(id: string, name: string, min: number, max: number, enabled: boolean, teacherId: string) {
-        this.id = id
-        this.name = name
-        this.min = min
-        this.max = max
-        this.enabled = enabled
-        this.teacherId = teacherId
+        this.id = id;
+        this.name = name;
+        this.min = min;
+        this.max = max;
+        this.enabled = enabled;
+        this.teacherId = teacherId;
     }
 }

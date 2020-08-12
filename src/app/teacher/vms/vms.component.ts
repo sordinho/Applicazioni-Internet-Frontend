@@ -8,6 +8,7 @@ import {VmModel} from '../../models/vmModel.model';
 import {MatOption} from '@angular/material/core';
 import {Team} from '../../models/team.model';
 import {VmModelService} from '../../services/vm-model.service';
+import {CourseService} from '../../services/course.service';
 
 @Component({
     selector: 'app-vms',
@@ -22,7 +23,7 @@ export class VmsComponent implements OnInit {
     editModel = false;
     osModelSelected = false;
     vms: Vm[] = [];
-    osTypes: VmModel[] = [];
+    osTypes: VmModel[];
     vmModel: VmModel = null;
 
 
@@ -37,15 +38,20 @@ export class VmsComponent implements OnInit {
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupVMsService: GroupService, private vmService: VmService,
-                private vmModelService: VmModelService) {
+                private vmModelService: VmModelService, private courseService: CourseService) {
     }
 
     ngOnInit(): void {
         this.getAllGroups();
-        this.osTypeSelect.setValue(this.vmModel.os);
         this.vmModelService.getAllModels().subscribe((data) => {
             this.osTypes = data;
+            console.log(data);
         });
+        this.initCourseVmModel();
+    }
+
+    initCourseVmModel() {
+        
     }
 
     displayFn(team: Team) {
@@ -137,41 +143,41 @@ export class VmsComponent implements OnInit {
         this.editModel = false;
         this.osModelSelected = false;
         console.log(this.osTypeSelect);
-        console.log(osTypes[0]['name']);
-        switch (this.osTypeSelect.value) {
-            case osTypes[0]['value']:
-                this.vmModel = vmModelWin10;
-                break;
-            case osTypes[1]['value']:
-                this.vmModel = vmModelWin7;
-                break;
-            case osTypes[2]['value']:
-                this.vmModel = vmModelLinux;
-                break;
-            case osTypes[3]['value']:
-                this.vmModel = vmModelMac;
-                break;
-        }
+        // console.log(osTypes[0]['name']);
+        // switch (this.osTypeSelect.value) {
+        //     case osTypes[0]['value']:
+        //         this.vmModel = vmModelWin10;
+        //         break;
+        //     case osTypes[1]['value']:
+        //         this.vmModel = vmModelWin7;
+        //         break;
+        //     case osTypes[2]['value']:
+        //         this.vmModel = vmModelLinux;
+        //         break;
+        //     case osTypes[3]['value']:
+        //         this.vmModel = vmModelMac;
+        //         break;
+        // }
         // TODO delete all vms of the course!!!
     }
 
     getOsNameFromValue(value: string) {
         let name = '';
-        switch (value) {
-            case osTypes[0]['value']:
-                name = osTypes[0]['name'];
-                break;
-            case osTypes[1]['value']:
-                name = osTypes[1]['name'];
-                break;
-            case osTypes[2]['value']:
-                name = osTypes[2]['name'];
-                break;
-            case osTypes[3]['value']:
-                name = osTypes[3]['name'];
-                break;
-        }
-        return name;
+        // switch (value) {
+        //     case osTypes[0]['value']:
+        //         name = osTypes[0]['name'];
+        //         break;
+        //     case osTypes[1]['value']:
+        //         name = osTypes[1]['name'];
+        //         break;
+        //     case osTypes[2]['value']:
+        //         name = osTypes[2]['name'];
+        //         break;
+        //     case osTypes[3]['value']:
+        //         name = osTypes[3]['name'];
+        //         break;
+        // }
+        // return name;
     }
 
 

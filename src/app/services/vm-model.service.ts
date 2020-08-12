@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class VmModelService {
 
-    private API_PATH = 'API//API/virtual-machine-models';
+    private API_PATH = 'API/virtual-machine-models';
 
     constructor(private http: HttpClient) {
     }

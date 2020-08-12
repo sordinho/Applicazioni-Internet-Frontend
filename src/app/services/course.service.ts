@@ -28,14 +28,34 @@ export class CourseService {
         return this.http.post<Course>(`${this.API_PATH}`, course);
     }
 
+
+    // find(courseId: string): Observable<Course> {
+    //     /* find course (by courseId) */
+    //     return this.http
+    //         .get<Course>(`${this.API_PATH}/${courseId}`)
+    //         .pipe(
+    //             catchError(err => {
+    //                 console.error(err);
+    //                 return throwError(`CourseService.find error: ${err.message}`);
+    //             })
+    //         );
+    // }
+
     find(courseId: string): Observable<Course> {
         /* find course (by courseId) */
         return this.http
-            .get<Course>(`${this.API_PATH}/${courseId}`)
+            .get<any>(`${this.API_PATH}/${courseId}`)
             .pipe(
                 catchError(err => {
                     console.error(err);
                     return throwError(`CourseService.find error: ${err.message}`);
+                }),
+                map(data => {
+                    let course = new Course(data.id, data.name, data.min, data.max, data.enabled, data.teacherId);
+                    if (data._links.virtualMachineModel) {
+                        course.vmModelLink = data._links.virtualMachineModel;
+                    }
+                    return course;
                 })
             );
     }
