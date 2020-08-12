@@ -16,6 +16,7 @@ import {CourseService} from '../../services/course.service';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {catchError} from 'rxjs/operators';
 
 @Component({
     selector: 'app-groups',
@@ -33,6 +34,7 @@ export class GroupsComponent implements OnInit {
     expiryProposal = new FormControl();
     proposals: Team[] = [];
     courseId: string = '';
+
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -104,10 +106,14 @@ export class GroupsComponent implements OnInit {
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
-                console.log(proposed);
-                this.initTeamProposals();
-            });
-        this.resetTeamProposalForm();
+                    this.snackBar.open('New Team proposed', '', {duration: 5000});
+                    this.resetTeamProposalForm();
+                    this.initTeamProposals();
+                },
+                (err) => {
+                    this.snackBar.open('Error creating new proposal', null, {duration: 5000});
+                }
+            );
     }
 
     disableProposalForm() {
