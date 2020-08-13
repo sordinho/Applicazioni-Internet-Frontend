@@ -1,16 +1,16 @@
 <!-- Group information-->
-<div *ngIf="group!==null">
+<div *ngIf="dataReady && team!==null">
 	<h3>Your group</h3>
 	<br>
 	<mat-list style="width: fit-content">
 		<div mat-subheader>Name</div>
 		<mat-list-item>
 			<mat-icon mat-list-icon>class</mat-icon>
-			<div mat-line>{{group.name}}</div>
+			<div mat-line>{{team.name}}</div>
 		</mat-list-item>
 		<mat-divider></mat-divider>
 		<div mat-subheader>Members</div>
-		<mat-list-item *ngFor="let member of group.members">
+		<mat-list-item *ngFor="let member of team.members">
 			<mat-icon mat-list-icon>person</mat-icon>
 			<div mat-line>{{member.id}}</div>
 			<div mat-line> {{member.lastName}} {{member.firstName}}</div>
@@ -19,9 +19,10 @@
 </div>
 
 <!-- Group creation/proposal-->
-<div *ngIf="group===null">
+<div *ngIf="dataReady && team===null">
 	<div>
 		<h3>Propose Group</h3>
+		<h5>You're automatically added to a new proposed group</h5>
 		<br>
 		<div>
 			<mat-form-field style="width: 50%">
@@ -77,33 +78,31 @@
 		<mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 	</div>
 	<br>
-	<mat-divider></mat-divider>
-	<h4>Group Proposals</h4>
-	<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
-		<button mat-button (click)="openAll()">Expand All</button>
-		<button mat-button (click)="closeAll()">Collapse All</button>
+	<div *ngIf="proposals.length>0">
+		<mat-divider></mat-divider>
+		<h4>Group Proposals</h4>
+		<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
+			<button mat-button (click)="accordion.openAll()">Expand All</button>
+			<button mat-button (click)="accordion.closeAll()">Collapse All</button>
+		</div>
+		<mat-accordion class="example-headers-align" multi>
+			<mat-expansion-panel *ngFor="let prop of proposals">
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						{{prop.name}}
+					</mat-panel-title>
+					<mat-panel-description>
+						{{prop.proposer}}
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+				<mat-grid-list cols="3" rowHeight="55px">
+					<mat-grid-tile *ngFor="let m of prop.members">
+						<mat-icon mat-list-icon>person</mat-icon>
+						{{m}} &nbsp;&nbsp;&nbsp;
+						<mat-icon mat-list-icon *ngIf="m.status==='ACCEPTED' || m.status==='PROPONENT'">done</mat-icon>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</mat-expansion-panel>
+		</mat-accordion>
 	</div>
-	<mat-accordion class="example-headers-align" multi>
-		<!--		TODO inserire multipli-->
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					Group1-Name
-				</mat-panel-title>
-				<mat-panel-description>
-					31/07/2020
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile colspan="2">
-					proposed members
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<button mat-stroked-button style="margin-left: 5px" color="primary">Accept</button>
-					<button mat-stroked-button style="margin-left: 5px" color="warn">Reject</button>
-				</mat-grid-tile>
-			</mat-grid-list>
-		</mat-expansion-panel>
-	</mat-accordion>
-
 </div>

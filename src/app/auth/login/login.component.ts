@@ -10,11 +10,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  email = new FormControl('d1@polito.it', {
+  email = new FormControl('s1@studenti.polito.it', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.email]
   });
-  password = new FormControl('Password#02', {
+  password = new FormControl('Password#01', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.minLength(6)]
   });

@@ -1,5 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Group,} from '../../models/group.model';
 import {GroupService} from '../../services/group.service';
 import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
@@ -7,6 +6,7 @@ import {VmService} from '../../services/vm.service';
 import {FormControl} from '@angular/forms';
 import {osTypes, VmModel, vmModelLinux, vmModelMac, vmModelWin10, vmModelWin7} from '../../models/vmModel.model';
 import {MatOption} from '@angular/material/core';
+import {Team} from '../../models/team.model';
 
 @Component({
     selector: 'app-vms',
@@ -15,9 +15,9 @@ import {MatOption} from '@angular/material/core';
 })
 export class VmsComponent implements OnInit {
 
-    _filteredGroups: Group[] = [];
-    _allGroups: Group[] = [];
-    selectedGroup: Group = null;
+    _filteredTeams: Team[] = [];
+    _allTeams: Team[] = [];
+    selectedTeam: Team = null;
     editModel = false;
     osModelSelected = false;
     vms: Vm[] = [];
@@ -43,16 +43,16 @@ export class VmsComponent implements OnInit {
         this.osTypeSelect.setValue(this.vmModel.os);
     }
 
-    displayFn(group: Group) {
-        if (group == null || typeof (group.id) == 'undefined') {
+    displayFn(team: Team) {
+        if (team == null || typeof (team.id) == 'undefined') {
             return '';
         }
-        return group.name + ' (' + group.id + ')';
+        return team.name + ' (' + team.id + ')';
     }
 
     filter(event) {
         let substringToFind = event.target.value.toLowerCase();
-        this._filteredGroups = this._allGroups
+        this._filteredTeams = this._allTeams
             .filter((g) =>
                 this.displayFn(g).toLocaleLowerCase().includes(substringToFind));
     }
@@ -60,32 +60,32 @@ export class VmsComponent implements OnInit {
     getAllGroups() {
         this.groupVMsService.getAllGroups()
             .subscribe((data) => {
-                this._allGroups = data;
-                this._filteredGroups = data;
+                this._allTeams = data;
+                this._filteredTeams = data;
                 console.log(data);
             });
     }
 
-    updateAddSelection(value: Group) {
-        this.selectedGroup = value;
-        console.log('selected: ' + this.selectedGroup.toString());
-        console.log('cpu: ' + this.selectedGroup.resources.maxVcpu);
-        console.log('ram: ' + this.selectedGroup.resources.maxRam);
+    updateAddSelection(value: Team) {
+        this.selectedTeam = value;
+        console.log('selected: ' + this.selectedTeam.toString());
+        console.log('cpu: ' + this.selectedTeam.resources.maxVcpu);
+        console.log('ram: ' + this.selectedTeam.resources.maxRam);
         this.updateFormValues();
         this.getGroupVmsData();
 
     }
 
     updateFormValues() {
-        this.cpuLimit.setValue(this.selectedGroup.resources.maxVcpu);
-        this.ramLimit.setValue(this.selectedGroup.resources.maxRam);
-        this.diskLimit.setValue(this.selectedGroup.resources.maxDiskSpace);
-        this.activesLimit.setValue(this.selectedGroup.resources.maxOn);
-        this.maxLimit.setValue(this.selectedGroup.resources.maxTot);
+        this.cpuLimit.setValue(this.selectedTeam.resources.maxVcpu);
+        this.ramLimit.setValue(this.selectedTeam.resources.maxRam);
+        this.diskLimit.setValue(this.selectedTeam.resources.maxDiskSpace);
+        this.activesLimit.setValue(this.selectedTeam.resources.maxOn);
+        this.maxLimit.setValue(this.selectedTeam.resources.maxTot);
     }
 
     getGroupVmsData() {
-        this.vmService.getVmsByGroupId(this.selectedGroup.id).subscribe((data) => {
+        this.vmService.getVmsByGroupId(this.selectedTeam.id).subscribe((data) => {
             this.vms = data;
         });
     }
