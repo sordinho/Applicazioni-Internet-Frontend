@@ -100,7 +100,10 @@ export class HomeComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = "500px";
-    dialogConfig.data = this._courses[index];
+    dialogConfig.data = { 
+      course: this._courses[index],
+      emitter: this.reloadCoursesEmitter
+    }
     
     const dialogRef = this.matDialog.open(EditCourseDialogComponent, dialogConfig)
     

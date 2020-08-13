@@ -26,6 +26,11 @@ export class CourseService {
     return this.http.post<Course>(`${this.API_PATH}`, course)
   }
 
+  edit(course: Course) {
+    /* edit course */
+    return this.http.put<Course>(`${this.API_PATH}/${course.id}`, course)
+  }
+
   find(courseId: string): Observable<Course> {
     /* find course (by courseId) */
     return this.http
@@ -87,7 +92,7 @@ export class CourseService {
                 .delete<any>(`${this.API_PATH}/${courseId}`)
                 .pipe(
                   catchError( err => {
-                    console.error(err);
+                    console.error(JSON.stringify(err));
                     return throwError(`CourseService.delete ${courseId} error: ${err.message}`);
                 })
               );
