@@ -1,10 +1,10 @@
 <mat-dialog-content>
-  <h1 mat-dialog-title>Edit {{ course.name }}</h1>
+  <h1 mat-dialog-title>{{ course.name }}</h1>
 
   <!-- course name -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Name</mat-label>
-    <input matInput [formControl]="name">
+    <input matInput #nameInput [formControl]="name" (keyup)="onNameChange(nameInput.value)">
   </mat-form-field>
 
   <!-- course id -->
@@ -30,14 +30,11 @@
     </mat-form-field>
   </div>
 
-  <!-- course enabled -->
-  <mat-checkbox [(ngModel)]="enabled" color="primary">Enabled</mat-checkbox>
-
   <br>
 
   <mat-dialog-actions>
     <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="editCourse()" [disabled]="enabled">Save</button>
+    <button mat-raised-button color="primary" (click)="editCourse()" >Save</button>
   </mat-dialog-actions>
 
 </mat-dialog-content>

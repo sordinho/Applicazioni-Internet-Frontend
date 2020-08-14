@@ -6,6 +6,8 @@ import { CourseService } from 'src/app/services/course.service';
 import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-course-dialog',
@@ -19,8 +21,6 @@ export class EditCourseDialogComponent implements OnInit {
   min: FormControl
   max: FormControl
 
-  enabled = true
-
   course: Course
   emitter: EventEmitter<void>
 
@@ -30,34 +30,33 @@ export class EditCourseDialogComponent implements OnInit {
     this.emitter = data.emitter
     this.course = data.course
 
-    this.name = new FormControl(data.course.name, {
-      updateOn: 'blur',
-      validators: [Validators.required]
-    })
+    this.name = new FormControl(data.course.name, 
+      {
+        updateOn: 'blur',
+        validators: [Validators.required]
+      }
+    )
   
-    this.id = new FormControl(data.course.id, {
-      updateOn: 'submit',
-      validators: [Validators.required]
-    })
+    this.id = new FormControl(data.course.id,
+      {
+        updateOn: 'submit',
+        validators: [Validators.required]
+      }
+    )
   
-    this.min = new FormControl(data.course.min, {
-      validators: [
-        Validators.required,
-        Validators.pattern("^[0-9]*$")
-      ]
-    })
+    this.min = new FormControl(data.course.min, 
+      {
+        validators: [ Validators.required, Validators.pattern("^[0-9]*$") ]
+      }
+    )
   
-    this.max = new FormControl(data.course.max, {
-      validators: [
-        Validators.required,
-        Validators.pattern("^[0-9]*$")
-      ]
-    })
-
-    this.enabled = data.course.enabled
+    this.max = new FormControl(data.course.max, 
+      {
+        validators: [ Validators.required, Validators.pattern("^[0-9]*$") ]
+      }
+    )
 
     this.teacherId = authService.getUserId()
-
   }
 
   ngOnInit(): void {
@@ -87,28 +86,29 @@ export class EditCourseDialogComponent implements OnInit {
         return
       }
       
-      /* all fields are valid */
-      this.courseService.edit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
-            .subscribe(
-              (editedCourse: Course) => {
-                // console.dir("course " + editedCourse.id + " edited successfully - owner: " + editedCourse.teacherId)
-                this.emitter.emit()
-                this.dialogRef.close(editedCourse)
-              },
-              err => {
-                // console.dir("editCourse (error) - err: " + err)
-                const snackbarMessage = new SnackbarMessage(err.error)
-                this.snackBar.open(snackbarMessage.message, snackbarMessage.action, { duration: 5000 })
-              }
-            )
-
+      /* all fields are valid... */
+      if(( this.course.name !== this.name.value || this.course.id !== this.id.value || this.course.min !== this.min.value || this.course.max !== this.max.value )) {
+        // at least one value has changed... edit the course 
+        console.dir("editing the course...")
+        this.courseService.edit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.course.enabled, this.teacherId))
+          .subscribe(
+            (editedCourse: Course) => {
+              // console.dir("course " + editedCourse.id + " edited successfully - owner: " + editedCourse.teacherId)
+              this.emitter.emit()
+              this.dialogRef.close(editedCourse)
+            },
+            err => {
+              const snackbarMessage = new SnackbarMessage(err.error)
+              this.snackBar.open(snackbarMessage.message, null, { duration: 5000 })
+            }
+          )
+      }
     } else {
       this.id.markAsTouched({onlySelf: true})
       this.name.markAsTouched({onlySelf: true})
       this.min.markAsTouched({onlySelf: true})
       this.max.markAsTouched({onlySelf: true})
     }
-
   }
 
   getIdErrorMessage() {

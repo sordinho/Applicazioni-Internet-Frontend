@@ -17,32 +17,41 @@ const httpOptions = {
     providedIn: 'root'
 })
 export class CourseService {
-
     private API_PATH = 'API/courses';
-
+    
     constructor(private http: HttpClient) {
     }
-
+    
     create(course: Course) {
         /* create course */
         return this.http.post<Course>(`${this.API_PATH}`, course)
     }
 
-  edit(course: Course) {
-    /* edit course */
-    return this.http.put<Course>(`${this.API_PATH}/${course.id}`, course)
-  }
+    edit(course: Course) {
+        /* edit course */
+        return this.http.put<Course>(`${this.API_PATH}/${course.id}`, course)
+    }
 
-  find(courseId: string): Observable<Course> {
-    /* find course (by courseId) */
-    return this.http
-                .get<Course>(`${this.API_PATH}/${courseId}`)
-                .pipe(
-                  catchError( err => {
-                    console.error(err);
-                    return throwError(`CourseService.find error: ${err.message}`);
-                })
-            );
+    enable(courseId: string): Observable<string> {
+        /* enable course */
+        return this.http.post<string>(`${this.API_PATH}/${courseId}/enable`, null)
+    }
+
+    disable(courseId: string): Observable<string> {
+        /* disable course */
+        return this.http.post<string>(`${this.API_PATH}/${courseId}/disable`, null)
+    }
+
+    find(courseId: string): Observable<Course> {
+        /* find course (by courseId) */
+        return this.http
+                    .get<Course>(`${this.API_PATH}/${courseId}`)
+                    .pipe(
+                    catchError( err => {
+                        console.error(err);
+                        return throwError(`CourseService.find error: ${err.message}`);
+                    })
+                );
     }
 
     queryAll(): Observable<Course[]> {
@@ -83,16 +92,16 @@ export class CourseService {
 
     }
 
-  delete(courseId: string): Observable<any> {
-    /* delete course (by courseId) */
-    return this.http
-                .delete<any>(`${this.API_PATH}/${courseId}`)
-                .pipe(
-                  catchError( err => {
-                    console.error(JSON.stringify(err));
-                    return throwError(`CourseService.delete ${courseId} error: ${err.message}`);
-                })
-            );
+    delete(courseId: string): Observable<any> {
+        /* delete course (by courseId) */
+        return this.http
+                    .delete<any>(`${this.API_PATH}/${courseId}`)
+                    .pipe(
+                    catchError( err => {
+                        //console.error(JSON.stringify(err));
+                        return throwError(`${err.error.message}`);
+                    })
+                );
     }
 
     queryEnrolledStudent(courseId: string): Observable<Student[]> {

@@ -6,6 +6,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { StudentService } from '../services/student.service';
 import { TeacherService } from '../services/teacher.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home-cont',
@@ -23,7 +24,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
 
   paramMapSub: Subscription
 
-  constructor(private courseService: CourseService, private authService: AuthService, private studentService: StudentService, private teacherService: TeacherService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private courseService: CourseService, private authService: AuthService, private studentService: StudentService, private teacherService: TeacherService, private router: Router, private activatedRoute: ActivatedRoute,  private snackBar: MatSnackBar) {
     this.userId = authService.getUserId()
   }
 
@@ -95,9 +96,27 @@ export class HomeContComponent implements OnInit, OnDestroy {
           this.getAllCourses()
         }
       },
-      err => {
-        console.dir("removeCourse (error) - err: " + err) 
+      errorMessage => {
+        this.snackBar.open(errorMessage, null, { duration: 5000 })
       })
+  }
+
+  enableCourse(courseId: string) {
+    this.courseService.enable(courseId).subscribe(
+      succ => {
+        this.allCourses.find(course => course.id === courseId).enabled = true
+        this.snackBar.open("Course enabled", null, { duration: 3000 })
+      }
+    )
+  }
+
+  disableCourse(courseId: string) {
+    this.courseService.disable(courseId).subscribe(
+      succ => {
+        this.allCourses.find(course => course.id === courseId).enabled = false
+        this.snackBar.open("Course disabled", null, { duration: 3000 })
+      }
+    )
   }
 
   logout() {

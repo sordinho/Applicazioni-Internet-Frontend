@@ -3,7 +3,10 @@
     [userId]="username"
     [isTeacher]="userRole" 
     [courseName]="courseName"
+    
     (reloadCoursesEmitter)="getAllCourses()"
     (deleteCourseEmitter)="delelteCourse($event)"
+    (enableCourseEmitter)="enableCourse($event)"
+    (disableCourseEmitter)="disableCourse($event)"
     (logoutEmitter)="logout()" >
 </app-home>
