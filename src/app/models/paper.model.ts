@@ -3,16 +3,20 @@ import { Student } from './student.model'
 export class Paper {
     id: string
     student: Student
+    published: string
     status: string
-    statusDate: string
-    history: string
+    flag: boolean
+    score: number
+    image: any
 
-    constructor(id: string, student: Student, status: string, statusDate: string, history = "TODO - history list") {
+    constructor(id: string, student: Student, published: string, status: string, flag: boolean, score: number, image: any) {
         this.id = id
         this.student = student
+        this.published = published
         this.status = status
-        this.statusDate = statusDate
-        this.history = history
+        this.flag = flag
+        this.score = score
+        this.image = image
     }
 
     toString(): string {

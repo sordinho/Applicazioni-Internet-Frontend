@@ -53,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 import { HomeContComponent } from './home/home-cont.component';
+import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { HomeContComponent } from './home/home-cont.component';
     CreateVmDialogComponent,
     UploadCorrectionDialogComponent,
     HomeContComponent,
+    AssigmentsContComponent,
   ],
   imports: [
     BrowserModule,

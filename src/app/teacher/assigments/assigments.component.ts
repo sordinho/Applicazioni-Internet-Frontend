@@ -26,20 +26,18 @@ import { UploadCorrectionDialogComponent } from 'src/app/dialogs/upload-correcti
 export class AssigmentsComponent implements OnInit {
   
   assignments: Assignment[] = [
-    new Assignment("A0",  "01/01/2020", "31/01/2020"), 
-    new Assignment("A1",  "01/03/2020", "31/03/2020"), 
-    new Assignment("A2",  "01/05/2020", "31/05/2020")
+    new Assignment("A0",  "01/01/2020", "31/01/2020", null), 
+    new Assignment("A1",  "01/03/2020", "31/03/2020", null)
   ]
 
   papers = new Map<string, Paper[]>([
-    ["A0", [ new Paper("P0", new Student("902030", "260342", "Andrea", "Rossi"), "null", "15/01/2020"),
-             new Paper("P1", new Student("902030", "260342", "Francesco", "Verdi"), "null", "10/01/2020"),
-             new Paper("P2", new Student("902030", "260342", "Stefano", "Gialli"), "null", "12/01/2020") ]],
-    ["A1", [ new Paper("P01", new Student("902030", "260342", "Andrea", "Rossi"), "null", "15/03/2020"),
-             new Paper("P02", new Student("902030", "260342", "Francesco", "Verdi"), "read", "10/03/2020"),
-             new Paper("P03", new Student("902030", "260342", "Stefano", "Gialli"), "read", "12/03/2020") ]],
-    ["A2", [ new Paper("P11", new Student("902030", "260342", "Andrea", "Rossi"), "null", "15/05/2020"),
-             new Paper("P12", new Student("902030", "260342", "Francesco", "Verdi"), "null", "10/05/2020") ]],
+    ["A0", [ new Paper("P0", new Student("902030", "260342", "Andrea", "Rossi"), "15/01/2020", "null", null, null, null),
+             new Paper("P1", new Student("902030", "260342", "Francesco", "Verdi"), "10/01/2020", "null", null, null, null),
+             new Paper("P2", new Student("902030", "260342", "Stefano", "Gialli"), "12/01/2020", "null", null, null, null) ]],
+    ["A1", [ new Paper("P0", new Student("902030", "260342", "Andrea", "Rossi"), "15/01/2020", "null", null, null, null),
+             new Paper("P1", new Student("902030", "260342", "Francesco", "Verdi"), "10/01/2020", "read", null, null, null),
+             new Paper("P2", new Student("902030", "260342", "Stefano", "Gialli"), "12/01/2020", "read", null, null, null),
+             new Paper("P3", new Student("902022", "260332", "Simone", "Gallo"), "10/01/2020", "delivered", null, null, null) ]]
   ]) 
 
   expandedPaper: Paper | null;
@@ -54,7 +52,7 @@ export class AssigmentsComponent implements OnInit {
 
   dataSource: MatTableDataSource<Paper>
   
-  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'statusDate']
+  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published']
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 

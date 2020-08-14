@@ -1,15 +1,17 @@
 export class Assignment {
     id: string
-    releaseDate: string
-    expireDate: string
+    published: string
+    expired: string
+    image: any
 
-    constructor(id: string, releaseDate: string, expireDate: string) {
+    constructor(id: string, published: string, expired: string, image: any) {
         this.id = id
-        this.releaseDate = releaseDate
-        this.expireDate = expireDate
+        this.published = published
+        this.expired = expired
+        this.image = image
     }
 
     toString(): string {
-        return this.id + ' (releaseDate: ' + this.releaseDate + ', expireDate: ' + this.expireDate + ')';
+        return this.id + ' (publish date: ' + this.published + ', expire date: ' + this.expired + ')';
     }
 }
