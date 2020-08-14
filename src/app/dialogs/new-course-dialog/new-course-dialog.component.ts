@@ -38,7 +38,7 @@ export class NewCourseDialogComponent implements OnInit {
     ]
   })
 
-  enabled = true
+  enabled = false
 
   teacherId: string
 
