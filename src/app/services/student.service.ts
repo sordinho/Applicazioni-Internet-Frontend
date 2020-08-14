@@ -91,7 +91,7 @@ export class StudentService {
                 map(data => {
                     var courses: Course[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.courseDToes.forEach((course: Course) => {
+                        data._embedded.courseDTOList.forEach((course: Course) => {
                             courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
                         });
                     }
@@ -114,7 +114,7 @@ export class StudentService {
                     var allTeams: Team[] = [];
                     // console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
-                        data._embedded.teamDToes.forEach((team:
+                        data._embedded.teamDTOList.forEach((team:
                                                               Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });

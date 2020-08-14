@@ -184,7 +184,7 @@ export class CourseService {
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
                     if (data !== null) {
-                        data._embedded.studentDToes.forEach((student: Student) => {
+                        data._embedded.studentDTOList.forEach((student: Student) => {
                             allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
