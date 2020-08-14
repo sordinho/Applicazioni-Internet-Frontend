@@ -21,7 +21,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { StudentsComponent } from './teacher/students/students.component';
 import { StudentsContComponent } from './teacher/students/students-cont.component';
@@ -105,7 +105,8 @@ import { HomeContComponent } from './home/home-cont.component';
     MatSelectModule,
     MatTooltipModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSlideToggleModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
