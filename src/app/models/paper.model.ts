@@ -6,10 +6,10 @@ export class Paper {
     published: string
     status: string
     flag: boolean
-    score: number
+    score: string
     image: any
 
-    constructor(id: string, student: Student, published: string, status: string, flag: boolean, score: number, image: any) {
+    constructor(id: string, student: Student, published: string, status: string, flag: boolean, score: string, image: any) {
         this.id = id
         this.student = student
         this.published = published
