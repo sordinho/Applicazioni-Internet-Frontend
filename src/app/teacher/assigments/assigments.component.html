@@ -1,6 +1,6 @@
 <mat-form-field appearance="legacy">
     <mat-select [(value)]="selectedAssignment" (selectionChange)="onSelectChange()">
-        <mat-option *ngFor="let assignment of assignments" [value]="assignment.id">
+        <mat-option *ngFor="let assignment of _assignments" [value]="assignment.id">
           {{ assignment.id }}
         </mat-option>
     </mat-select>
@@ -52,23 +52,33 @@
     </ng-container>
 
     <!-- statusDate Column -->
-    <ng-container matColumnDef="statusDate">
+    <ng-container matColumnDef="published">
         <th mat-header-cell *matHeaderCellDef> Status Date </th>
-        <td mat-cell *matCellDef="let paper"> {{ paper.statusDate  }} </td>
+        <td mat-cell *matCellDef="let paper"> {{ paper.published  }} </td>
     </ng-container>
-
 
     <!-- Expanded (Paper) Content -->
     <ng-container matColumnDef="expandedDetail">
         <td mat-cell *matCellDef="let paper" [attr.colspan]="colsToDisplay.length">
-        <div class="paper-detail"
-            [@detailExpand]="paper == expandedPaper ? 'expanded' : 'collapsed'">
-            <div class="paper-history-list">
-            {{paper.history}}
+            <div class="paper-detail"
+                [@detailExpand]="paper === expandedPaper ? 'expanded' : 'collapsed'">
+                <div class="paper-history-list">
+                    <mat-list>
+                        <mat-list-item *ngFor="let paper of _papersHistory; let last = last;">
+                            <mat-icon mat-list-icon class="download" (click)="downloadPaper(paper)">get_app</mat-icon>
+                            <div mat-line>{{"paper " + paper.id}}</div> 
+                            <div mat-line>{{paper.published}}</div>
+                            <p class="status">{{paper.status}}</p>
+                            <mat-icon class="readed" *ngIf="paper.status==='LETTO'">done</mat-icon>
+                            <mat-icon class="delivered" *ngIf="paper.status==='CONSEGNATO'">done_all</mat-icon>
+                            <mat-icon class="revised" *ngIf="paper.status==='RIVSTO'">done_all</mat-icon>
+                            <mat-divider *ngIf="!last"></mat-divider>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+                <br>
+                <button *ngIf="paper.flag" class="upload-button" mat-stroked-button color="primary" (click)="uploadCorrection(paper)">Upload correction</button>
             </div>
-            <br>
-            <button class="upload-button" mat-flat-button color="primary" (click)="uploadCorrection(paper)">Upload correction</button>
-        </div>
         </td>
     </ng-container>
     
@@ -76,7 +86,7 @@
     <tr mat-row *matRowDef="let paper; columns: colsToDisplay"
         class="paper-row"
         [class.expanded-row]="expandedPaper === paper"
-        (click)="expandedPaper = expandedPaper === paper ? null : paper">
+        (click)="expandPaper(paper)">
     </tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
 

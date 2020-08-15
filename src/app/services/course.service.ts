@@ -6,6 +6,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Student} from '../models/student.model';
 import {SnackbarMessage} from '../models/snackbarMessage.model';
 import {Team} from '../models/team.model';
+import { Assignment } from '../models/assignment.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -191,6 +192,27 @@ export class CourseService {
                     return allStudents;
                 })
             );
+    }
+
+    queryAllAssigments(courseId: string): Observable<Assignment[]> {
+        /* Retrieve all the assignments for the course */
+        return this.http
+            .get<any>(`${this.API_PATH}/${courseId}/assignments`)
+                .pipe(
+                    catchError(err => {
+                        console.error(JSON.stringify(err))
+                        return throwError(`CourseService.queryAllAssignments error: ${err}`)
+                    }),
+                    map(data => {
+                        var assignments: Assignment[] = []
+                        if (data !== undefined && data._embedded !== undefined) {
+                            data._embedded.assignmentDTOList.forEach((a: Assignment) => {
+                                assignments.push(new Assignment(a.id, a.published, a.expired, a.image))
+                            });
+                        }
+                        return assignments;
+                    })
+                );
     }
 }
 
