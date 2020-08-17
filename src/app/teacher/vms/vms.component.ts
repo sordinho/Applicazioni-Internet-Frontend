@@ -45,7 +45,6 @@ export class VmsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.initCourseVmModel();
         this.getAllGroups();
         this.vmModelService.getAllModels().subscribe((data) => {
             this.osTypes = data;
@@ -60,13 +59,13 @@ export class VmsComponent implements OnInit {
             this.course = data;
             if (this.course.vmModelLink !== null) {
                 // vm model is selected for the current group
-                // this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
-                //     this.vmModel = data;
-                    this.osTypeSelect.setValue(this.vmModel);
-                // });
+                this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
+                    this.vmModel = data;
+                this.osTypeSelect.setValue(this.vmModel);
+                });
             }
         });
-        this.osTypeSelect.setValue(new VmModel('WINZOZZ_12'));
+        this.osTypeSelect.setValue(this.vmModel.id)
     }
 
     displayFn(team: Team) {
