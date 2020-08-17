@@ -59,13 +59,12 @@ export class VmsComponent implements OnInit {
             this.course = data;
             if (this.course.vmModelLink !== null) {
                 // vm model is selected for the current group
-                this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
-                    this.vmModel = data;
-                this.osTypeSelect.setValue(this.vmModel);
-                });
+                // this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
+                //     this.vmModel = data;
+                //     this.osTypeSelect.setValue(this.vmModel.id);
+                // });
             }
         });
-        this.osTypeSelect.setValue(this.vmModel.id)
     }
 
     displayFn(team: Team) {
