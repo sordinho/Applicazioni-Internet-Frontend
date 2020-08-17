@@ -45,7 +45,7 @@ export class AssignmentService {
                     /* convert explicitly the result to Paper[] */
                     var papers: any[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.paperDTOList.forEach((res) => {
+                        data._embedded.paperList.forEach((res) => {
                           const studentLink = res._links.student.href // http://localhost:8080/API/students/s2"
                           const URLsplit = studentLink.split('/')
                           const studentId = URLsplit[5]
@@ -57,7 +57,7 @@ export class AssignmentService {
                     return papers;
                   })
                 )
-                
+
   }
 
   queryPaperHistory(assignmentId: string, studentId: string): Observable<Paper[]> {
@@ -73,7 +73,7 @@ export class AssignmentService {
                     /* convert explicitly the result to Paper[] */
                     var papers: Paper[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.paperDTOList.forEach((paper: Paper) => {
+                        data._embedded.paperList.forEach((paper: Paper) => {
                             papers.push(new Paper(paper.id, null /* not required */, paper.published, paper.status, paper.flag, paper.score, paper.image))
                         })
                     }

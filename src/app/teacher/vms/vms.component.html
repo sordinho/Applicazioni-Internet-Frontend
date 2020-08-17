@@ -23,6 +23,7 @@
 
 <mat-divider></mat-divider>
 <h4>Group VM</h4>
+<h6>Total groups: {{_allTeams.length}}</h6>
 <mat-form-field>
 	<mat-label>Find group</mat-label>
 	<input type="search" matInput placeholder="Group name or ID"
@@ -141,7 +142,7 @@
 					<p>({{vm.id}})</p>
 				</mat-panel-title>
 				<mat-panel-description>
-					<p>{{getOsNameFromValue(vmModel.os)}}</p>
+					<p>{{vmModel.os}}</p>
 					<p>({{vm.status}})</p>
 				</mat-panel-description>
 			</mat-expansion-panel-header>

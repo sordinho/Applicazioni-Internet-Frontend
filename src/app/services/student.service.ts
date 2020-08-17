@@ -114,7 +114,7 @@ export class StudentService {
                     var allTeams: Team[] = [];
                     // console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
-                        data._embedded.teamDTOList.forEach((team:
+                        data._embedded.teamList.forEach((team:
                                                               Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });

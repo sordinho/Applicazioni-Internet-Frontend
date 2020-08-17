@@ -192,7 +192,7 @@ export class CourseService {
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
                     if (data !== null) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
+                        data._embedded.studentList.forEach((student: Student) => {
                             allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -213,7 +213,7 @@ export class CourseService {
                 map(data => {
                     var assignments: Assignment[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.assignmentDTOList.forEach((a: Assignment) => {
+                        data._embedded.assignmentList.forEach((a: Assignment) => {
                             assignments.push(new Assignment(a.id, a.published, a.expired, a.image));
                         });
                     }

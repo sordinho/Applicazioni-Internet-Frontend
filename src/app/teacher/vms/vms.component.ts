@@ -83,7 +83,7 @@ export class VmsComponent implements OnInit {
 
     getAllGroups() {
         // this.groupVMsService.getAllGroups()
-        this.courseService.getAllGroups(this.course.idst)
+        this.courseService.getAllGroups(this.route.snapshot.parent.url[1].toString())
             .subscribe((data) => {
                 this._allTeams = data;
                 this._filteredTeams = data;
@@ -157,42 +157,7 @@ export class VmsComponent implements OnInit {
         this.editModel = false;
         this.osModelSelected = false;
         console.log(this.osTypeSelect);
-        // console.log(osTypes[0]['name']);
-        // switch (this.osTypeSelect.value) {
-        //     case osTypes[0]['value']:
-        //         this.vmModel = vmModelWin10;
-        //         break;
-        //     case osTypes[1]['value']:
-        //         this.vmModel = vmModelWin7;
-        //         break;
-        //     case osTypes[2]['value']:
-        //         this.vmModel = vmModelLinux;
-        //         break;
-        //     case osTypes[3]['value']:
-        //         this.vmModel = vmModelMac;
-        //         break;
-        // }
         // TODO delete all vms of the course!!!
     }
-
-    getOsNameFromValue(value: string) {
-        let name = '';
-        // switch (value) {
-        //     case osTypes[0]['value']:
-        //         name = osTypes[0]['name'];
-        //         break;
-        //     case osTypes[1]['value']:
-        //         name = osTypes[1]['name'];
-        //         break;
-        //     case osTypes[2]['value']:
-        //         name = osTypes[2]['name'];
-        //         break;
-        //     case osTypes[3]['value']:
-        //         name = osTypes[3]['name'];
-        //         break;
-        // }
-        // return name;
-    }
-
 
 }
