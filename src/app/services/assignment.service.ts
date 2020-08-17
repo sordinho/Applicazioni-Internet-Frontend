@@ -44,9 +44,9 @@ export class AssignmentService {
                   map(data => {
                     /* convert explicitly the result to Paper[] */
                     var papers: any[] = [];
-                    if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.paperDTOList.forEach((res) => {
-                          const studentLink = res._links.student.href // http://localhost:8080/API/students/s2"
+                    if (data !== undefined && data.content !== undefined) {
+                        data.content.forEach((res) => {
+                          const studentLink = res.links.find(link => link.rel === "student").href // http://localhost:8080/API/students/s2"
                           const URLsplit = studentLink.split('/')
                           const studentId = URLsplit[5]
                           const paper = new Paper(res.id, null, res.published, res.status, res.flag, res.score, res.image)
@@ -72,8 +72,8 @@ export class AssignmentService {
                   map(data => {
                     /* convert explicitly the result to Paper[] */
                     var papers: Paper[] = [];
-                    if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.paperDTOList.forEach((paper: Paper) => {
+                    if (data !== undefined && data.content !== undefined) {
+                        data.content.forEach((paper: Paper) => {
                             papers.push(new Paper(paper.id, null /* not required */, paper.published, paper.status, paper.flag, paper.score, paper.image))
                         })
                     }

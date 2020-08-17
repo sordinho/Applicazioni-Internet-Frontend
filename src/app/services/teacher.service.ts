@@ -29,9 +29,9 @@ export class TeacherService {
                     return throwError(`TeacherService.queryCourses error: ${err.message}`)
                   }),
                   map( data => {
-                    var courses: Course[] = [];
-                    if(data !== undefined && data._embedded !== undefined) {
-                      data._embedded.courseDTOList.forEach( (course: Course) => {
+                    var courses: Course[] = [];                      
+                    if(data !== undefined && data.content !== undefined) {
+                      data.content.forEach( (course: Course) => {
                         courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId))
                       })
                     }

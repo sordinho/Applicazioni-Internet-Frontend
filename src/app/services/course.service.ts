@@ -66,8 +66,8 @@ export class CourseService {
                 }),
                 map(data => {
                     var courses: Course[] = [];
-                    if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.courseDTOList.forEach((course: Course) => {
+                    if (data !== undefined && data.content !== undefined) {
+                        data.content.forEach((course: Course) => {
                             courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
                         });
                     }
@@ -117,8 +117,8 @@ export class CourseService {
                 map(data => {
                     /* convert explicitly the result to Student[] */
                     var enrolledStudents: Student[] = [];
-                    if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
+                    if (data !== undefined && data.content !== undefined) {
+                        data.content.forEach((student: Student) => {
                             enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -185,7 +185,7 @@ export class CourseService {
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
                     if (data !== null) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
+                        data.content.forEach((student: Student) => {
                             allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -205,8 +205,8 @@ export class CourseService {
                     }),
                     map(data => {
                         var assignments: Assignment[] = []
-                        if (data !== undefined && data._embedded !== undefined) {
-                            data._embedded.assignmentDTOList.forEach((a: Assignment) => {
+                        if (data !== undefined && data.content !== undefined) {
+                            data.content.forEach((a: Assignment) => {
                                 assignments.push(new Assignment(a.id, a.published, a.expired, a.image))
                             });
                         }
