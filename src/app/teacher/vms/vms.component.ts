@@ -9,6 +9,8 @@ import {MatOption} from '@angular/material/core';
 import {Team} from '../../models/team.model';
 import {VmModelService} from '../../services/vm-model.service';
 import {CourseService} from '../../services/course.service';
+import {Course} from '../../models/course.model';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-vms',
@@ -25,6 +27,7 @@ export class VmsComponent implements OnInit {
     vms: Vm[] = [];
     osTypes: VmModel[];
     vmModel: VmModel = null;
+    course: Course = null;
 
 
     // Form data from resources limits
@@ -38,10 +41,11 @@ export class VmsComponent implements OnInit {
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupVMsService: GroupService, private vmService: VmService,
-                private vmModelService: VmModelService, private courseService: CourseService) {
+                private vmModelService: VmModelService, private courseService: CourseService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
+        this.initCourseVmModel();
         this.getAllGroups();
         this.vmModelService.getAllModels().subscribe((data) => {
             this.osTypes = data;
@@ -51,7 +55,14 @@ export class VmsComponent implements OnInit {
     }
 
     initCourseVmModel() {
-        
+        // init course object
+        this.courseService.find(this.route.snapshot.parent.url[1].toString()).subscribe((data) => {
+            this.course = data;
+            if (this.course.vmModelLink !==null){
+                // vm model is selected for the current group
+
+            }
+        });
     }
 
     displayFn(team: Team) {

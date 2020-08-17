@@ -5,7 +5,7 @@ export class Course {
     max: number;
     enabled: boolean;
     teacherId: string; // course owner
-    vmModelLink: string;
+    vmModelLink: string = null;
 
     constructor(id: string, name: string, min: number, max: number, enabled: boolean, teacherId: string) {
         this.id = id;
