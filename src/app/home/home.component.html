@@ -26,6 +26,14 @@
       </mat-list-item>
 
       <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="!courseMenuEnabled" (click)="enableCourseEmitter.emit(courseMenu)">
+          <mat-icon>link</mat-icon>
+          <span>Enable</span>
+        </button>
+        <button mat-menu-item *ngIf="courseMenuEnabled" (click)="disableCourseEmitter.emit(courseMenu)">
+          <mat-icon>link_off</mat-icon>
+          <span>Disable</span>
+        </button>
         <button mat-menu-item (click)="editCourse()">
           <mat-icon>edit</mat-icon>
           <span>Edit</span>

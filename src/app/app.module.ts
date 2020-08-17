@@ -21,7 +21,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { StudentsComponent } from './teacher/students/students.component';
 import { StudentsContComponent } from './teacher/students/students-cont.component';
@@ -53,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 import { HomeContComponent } from './home/home-cont.component';
+import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { HomeContComponent } from './home/home-cont.component';
     CreateVmDialogComponent,
     UploadCorrectionDialogComponent,
     HomeContComponent,
+    AssigmentsContComponent,
   ],
   imports: [
     BrowserModule,
@@ -105,7 +107,8 @@ import { HomeContComponent } from './home/home-cont.component';
     MatSelectModule,
     MatTooltipModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSlideToggleModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

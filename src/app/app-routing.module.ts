@@ -13,6 +13,7 @@ import { GroupsComponent } from './student/groups/groups.component';
 import { DeliveriesComponent } from './student/deliveries/deliveries.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { HomeContComponent } from './home/home-cont.component';
+import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
 
 const routes: Routes = [
     {
@@ -33,7 +34,7 @@ const routes: Routes = [
             },
             { // assignments
                 path: 'assignments',
-                component: AssigmentsComponent
+                component: AssigmentsContComponent
             },
             
             /* student */
