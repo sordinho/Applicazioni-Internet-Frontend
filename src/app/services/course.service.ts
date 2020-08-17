@@ -55,27 +55,6 @@ export class CourseService {
                 );
     }
 
-    queryAll(): Observable<Course[]> {
-        /* return courses list */
-        return this.http
-            .get<any>(`${this.API_PATH}`)
-            .pipe(
-                catchError(err => {
-                    console.error(err);
-                    return throwError(`CourseService.queryAll error: ${err.message}`);
-                }),
-                map(data => {
-                    var courses: Course[] = [];
-                    if (data !== undefined && data.content !== undefined) {
-                        data.content.forEach((course: Course) => {
-                            courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
-                        });
-                    }
-                    return courses;
-                })
-            );
-    }
-
     createTeam(courseId: string, teamName: string, memberIds: string[], studentId: string, timeout: string) {
         // propose a new team
         return this.http.post<Team>(`${this.API_PATH}/${courseId}/createTeam`, {
