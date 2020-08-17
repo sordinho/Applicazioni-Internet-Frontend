@@ -19,10 +19,10 @@ const httpOptions = {
 })
 export class CourseService {
     private API_PATH = 'API/courses';
-    
+
     constructor(private http: HttpClient) {
     }
-    
+
     create(course: Course) {
         /* create course */
         return this.http.post<Course>(`${this.API_PATH}`, course)
@@ -55,7 +55,7 @@ export class CourseService {
                 map(data => {
                     let course = new Course(data.id, data.name, data.min, data.max, data.enabled, data.teacherId);
                     if (data._links.virtualMachineModel) {
-                        course.vmModelLink = data._links.virtualMachineModel;
+                        course.vmModelLink = data._links.virtualMachineModel.href;
                     }
                     return course;
                 })

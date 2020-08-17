@@ -26,7 +26,7 @@ export class VmModelService {
             .pipe(
                 catchError(err => {
                     console.error(err);
-                    return throwError(`StudentService.find error: ${err.message}`);
+                    return throwError(`VmModelService.getAllModels error: ${err.message}`);
                 }),
                 map(data => {
                     let vmModels: VmModel[] = [];
@@ -37,6 +37,20 @@ export class VmModelService {
                         });
                     }
                     return vmModels;
+                })
+            );
+    }
+
+    getModelInfoByDirectLink(link: string): Observable<VmModel> {
+        return this.http.get<any>(link)
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`VmModelService.getModelInfoByDirectLink error: ${err.message}`);
+                }),
+                map(data => {
+                    console.log('model: ' + data.os);
+                    return new VmModel(data.os);
                 })
             );
     }
