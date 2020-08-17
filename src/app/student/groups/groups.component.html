@@ -23,6 +23,14 @@
 	<div>
 		<h3>Propose Group</h3>
 		<h5>You're automatically added to a new proposed group</h5>
+		<mat-divider></mat-divider>
+		<mat-grid-list cols="2" rowHeight="50px">
+			<mat-grid-tile>Min members: {{course.min}} &nbsp;
+				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length >= course.min">done</mat-icon></mat-grid-tile>
+			<mat-grid-tile>Max members: {{course.max}} &nbsp;
+				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length <= course.max">done</mat-icon></mat-grid-tile>
+		</mat-grid-list>
+		<mat-divider></mat-divider>
 		<br>
 		<div>
 			<mat-form-field style="width: 50%">
