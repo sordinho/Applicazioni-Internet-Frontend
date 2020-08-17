@@ -74,7 +74,7 @@ export class CourseService {
                 map(data => {
                     var courses: Course[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.courseDTOList.forEach((course: Course) => {
+                        data._embedded.courseList.forEach((course: Course) => {
                             courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
                         });
                     }
@@ -125,7 +125,7 @@ export class CourseService {
                     /* convert explicitly the result to Student[] */
                     var enrolledStudents: Student[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
+                        data._embedded.studentList.forEach((student: Student) => {
                             enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -223,8 +223,19 @@ export class CourseService {
     }
 
     getAllGroups(courseId: string): Observable<Team[]> {
-        /API/courses/{courseId}/teams
+        return this.http.get<any>(`${this.API_PATH}/${courseId}/teams`)
+            .pipe(
+                catchError(err => {
+                    console.error(JSON.stringify(err));
+                    return throwError(`CourseService.getAllGroups error: ${err}`);
+                }),
+                map(data => {
+                    console.log(data);
+                    let teams: Team[] = [];
+                    return teams;
+                }));
     }
+
 }
 
 interface groupProposal {

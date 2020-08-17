@@ -32,7 +32,7 @@ export class TeacherService {
                 map(data => {
                     var courses: Course[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.courseDToes.forEach((course: Course) => {
+                        data._embedded.courseList.forEach((course: Course) => {
                             courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
                         });
                     }

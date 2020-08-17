@@ -82,7 +82,8 @@ export class VmsComponent implements OnInit {
     }
 
     getAllGroups() {
-        this.groupVMsService.getAllGroups()
+        // this.groupVMsService.getAllGroups()
+        this.courseService.getAllGroups(this.course.idst)
             .subscribe((data) => {
                 this._allTeams = data;
                 this._filteredTeams = data;
