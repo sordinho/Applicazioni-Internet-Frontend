@@ -10,7 +10,7 @@ export class Team {
     vmModel: string;
 
     resources: Resources;
-    members: Student[];
+    members: Student[] = [];
     proposer: Student;
 
     constructor(id?: string, name?: string, status?: string, vmModel?: string, resources?: Resources, members?: Student[], proposer?: Student) {

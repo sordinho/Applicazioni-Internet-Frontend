@@ -8,7 +8,7 @@
 		</mat-select>
 	</mat-form-field>
 	&nbsp;&nbsp;
-	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="editModel=true"
+	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="enableEditModel()"
 			matTooltip="By changing the model, ALL the VMs based on the previous one will be deleted!!!"
 			matTooltipClass="warning-tooltip">
 		<mat-icon>warning</mat-icon>
@@ -49,6 +49,7 @@
 				</mat-panel-title>
 				<mat-panel-description>
 					<p>Name: {{selectedTeam.name}}</p>
+					<p>Members: {{selectedTeam.members.length}}</p>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">

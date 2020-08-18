@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {VmModel} from '../models/vmModel.model';
 import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, shareReplay, tap} from 'rxjs/operators';
+import {Vm} from '../models/vm.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -50,8 +51,29 @@ export class VmModelService {
                 }),
                 map(data => {
                     console.log('model: ' + data.os);
-                    return new VmModel(data.os);
+                    let model = new VmModel(data.os);
+                    model.uniqueId = data.id;
+                    return model;
                 })
             );
+    }
+
+    deleteVmModel(uniqueId: string): Observable<any> {
+        return this.http.delete<any>(`${this.API_PATH}/${uniqueId}`)
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`VmModelService.deleteVmModel error: ${err.message}`);
+                }));
+    }
+
+    createVmModel(courseId: string, os: string): Observable<any> {
+        return this.http.post<any>(`${this.API_PATH}`, {os, courseId})
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`VmModelService.createVmModel error: ${err.message}`);
+                }));
+
     }
 }

@@ -1,6 +1,7 @@
 export class VmModel {
     id: string;
     os: string;
+    uniqueId: string;
 
 
     constructor(id: string) {

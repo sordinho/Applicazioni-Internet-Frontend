@@ -232,6 +232,11 @@ export class CourseService {
                 map(data => {
                     console.log(data);
                     let teams: Team[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.teamList.forEach((t: Team) => {
+                            teams.push(new Team(t.id, t.name, t.status));
+                        });
+                    }
                     return teams;
                 }));
     }

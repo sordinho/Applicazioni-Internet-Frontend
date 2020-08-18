@@ -11,6 +11,7 @@ import {VmModelService} from '../../services/vm-model.service';
 import {CourseService} from '../../services/course.service';
 import {Course} from '../../models/course.model';
 import {ActivatedRoute} from '@angular/router';
+import {forkJoin} from 'rxjs';
 
 @Component({
     selector: 'app-vms',
@@ -41,7 +42,8 @@ export class VmsComponent implements OnInit {
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupVMsService: GroupService, private vmService: VmService,
-                private vmModelService: VmModelService, private courseService: CourseService, private route: ActivatedRoute) {
+                private vmModelService: VmModelService, private courseService: CourseService,
+                private groupService: GroupService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -59,10 +61,10 @@ export class VmsComponent implements OnInit {
             this.course = data;
             if (this.course.vmModelLink !== null) {
                 // vm model is selected for the current group
-                // this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
-                //     this.vmModel = data;
-                //     this.osTypeSelect.setValue(this.vmModel.id);
-                // });
+                this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
+                    this.vmModel = data;
+                    this.osTypeSelect.setValue(this.vmModel.id);
+                });
             }
         });
     }
@@ -93,11 +95,22 @@ export class VmsComponent implements OnInit {
 
     updateAddSelection(value: Team) {
         this.selectedTeam = value;
+        // Get Members
+        // Get Resources
+        let members$ = this.groupService.getMembers(this.selectedTeam.id);
+        let resources$ = this.groupService.getResources(this.selectedTeam.id);
+        let vms$ = null; //TODO this.getGroupVmsData();
+        forkJoin([members$, resources$]).subscribe(data => {
+            this.selectedTeam.members = data[0];
+            this.selectedTeam.resources = data[1];
+
+            this.updateFormValues();
+        });
+
+
         console.log('selected: ' + this.selectedTeam.toString());
-        console.log('cpu: ' + this.selectedTeam.resources.maxVcpu);
-        console.log('ram: ' + this.selectedTeam.resources.maxRam);
-        this.updateFormValues();
-        this.getGroupVmsData();
+        // console.log('cpu: ' + this.selectedTeam.resources.maxVcpu);
+        // console.log('ram: ' + this.selectedTeam.resources.maxRam);
 
     }
 
@@ -157,7 +170,25 @@ export class VmsComponent implements OnInit {
         this.editModel = false;
         this.osModelSelected = false;
         console.log(this.osTypeSelect);
-        // TODO delete all vms of the course!!!
+
+        // No previous vmModel
+        if (this.vmModel == null) {
+            this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
+                    console.log('CREATED VMMODEL');
+                }
+            );
+        } else if (this.osTypeSelect.value !== this.vmModel.id) {
+            this.vmModelService.deleteVmModel(this.vmModel.uniqueId).subscribe(data => {
+                this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
+                        console.log('UPDATED VMMODEL');
+                    }
+                );
+            });
+        }
+    }
+
+    enableEditModel() {
+        this.editModel = true;
     }
 
 }
