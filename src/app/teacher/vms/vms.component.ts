@@ -12,6 +12,7 @@ import {CourseService} from '../../services/course.service';
 import {Course} from '../../models/course.model';
 import {ActivatedRoute} from '@angular/router';
 import {forkJoin} from 'rxjs';
+import {StudentService} from '../../services/student.service';
 
 @Component({
     selector: 'app-vms',
@@ -43,7 +44,7 @@ export class VmsComponent implements OnInit {
 
     constructor(private groupVMsService: GroupService, private vmService: VmService,
                 private vmModelService: VmModelService, private courseService: CourseService,
-                private groupService: GroupService, private route: ActivatedRoute) {
+                private groupService: GroupService, private studentService: StudentService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -99,19 +100,23 @@ export class VmsComponent implements OnInit {
         // Get Resources
         let members$ = this.groupService.getMembers(this.selectedTeam.id);
         let resources$ = this.groupService.getResources(this.selectedTeam.id);
-        let vms$ = null; //TODO this.getGroupVmsData();
-        forkJoin([members$, resources$]).subscribe(data => {
+        let vms$ = this.groupService.getVms(this.selectedTeam.id);
+        forkJoin([members$, resources$, vms$]).subscribe(data => {
             this.selectedTeam.members = data[0];
             this.selectedTeam.resources = data[1];
-
+            this.vms = data[2];
             this.updateFormValues();
+
+            // get owners and creator info about all the vms
+            this.vms.forEach((vm) => {
+                let creator$ = this.studentService.find(vm.creatorId);
+                let owners$ = this.vmService.getVmOwners(vm.id);
+                forkJoin([creator$, owners$]).subscribe(data => {
+                    vm.creator = data[0];
+                    vm.owners = data[1];
+                });
+            });
         });
-
-
-        console.log('selected: ' + this.selectedTeam.toString());
-        // console.log('cpu: ' + this.selectedTeam.resources.maxVcpu);
-        // console.log('ram: ' + this.selectedTeam.resources.maxRam);
-
     }
 
     updateFormValues() {
@@ -122,12 +127,6 @@ export class VmsComponent implements OnInit {
         this.maxLimit.setValue(this.selectedTeam.resources.maxTot);
     }
 
-    getGroupVmsData() {
-        this.vmService.getVmsByGroupId(this.selectedTeam.id).subscribe((data) => {
-            this.vms = data;
-        });
-    }
-
 
     saveResourcesLimits() {
         // TODO:  UPDATE resources limits for the group. To do vm service
@@ -135,6 +134,7 @@ export class VmsComponent implements OnInit {
     }
 
     checkResourcesLimits(): boolean {
+        return true;
         const reducer = (accumulator, currentValue) => accumulator + currentValue;
         let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
         let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
