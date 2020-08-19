@@ -3,7 +3,7 @@ import {GroupService} from '../../services/group.service';
 import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
-import {FormControl} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import {VmModel} from '../../models/vmModel.model';
 import {MatOption} from '@angular/material/core';
 import {Team} from '../../models/team.model';
@@ -134,16 +134,21 @@ export class VmsComponent implements OnInit {
     }
 
     checkResourcesLimits(): boolean {
-        return true;
-        const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
-        let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
-        let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
-        let actualMax = this.vms.length;
-        let actualActives = this.vms.filter(vm => {
-            return vm.status === 'RUNNING';
-        }).length;
-
+        let actualCpu = 0;
+        let actualRam = 0;
+        let actualDisk = 0;
+        let actualMax = 0;
+        let actualActives = 0;
+        if (this.vms.length != 0) {
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
+            actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
+            actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
+            actualMax = this.vms.length;
+            actualActives = this.vms.filter(vm => {
+                return vm.status === 'RUNNING';
+            }).length;
+        }
         return (
             this.cpuLimit.value >= actualCpu &&
             this.ramLimit.value >= actualRam &&

@@ -6,6 +6,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from './share-dialog.component';
 import {CreateVmDialogComponent} from './create-vm-dialog.component';
 import {Team, TEST_GROUP} from '../../models/team.model';
+import {StudentService} from '../../services/student.service';
+import {GroupService} from '../../services/group.service';
+import {AuthService} from '../../services/auth.service';
+import {ActivatedRoute} from '@angular/router';
+import {forkJoin} from 'rxjs';
 
 @Component({
     selector: 'app-vm',
@@ -14,17 +19,24 @@ import {Team, TEST_GROUP} from '../../models/team.model';
 })
 export class VmComponent implements OnInit {
 
-    team: Team = TEST_GROUP;
+    team: Team;
+    teamFetched: boolean = false;
     vms: Vm[] = [];
+    courseId: string;
 
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor(private vmService: VmService, private shareDialog: MatDialog, private createVmDialog: MatDialog) {
+    constructor(private vmService: VmService, private studentService: StudentService, private groupService: GroupService,
+                private authService: AuthService,
+                private route: ActivatedRoute,
+                private shareDialog: MatDialog, private createVmDialog: MatDialog) {
     }
 
     ngOnInit(): void {
-        this.initGroupVms();
+        this.team = new Team('-1');
+        this.courseId = this.route.snapshot.parent.url[1].toString();
+        this.initStudentGroup();
     }
 
     openAll() {
@@ -41,25 +53,32 @@ export class VmComponent implements OnInit {
         window.open('https://www.google.com');
     }
 
+    initStudentGroup() {
+        this.studentService.getTeamByCourse(this.authService.getUserId(), this.courseId).subscribe((t: Team) => {
+            this.teamFetched = true;
+            if (t != null) {
+                this.team = t;
+                let members$ = this.groupService.getMembers(this.team.id);
+                let resources$ = this.groupService.getResources(this.team.id);
+                let vms$ = this.groupService.getVms(this.team.id);
+                forkJoin([members$, resources$, vms$]).subscribe(data => {
+                    this.team.members = data[0];
+                    this.team.resources = data[1];
+                    this.vms = data[2];
 
-    initGroupVms() {
-        this.vmService.getVmsByGroupId(this.team.id)
-            .subscribe((data) => {
-                this.vms = data;
-            });
+                    // get owners and creator info about all the vms
+                    this.vms.forEach((vm) => {
+                        let creator$ = this.studentService.find(vm.creatorId);
+                        let owners$ = this.vmService.getVmOwners(vm.id);
+                        forkJoin([creator$, owners$]).subscribe(data => {
+                            vm.creator = data[0];
+                            vm.owners = data[1];
+                        });
+                    });
+                });
+            }
+        });
     }
-
-    /*initStudentGroup() {
-        this.studentService.getTeamByCourse("s1", "p").subscribe((group: Group) => {
-            this.groupService.getMembers(group.id).subscribe((members: Student[]) => {
-                group.members = members
-                this.groupService.getResources(group.id).subscribe((resources: Resources) => {
-                    group.resources = resources
-                    this.group = group
-                })
-            })
-        })
-    }*/
 
     deleteVM(vm: Vm) {
         console.log('Delete vm: ' + vm.id);

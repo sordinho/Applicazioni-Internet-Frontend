@@ -13,7 +13,7 @@ export class Team {
         this.id = id;
         this.name = name;
         this.status = status;
-        this.resources = new Resources(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        // this.resources = new Resources(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         this.members = [];
     }
 

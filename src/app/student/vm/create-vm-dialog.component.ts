@@ -13,8 +13,8 @@ export class CreateVmDialogComponent implements OnInit {
 
     // Form data new vm
     newVmCpu = new FormControl(1);
-    newVmRam = new FormControl(256);
-    newVmDisk = new FormControl(512);
+    newVmRam = new FormControl(1);
+    newVmDisk = new FormControl(256);
 
     team: Team;
     vms: Vm[] = [];
@@ -32,14 +32,15 @@ export class CreateVmDialogComponent implements OnInit {
     }
 
     checkResourcesLimits(): boolean {
-        if (this.vms.length === 0) {
-            return true;
+        let actualCpu = 0;
+        let actualRam = 0;
+        let actualDisk = 0;
+        if (this.vms.length !== 0) {
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
+            actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
+            actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
         }
-        const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
-        let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
-        let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
-
         return (
             this.team.resources.maxVcpu >= actualCpu + this.newVmCpu.value &&
             this.team.resources.maxRam >= actualRam + this.newVmRam.value &&
@@ -50,8 +51,8 @@ export class CreateVmDialogComponent implements OnInit {
 
     resetNewValues() {
         this.newVmCpu.setValue(1);
-        this.newVmRam.setValue(256);
-        this.newVmDisk.setValue(512);
+        this.newVmRam.setValue(1);
+        this.newVmDisk.setValue(256);
     }
 
     saveNewVm() {
