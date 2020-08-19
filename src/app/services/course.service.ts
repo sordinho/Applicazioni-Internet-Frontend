@@ -6,7 +6,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Student} from '../models/student.model';
 import {SnackbarMessage} from '../models/snackbarMessage.model';
 import {Team} from '../models/team.model';
-import { Assignment } from '../models/assignment.model';
+import {Assignment} from '../models/assignment.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -19,40 +19,47 @@ const httpOptions = {
 })
 export class CourseService {
     private API_PATH = 'API/courses';
-    
+
     constructor(private http: HttpClient) {
     }
-    
+
     create(course: Course) {
         /* create course */
-        return this.http.post<Course>(`${this.API_PATH}`, course)
+        return this.http.post<Course>(`${this.API_PATH}`, course);
     }
 
     edit(course: Course) {
         /* edit course */
-        return this.http.put<Course>(`${this.API_PATH}/${course.id}`, course)
+        return this.http.put<Course>(`${this.API_PATH}/${course.id}`, course);
     }
 
     enable(courseId: string): Observable<string> {
         /* enable course */
-        return this.http.post<string>(`${this.API_PATH}/${courseId}/enable`, null)
+        return this.http.post<string>(`${this.API_PATH}/${courseId}/enable`, null);
     }
 
     disable(courseId: string): Observable<string> {
         /* disable course */
-        return this.http.post<string>(`${this.API_PATH}/${courseId}/disable`, null)
+        return this.http.post<string>(`${this.API_PATH}/${courseId}/disable`, null);
     }
 
     find(courseId: string): Observable<Course> {
         /* find course (by courseId) */
         return this.http
-                    .get<Course>(`${this.API_PATH}/${courseId}`)
-                    .pipe(
-                    catchError( err => {
-                        console.error(err);
-                        return throwError(`CourseService.find error: ${err.message}`);
-                    })
-                );
+            .get<any>(`${this.API_PATH}/${courseId}`)
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`CourseService.find error: ${err.message}`);
+                }),
+                map(data => {
+                    let course = new Course(data.id, data.name, data.min, data.max, data.enabled, data.teacherId);
+                    if (data._links.virtualMachineModel) {
+                        course.vmModelLink = data._links.virtualMachineModel.href;
+                    }
+                    return course;
+                })
+            );
     }
 
     createTeam(courseId: string, teamName: string, memberIds: string[], studentId: string, timeout: string) {
@@ -75,13 +82,13 @@ export class CourseService {
     delete(courseId: string): Observable<any> {
         /* delete course (by courseId) */
         return this.http
-                    .delete<any>(`${this.API_PATH}/${courseId}`)
-                    .pipe(
-                    catchError( err => {
-                        //console.error(JSON.stringify(err));
-                        return throwError(`${err.error.message}`);
-                    })
-                );
+            .delete<any>(`${this.API_PATH}/${courseId}`)
+            .pipe(
+                catchError(err => {
+                    //console.error(JSON.stringify(err));
+                    return throwError(`${err.error.message}`);
+                })
+            );
     }
 
     queryEnrolledStudent(courseId: string): Observable<Student[]> {
@@ -96,8 +103,8 @@ export class CourseService {
                 map(data => {
                     /* convert explicitly the result to Student[] */
                     var enrolledStudents: Student[] = [];
-                    if (data !== undefined && data.content !== undefined) {
-                        data.content.forEach((student: Student) => {
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.studentList.forEach((student: Student) => {
                             enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -164,7 +171,7 @@ export class CourseService {
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
                     if (data !== null) {
-                        data.content.forEach((student: Student) => {
+                        data._embedded.studentList.forEach((student: Student) => {
                             allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -177,22 +184,42 @@ export class CourseService {
         /* Retrieve all the assignments for the course */
         return this.http
             .get<any>(`${this.API_PATH}/${courseId}/assignments`)
-                .pipe(
-                    catchError(err => {
-                        console.error(JSON.stringify(err))
-                        return throwError(`CourseService.queryAllAssignments error: ${err}`)
-                    }),
-                    map(data => {
-                        var assignments: Assignment[] = []
-                        if (data !== undefined && data.content !== undefined) {
-                            data.content.forEach((a: Assignment) => {
-                                assignments.push(new Assignment(a.id, a.published, a.expired, a.image))
-                            });
-                        }
-                        return assignments;
-                    })
-                );
+            .pipe(
+                catchError(err => {
+                    console.error(JSON.stringify(err));
+                    return throwError(`CourseService.queryAllAssignments error: ${err}`);
+                }),
+                map(data => {
+                    var assignments: Assignment[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.assignmentList.forEach((a: Assignment) => {
+                            assignments.push(new Assignment(a.id, a.published, a.expired, a.image));
+                        });
+                    }
+                    return assignments;
+                })
+            );
     }
+
+    getAllGroups(courseId: string): Observable<Team[]> {
+        return this.http.get<any>(`${this.API_PATH}/${courseId}/teams`)
+            .pipe(
+                catchError(err => {
+                    console.error(JSON.stringify(err));
+                    return throwError(`CourseService.getAllGroups error: ${err}`);
+                }),
+                map(data => {
+                    console.log(data);
+                    let teams: Team[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.teamList.forEach((t: Team) => {
+                            teams.push(new Team(t.id, t.name, t.status));
+                        });
+                    }
+                    return teams;
+                }));
+    }
+
 }
 
 interface groupProposal {
