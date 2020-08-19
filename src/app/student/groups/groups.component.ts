@@ -64,11 +64,8 @@ export class GroupsComponent implements OnInit {
                 this.initTeamProposals();
                 return;
             }
-            let members$ = this.groupService.getMembers(team.id);
-            let resources$ = this.groupService.getResources(team.id);
-            forkJoin([members$, resources$]).subscribe(data => {
-                this.team.members = data[0];
-                this.team.resources = data[1];
+            this.groupService.getMembers(team.id).subscribe(data => {
+                this.team.members = data;
             });
         });
     }
