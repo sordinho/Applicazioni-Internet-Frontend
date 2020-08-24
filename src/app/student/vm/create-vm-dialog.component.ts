@@ -4,6 +4,7 @@ import {FormControl, Validators} from '@angular/forms';
 import {Vm} from '../../models/vm.model';
 import {Team} from '../../models/team.model';
 import {VmService} from '../../services/vm.service';
+import {ConfigurationModel} from '../../models/configuration.model';
 
 @Component({
     selector: 'app-create-vm-dialog',
@@ -13,13 +14,14 @@ import {VmService} from '../../services/vm.service';
 export class CreateVmDialogComponent implements OnInit {
 
     // Form data new vm
-    newVmCpu = new FormControl(1, [Validators.min(1), Validators.required]);
-    newVmRam = new FormControl(1, [Validators.min(1), Validators.required]);
-    newVmDisk = new FormControl(256, [Validators.min(256), Validators.required]);
+    newVmCpu = new FormControl(1, Validators.required);
+    newVmRam = new FormControl(1, Validators.required);
+    newVmDisk = new FormControl(1, Validators.required);
     working: Boolean = false;
 
     team: Team;
     vms: Vm[] = [];
+    configuration: ConfigurationModel;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data, private dialogRef: MatDialogRef<CreateVmDialogComponent>,
                 private vmService: VmService) {
@@ -28,6 +30,26 @@ export class CreateVmDialogComponent implements OnInit {
     ngOnInit(): void {
         this.team = this.data.group;
         this.vms = this.data.vms;
+        this.configuration = this.data.configuration;
+        this.initMinValues();
+        if (this.data.action === 'UPDATE') {
+            this.initFormFromVmValues(this.data.vmToUpdate);
+        }
+    }
+
+    initFormFromVmValues(vm: Vm) {
+        this.newVmCpu.setValue(vm.num_vcpu);
+        this.newVmRam.setValue(vm.ram);
+        this.newVmDisk.setValue(vm.disk_space);
+    }
+
+    initMinValues() {
+        this.newVmCpu.setValue(this.configuration.min_vcpu);
+        this.newVmRam.setValue(this.configuration.min_ram);
+        this.newVmDisk.setValue(this.configuration.min_disk);
+        this.newVmCpu.setValidators(Validators.min(this.configuration.min_vcpu));
+        this.newVmRam.setValidators(Validators.min(this.configuration.min_ram));
+        this.newVmDisk.setValidators(Validators.min(this.configuration.min_disk));
     }
 
     closeDialog() {
@@ -75,6 +97,11 @@ export class CreateVmDialogComponent implements OnInit {
             this.team.id, this.data.vmModel).subscribe((data) => {
             this.closeDialog();
         });
+    }
+
+    updateVm() {
+        console.log('UPDATE');
+        this.closeDialog();
     }
 
 }

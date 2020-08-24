@@ -115,7 +115,7 @@ export class StudentService {
                     // console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
                         data._embedded.teamList.forEach((team:
-                                                              Team) => {
+                                                             Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });
                     }
@@ -127,7 +127,7 @@ export class StudentService {
     getTeamByCourse(studentId: string, courseId: string): Observable<Team> {
         /* find student (by studentId) */
         return this.http
-            .get<Team>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
+            .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
             .pipe(
                 catchError(err => {
                     // console.error('CODE: ' + err.status);
@@ -135,6 +135,12 @@ export class StudentService {
                         return of(null);
                     } // return null so i can handle the 404
                     // return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                }), map(data => {
+                    let team = new Team(data.id, data.name, data.status);
+                    if (data._links.virtualMachineConfiguration) {
+                        team.configurationLink = data._links.virtualMachineConfiguration.href;
+                    }
+                    return team;
                 })
             );
     }

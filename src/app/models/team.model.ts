@@ -8,6 +8,7 @@ export class Team {
     resources: Resources;
     members: Student[];
     proposer: Student;
+    configurationLink: string;
 
     constructor(id?: string, name?: string, status?: string) {
         this.id = id;

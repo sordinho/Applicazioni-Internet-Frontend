@@ -14,6 +14,8 @@ import {forkJoin} from 'rxjs';
 import {CourseService} from '../../services/course.service';
 import {VmModel} from '../../models/vmModel.model';
 import {VmModelService} from '../../services/vm-model.service';
+import {ConfigurationModel} from '../../models/configuration.model';
+import {ConfigurationService} from '../../services/configuration.service';
 
 @Component({
     selector: 'app-vm',
@@ -24,18 +26,21 @@ export class VmComponent implements OnInit {
 
     team: Team;
     teamFetched: boolean = false;
+    vmDataFetched: number = 0;
+    teamHasConfigValid: boolean = false;
     vms: Vm[] = [];
     courseId: string;
-    vmModelId: string;
+    vmModel: VmModel;
     allocatedCPU = 0;
     allocatedDisk = 0;
     allocatedRam = 0;
+    configuration: ConfigurationModel = null;
 
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private vmService: VmService, private studentService: StudentService, private groupService: GroupService,
-                private courseService: CourseService, private vmModelService: VmModelService,
+                private courseService: CourseService, private vmModelService: VmModelService, private configurationService: ConfigurationService,
                 private authService: AuthService,
                 private route: ActivatedRoute,
                 private shareDialog: MatDialog, private createVmDialog: MatDialog) {
@@ -65,12 +70,9 @@ export class VmComponent implements OnInit {
     initCourseData() {
         this.courseService.find(this.courseId).subscribe((course) => {
             if (course.vmModelLink !== null) {
-                // vm model is selected for the current group
-                // this.vmModelService.getModelInfoByDirectLink(course.vmModelLink).subscribe((model) => {
-                //     this.vmModel = model;
-                // });
-                this.vmModelId = course.vmModelLink.split('virtual-machine-models/')[1];
-                console.log(this.vmModelId);
+                this.vmModelService.getModelInfoByDirectLink(course.vmModelLink).subscribe((data) => {
+                    this.vmModel = data;
+                });
             }
         });
     }
@@ -82,28 +84,39 @@ export class VmComponent implements OnInit {
                 this.team = t;
                 let members$ = this.groupService.getMembers(this.team.id);
                 let resources$ = this.groupService.getResources(this.team.id);
-                let vms$ = this.groupService.getVms(this.team.id);
-                forkJoin([members$, resources$, vms$]).subscribe(data => {
+                if (this.team.configurationLink) {
+                    this.configurationService.getConfigurationByLink(this.team.configurationLink).subscribe((data) => {
+                            this.configuration = data;
+                            this.teamHasConfigValid = true;
+                        }
+                    );
+                    this.initVmsData();
+                }
+                forkJoin([members$, resources$]).subscribe(data => {
                     this.team.members = data[0];
                     this.team.resources = data[1];
-                    this.vms = data[2];
-                    this.updateAllocatedResources();
-                    // get owners and creator info about all the vms
-                    this.vms.forEach((vm) => {
 
-                        // let creator$ = this.studentService.find(vm.creatorId);
-                        // let owners$ =
-                        this.vmService.getVmOwners(vm.id)
-                            // forkJoin([creator$, owners$]).
-                            .subscribe(data => {
-                                // vm.creator = data[0];
-                                vm.owners = data;
-                                // console.log('creator: ' + vm.creator);
-                                console.log('owner: ' + vm.owners);
-                            });
-                    });
                 });
             }
+        });
+    }
+
+    initVmsData() {
+        this.vmDataFetched = 0;
+        this.vms = [];
+        this.groupService.getVms(this.team.id).subscribe((data) => {
+            this.vms = data;
+            this.updateAllocatedResources();
+
+            // get owners info about all the vms
+            this.vms.forEach((vm) => {
+                this.vmService.getVmOwners(vm.id)
+                    .subscribe((data) => {
+                        vm.owners = data;
+                        this.vmDataFetched++;
+                        console.log('owner: ' + vm.owners);
+                    });
+            });
         });
     }
 
@@ -150,14 +163,36 @@ export class VmComponent implements OnInit {
             data: {
                 group: this.team,
                 vms: this.vms,
-                vmModel: this.vmModelId,
+                vmModel: this.vmModel.uniqueId,
                 creatorId: this.authService.getUserId(),
+                configuration: this.configuration,
+                action: 'CREATE'
             }
         }).afterClosed().subscribe(() => {
-            this.groupService.getVms(this.team.id).subscribe((data) => {
-                this.vms = data;
-                console.log('CLOSED');
-            });
+            this.initVmsData();
+            console.log('CLOSED');
         });
+    }
+
+    vmIsEditable(vm: Vm) {
+        return true;
+        return (vm.status === 'OFF' && this.studentIsOwner(vm));
+    }
+
+    updateVm(vm: Vm) {
+        this.createVmDialog.open(CreateVmDialogComponent, {
+            data: {
+                group: this.team,
+                vms: this.vms.filter(value => value != vm),
+                vmModel: this.vmModel.uniqueId,
+                creatorId: this.authService.getUserId(),
+                configuration: this.configuration,
+                action: 'UPDATE',
+                vmToUpdate: vm
+            }
+        }).afterClosed().subscribe(() => {
+            this.initVmsData();
+        });
+
     }
 }

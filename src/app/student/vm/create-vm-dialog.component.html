@@ -1,4 +1,5 @@
-<h1 mat-dialog-title>Create a new VM</h1>
+<h1 mat-dialog-title *ngIf="data.action==='CREATE'">Create a new VM</h1>
+<h1 mat-dialog-title *ngIf="data.action==='UPDATE'">Edit VM</h1>
 
 <mat-spinner *ngIf="working"></mat-spinner>
 <div mat-dialog-content class="full-width" *ngIf="!working">
@@ -15,12 +16,17 @@
 	<br>
 	<mat-form-field>
 		<mat-label>DISK</mat-label>
-		<input [formControl]="newVmDisk" matInput type="number" min="256" required>
+		<input [formControl]="newVmDisk" matInput type="number" min="1" required>
 		<span matSuffix>MB</span>
 	</mat-form-field>
 	<br>
 	<button mat-stroked-button color="primary" (click)="saveNewVm()"
-			[disabled]="!checkResourcesLimits() || !checkValidFormValues()">
+			[disabled]="!checkResourcesLimits() || !checkValidFormValues()" *ngIf="data.action=='CREATE'">
+		<mat-icon>add</mat-icon>
+		<label> Save</label>
+	</button>
+	<button mat-stroked-button color="primary" (click)="updateVm()"
+			[disabled]="!checkResourcesLimits() || !checkValidFormValues()" *ngIf="data.action=='UPDATE'">
 		<mat-icon>add</mat-icon>
 		<label> Save</label>
 	</button>
