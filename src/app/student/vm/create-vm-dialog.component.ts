@@ -16,7 +16,7 @@ export class CreateVmDialogComponent implements OnInit {
     newVmCpu = new FormControl(1, [Validators.min(1), Validators.required]);
     newVmRam = new FormControl(1, [Validators.min(1), Validators.required]);
     newVmDisk = new FormControl(256, [Validators.min(256), Validators.required]);
-    wrongValues: Boolean = false;
+    working: Boolean = false;
 
     team: Team;
     vms: Vm[] = [];
@@ -70,6 +70,7 @@ export class CreateVmDialogComponent implements OnInit {
         console.log(this.data.creatorId);
         console.log(this.team.id);
         console.log(this.data.vmModel);
+        this.working = true;
         this.vmService.createNewVm(this.newVmCpu.value, this.newVmRam.value, this.newVmDisk.value, this.data.creatorId,
             this.team.id, this.data.vmModel).subscribe((data) => {
             this.closeDialog();

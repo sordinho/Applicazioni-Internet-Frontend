@@ -1,5 +1,7 @@
 <h1 mat-dialog-title>Create a new VM</h1>
-<div mat-dialog-content class="full-width">
+
+<mat-spinner *ngIf="working"></mat-spinner>
+<div mat-dialog-content class="full-width" *ngIf="!working">
 	<mat-form-field>
 		<mat-label>CPU</mat-label>
 		<input [formControl]="newVmCpu" matInput type="number" min="1" required>

@@ -54,6 +54,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 import { HomeContComponent } from './home/home-cont.component';
 import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -79,37 +80,38 @@ import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.co
     HomeContComponent,
     AssigmentsContComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-    MatTabsModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatSortModule,
-    MatPaginatorModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatCardModule,
-    MatMenuModule,
-    MatGridListModule,
-    MatExpansionModule,
-    MatBadgeModule,
-    MatSelectModule,
-    MatTooltipModule,
-    MatChipsModule,
-    MatSnackBarModule,
-    MatSlideToggleModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatListModule,
+        MatTabsModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatSortModule,
+        MatPaginatorModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatCardModule,
+        MatMenuModule,
+        MatGridListModule,
+        MatExpansionModule,
+        MatBadgeModule,
+        MatSelectModule,
+        MatTooltipModule,
+        MatChipsModule,
+        MatSnackBarModule,
+        MatSlideToggleModule,
+        MatProgressSpinnerModule
+    ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })

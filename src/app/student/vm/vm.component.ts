@@ -91,14 +91,16 @@ export class VmComponent implements OnInit {
                     // get owners and creator info about all the vms
                     this.vms.forEach((vm) => {
 
-                        let creator$ = this.studentService.find(vm.creatorId);
-                        let owners$ = this.vmService.getVmOwners(vm.id);
-                        forkJoin([creator$, owners$]).subscribe(data => {
-                            vm.creator = data[0];
-                            vm.owners = data[1];
-                            console.log('creator: ' + vm.creator);
-                            console.log('owner: ' + vm.owners);
-                        });
+                        // let creator$ = this.studentService.find(vm.creatorId);
+                        // let owners$ =
+                        this.vmService.getVmOwners(vm.id)
+                            // forkJoin([creator$, owners$]).
+                            .subscribe(data => {
+                                // vm.creator = data[0];
+                                vm.owners = data;
+                                // console.log('creator: ' + vm.creator);
+                                console.log('owner: ' + vm.owners);
+                            });
                     });
                 });
             }
