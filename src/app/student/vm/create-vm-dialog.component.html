@@ -7,18 +7,18 @@
 	<br>
 	<mat-form-field>
 		<mat-label>RAM</mat-label>
-		<input [formControl]="newVmRam" matInput type="number" min="256" required>
+		<input [formControl]="newVmRam" matInput type="number" min="1" required>
 		<span matSuffix>GB</span>
 	</mat-form-field>
 	<br>
 	<mat-form-field>
 		<mat-label>DISK</mat-label>
-		<input [formControl]="newVmDisk" matInput type="number" min="512" required>
+		<input [formControl]="newVmDisk" matInput type="number" min="256" required>
 		<span matSuffix>MB</span>
 	</mat-form-field>
 	<br>
 	<button mat-stroked-button color="primary" (click)="saveNewVm()"
-			[disabled]="!checkResourcesLimits()">
+			[disabled]="!checkResourcesLimits() || !checkValidFormValues()">
 		<mat-icon>add</mat-icon>
 		<label> Save</label>
 	</button>
@@ -31,6 +31,7 @@
 		Close
 	</button>
 	<p *ngIf="!checkResourcesLimits()" class="error">Error. Exceeded resources limit!</p>
+	<p *ngIf="!checkValidFormValues()" class="error">Error. Wrong values inserted</p>
 	<br><br>
 
 </div>

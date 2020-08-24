@@ -39,14 +39,18 @@
 				 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 				<mat-list class="history-list">
 					<div mat-subheader>History &nbsp;&nbsp;&nbsp;
-						<button mat-stroked-button color="primary" (click)="uploadTask(element)">Upload</button>
+						<button mat-stroked-button color="primary" (click)="uploadTask(element)">
+							<mat-icon>cloud_upload</mat-icon>
+						</button>
 					</div>
 					<mat-list-item *ngFor="let paper of papers.get(element.id)">
 						<mat-list-item class="paper-item">{{paper.id}}</mat-list-item>
 						<mat-list-item class="paper-item">{{paper.status}}</mat-list-item>
 						<mat-list-item class="paper-item">{{paper.published}}</mat-list-item>
 						<mat-list-item class="paper-item">
-							<button mat-stroked-button color="primary" (click)="downloadDelivered(paper)">Download</button>
+							<button mat-stroked-button color="primary" (click)="downloadDelivered(paper)">
+								<mat-icon>cloud_download</mat-icon>
+							</button>
 						</mat-list-item>
 					</mat-list-item>
 				</mat-list>

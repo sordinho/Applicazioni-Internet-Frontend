@@ -9,15 +9,17 @@
 		<h4>Group resources limits</h4>
 		<mat-grid-list cols="3" rowHeight="55px">
 			<mat-grid-tile>
-				<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{team.resources.maxVcpu}}</mat-grid-tile>
+				<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{allocatedCPU}}
+				/ {{team.resources.maxVcpu}}</mat-grid-tile>
 			<mat-grid-tile>
-				<mat-icon>memory</mat-icon>&nbsp; RAM: {{team.resources.maxRam}} &nbsp;GB
+				<mat-icon>memory</mat-icon>&nbsp; RAM: {{allocatedRam}} / {{team.resources.maxRam}} &nbsp;GB
 			</mat-grid-tile>
 			<mat-grid-tile>
-				<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{team.resources.maxDiskSpace}} &nbsp;MB
+				<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{allocatedDisk}}
+				/ {{team.resources.maxDiskSpace}} &nbsp;MB
 			</mat-grid-tile>
-			<mat-grid-tile>Max actives VMs: {{team.resources.maxOn}}</mat-grid-tile>
-			<mat-grid-tile>Total max VMs: {{team.resources.maxTot}}</mat-grid-tile>
+			<mat-grid-tile>Max actives VMs: {{team.resources.activeVMs}} / {{team.resources.maxOn}}</mat-grid-tile>
+			<mat-grid-tile>Total max VMs: {{team.resources.tot}} / {{team.resources.maxTot}}</mat-grid-tile>
 		</mat-grid-list>
 	</div>
 

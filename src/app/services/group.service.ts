@@ -102,7 +102,7 @@ export class GroupService {
                     // console.log(JSON.stringify(data));
                     let vms: Vm[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.virtualMachineList((vmData: any) => {
+                        data._embedded.virtualMachineList.forEach((vmData: any) => {
                             let vm = new Vm(vmData.id, vmData.num_vcpu, vmData.ram, vmData.disk_space, vmData.studentId);
                             vms.push(vm);
                         });

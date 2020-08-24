@@ -1,10 +1,15 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EMPTY, Observable, of, throwError} from 'rxjs';
 import {Vm} from '../models/vm.model';
 import {catchError} from 'rxjs/operators';
 import {Student} from '../models/student.model';
-import {VmModel} from '../models/vmModel.model';
+
+const httpOptions = {
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+    })
+};
 
 @Injectable({
     providedIn: 'root'
@@ -16,26 +21,6 @@ export class VmService {
     constructor(private http: HttpClient) {
     }
 
-    // getTeamConfiguration(groupId: string): Observable<VmConfigurationModel> {
-    //     return this.http
-    //         .get<VmConfigurationModel>(`${this.API_PATH}/teams/${groupId}/configuration`)
-    //         .pipe(catchError(err => {
-    //             console.error(err);
-    //             return throwError(`VmService.getConfiguration error: ${err.message}`);
-    //         }));
-    // }
-
-    getVmsByGroupId(groupId: string): Observable<Vm[]> {
-        // return of([TEST_VM_UBUNTU, TEST_VM_WIN]);
-
-        return this.http
-            .get<Vm[]>(`${this.API_PATH}/teams/${groupId}/virtual-machines`)
-            .pipe(catchError(err => {
-                console.error(err);
-                return throwError(`VmService.getVmsByGroupId error: ${err.message}`);
-            }));
-    }
-
     getVmOwners(vmID: string): Observable<Student[]> {
         return this.http
             .get<Student[]>(`${this.API_PATH}/virtual-machines/${vmID}/owners`)
@@ -45,13 +30,19 @@ export class VmService {
             }));
     }
 
-    getVmModel(courseID: string): Observable<VmModel> {
-        return this.http
-            .get<VmModel>(`${this.API_PATH}/courses/${courseID}/model`)
-            .pipe(catchError(err => {
-                console.error(err);
-                return throwError(`VmService.getVmModel error: ${err.message}`);
-            }));
+    createNewVm(num_vcpu: number, ram: number, disk_space: number, creatorId: string, teamId: string, modelId: string): Observable<Vm> {
+        return this.http.post<any>(`${this.API_PATH}/virtual-machines`, {
+            'num_vcpu': num_vcpu,
+            'disk_space': disk_space,
+            'ram': ram,
+            'studentId': creatorId,
+            'teamId': teamId,
+            'modelId': modelId
+        }, httpOptions).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.createNewVm error: ${err.message}`);
+        }));
+
     }
 
 
