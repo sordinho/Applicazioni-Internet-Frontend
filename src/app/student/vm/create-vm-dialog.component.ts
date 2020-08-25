@@ -52,8 +52,8 @@ export class CreateVmDialogComponent implements OnInit {
         this.newVmDisk.setValidators(Validators.min(this.configuration.min_disk));
     }
 
-    closeDialog() {
-        this.dialogRef.close();
+    closeDialog(res: string = '') {
+        this.dialogRef.close(res);
     }
 
     checkValidFormValues(): boolean {
@@ -69,6 +69,11 @@ export class CreateVmDialogComponent implements OnInit {
             actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
             actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
             actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
+            if (this.data.action === 'UPDATE') {
+                actualCpu -= this.data.vmToUpdate.num_vcpu;
+                actualRam -= this.data.vmToUpdate.ram;
+                actualDisk -= this.data.vmToUpdate.disk_space;
+            }
         }
         return (
             this.team.resources.maxVcpu >= actualCpu + this.newVmCpu.value &&
@@ -95,13 +100,24 @@ export class CreateVmDialogComponent implements OnInit {
         this.working = true;
         this.vmService.createNewVm(this.newVmCpu.value, this.newVmRam.value, this.newVmDisk.value, this.data.creatorId,
             this.team.id, this.data.vmModel).subscribe((data) => {
-            this.closeDialog();
+            this.closeDialog('OK');
         });
     }
 
     updateVm() {
         console.log('UPDATE');
-        this.closeDialog();
+        console.log(this.data.vmToUpdate.id);
+        console.log(this.newVmCpu.value);
+        console.log(this.newVmRam.value);
+        console.log(this.newVmDisk.value);
+        console.log(this.data.creatorId);
+        console.log(this.team.id);
+        console.log(this.data.vmModel);
+        this.working = true;
+        this.vmService.updateVm(this.data.vmToUpdate.id, this.newVmCpu.value, this.newVmRam.value, this.newVmDisk.value, this.data.creatorId,
+            this.team.id, this.data.vmModel).subscribe((data) => {
+            this.closeDialog('OK');
+        });
     }
 
 }

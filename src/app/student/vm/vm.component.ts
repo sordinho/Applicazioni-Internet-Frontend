@@ -131,6 +131,9 @@ export class VmComponent implements OnInit {
 
     deleteVM(vm: Vm) {
         console.log('Delete vm: ' + vm.id);
+        this.vmService.deleteVm(vm.id).subscribe(() => {
+            // todo snackbar
+        });
     }
 
     stopVm(vm: Vm) {
@@ -150,6 +153,11 @@ export class VmComponent implements OnInit {
                 group: this.team,
                 vm: vm
             }
+        }).afterClosed().subscribe((res) => {
+            if (res === 'OK') {
+                this.initVmsData();
+            }
+            console.log('CLOSED');
         });
     }
 
@@ -168,8 +176,10 @@ export class VmComponent implements OnInit {
                 configuration: this.configuration,
                 action: 'CREATE'
             }
-        }).afterClosed().subscribe(() => {
-            this.initVmsData();
+        }).afterClosed().subscribe((res) => {
+            if (res === 'OK') {
+                this.initVmsData();
+            }
             console.log('CLOSED');
         });
     }
@@ -190,8 +200,11 @@ export class VmComponent implements OnInit {
                 action: 'UPDATE',
                 vmToUpdate: vm
             }
-        }).afterClosed().subscribe(() => {
-            this.initVmsData();
+        }).afterClosed().subscribe((res) => {
+            if (res === 'OK') {
+                this.initVmsData();
+            }
+            console.log('CLOSED');
         });
 
     }
