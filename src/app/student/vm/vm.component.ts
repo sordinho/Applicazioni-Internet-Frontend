@@ -17,6 +17,7 @@ import {VmModelService} from '../../services/vm-model.service';
 import {ConfigurationModel} from '../../models/configuration.model';
 import {ConfigurationService} from '../../services/configuration.service';
 
+
 @Component({
     selector: 'app-vm',
     templateUrl: './vm.component.html',
@@ -63,8 +64,7 @@ export class VmComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-        // todo set vm status running
-        window.open('https://www.google.com');
+        let vmWindow = window.open('assets/images/' + this.vmModel.id + '.png', vm.id, 'status=no, toolbar=no, menubar=no, location=no, addressbar=no');
     }
 
     initCourseData() {
@@ -138,12 +138,17 @@ export class VmComponent implements OnInit {
 
     stopVm(vm: Vm) {
         console.log('Stop vm: ' + vm.id);
-        vm.status = 'OFF';
+        this.vmService.stopVm(vm.id).subscribe(data => {
+            vm.status = 'OFF';
+        });
+
     }
 
     startVm(vm: Vm) {
         console.log('Start vm: ' + vm.id);
-        vm.status = 'RUNNING';
+        this.vmService.stopVm(vm.id).subscribe(data => {
+            vm.status = 'RUNNING';
+        });
     }
 
     shareVm(vm: Vm) {
@@ -162,8 +167,10 @@ export class VmComponent implements OnInit {
     }
 
     studentIsOwner(vm: Vm) {
-        // TODO check if actual user is owner of the given VM
-        return true;
+        let actualOwners: string[] = vm.owners.map((s) => {
+            return s.id;
+        });
+        return actualOwners.includes(this.authService.getUserId());
     }
 
     createNewVm() {
@@ -185,7 +192,6 @@ export class VmComponent implements OnInit {
     }
 
     vmIsEditable(vm: Vm) {
-        return true;
         return (vm.status === 'OFF' && this.studentIsOwner(vm));
     }
 

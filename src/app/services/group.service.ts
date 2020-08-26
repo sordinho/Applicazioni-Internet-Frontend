@@ -104,6 +104,7 @@ export class GroupService {
                     if (data !== undefined && data._embedded !== undefined) {
                         data._embedded.virtualMachineList.forEach((vmData: any) => {
                             let vm = new Vm(vmData.id, vmData.num_vcpu, vmData.ram, vmData.disk_space, vmData.studentId);
+                            vm.status = 'RUNNING'; // todo delete;
                             vms.push(vm);
                         });
                     }
