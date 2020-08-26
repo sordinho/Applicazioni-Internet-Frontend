@@ -51,10 +51,11 @@ export class ShareDialogComponent implements OnInit {
         let requests = [];
         this.selectionModel.selected.forEach((s) => {
             console.log(s.id);
-            requests.push(this.vmService.shareVm(this.data.vm.id, s.id));
+            let req = this.vmService.shareVm(this.data.vm.id, s.id);
+            requests.push(req);
         });
         forkJoin(requests).subscribe(results => {
-            console.log(results);
+            console.log('Req: ' + requests.length);
             this.closeDialog('OK');
         });
 

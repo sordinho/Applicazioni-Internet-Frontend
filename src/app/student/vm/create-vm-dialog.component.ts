@@ -90,7 +90,6 @@ export class CreateVmDialogComponent implements OnInit {
     }
 
     saveNewVm() {
-        // TODO:  UPDATE resources usage for the group. To do vm service
         console.log(this.newVmCpu.value);
         console.log(this.newVmRam.value);
         console.log(this.newVmDisk.value);
