@@ -8,10 +8,10 @@ export class ConfigurationModel {
     max_ram: number;
     tot: number;
     max_on: number;
-    teamId: number;
+    teamId: string;
 
 
-    constructor(id: number, min_vcpu: number, max_vcpu: number, min_disk: number, max_disk: number, min_ram: number, max_ram: number, tot: number, max_on: number, teamId: number) {
+    constructor(id: number, min_vcpu: number, max_vcpu: number, min_disk: number, max_disk: number, min_ram: number, max_ram: number, tot: number, max_on: number, teamId: string) {
         this.id = id;
         this.min_vcpu = min_vcpu;
         this.max_vcpu = max_vcpu;

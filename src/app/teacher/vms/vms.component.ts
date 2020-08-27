@@ -13,6 +13,9 @@ import {Course} from '../../models/course.model';
 import {ActivatedRoute} from '@angular/router';
 import {forkJoin} from 'rxjs';
 import {StudentService} from '../../services/student.service';
+import {Resources} from '../../models/resources.model';
+import {ConfigurationService} from '../../services/configuration.service';
+import {ConfigurationModel} from '../../models/configuration.model';
 
 @Component({
     selector: 'app-vms',
@@ -24,6 +27,7 @@ export class VmsComponent implements OnInit {
     _filteredTeams: Team[] = [];
     _allTeams: Team[] = [];
     selectedTeam: Team = null;
+    selectedTeamConfiguration: ConfigurationModel = null;
     editModel = false;
     osModelSelected = false;
     vms: Vm[] = [];
@@ -39,12 +43,16 @@ export class VmsComponent implements OnInit {
     activesLimit = new FormControl();
     maxLimit = new FormControl();
     osTypeSelect = new FormControl();
+    minCpuLimit = new FormControl();
+    minRamLimit = new FormControl();
+    minDiskLimit = new FormControl();
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupVMsService: GroupService, private vmService: VmService,
                 private vmModelService: VmModelService, private courseService: CourseService,
-                private groupService: GroupService, private studentService: StudentService, private route: ActivatedRoute) {
+                private groupService: GroupService, private studentService: StudentService,
+                private configurationService: ConfigurationService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -95,36 +103,55 @@ export class VmsComponent implements OnInit {
     }
 
     updateAddSelection(value: Team) {
+        this.selectedTeamConfiguration = null;
         this.selectedTeam = value;
         // Get Members
-        // Get Resources
         let members$ = this.groupService.getMembers(this.selectedTeam.id);
-        let resources$ = this.groupService.getResources(this.selectedTeam.id);
-        let vms$ = this.groupService.getVms(this.selectedTeam.id);
-        forkJoin([members$, resources$, vms$]).subscribe(data => {
-            this.selectedTeam.members = data[0];
-            this.selectedTeam.resources = data[1];
-            this.vms = data[2];
-            this.updateFormValues();
 
-            // get owners and creator info about all the vms
-            this.vms.forEach((vm) => {
-                let creator$ = this.studentService.find(vm.creatorId);
-                let owners$ = this.vmService.getVmOwners(vm.id);
-                forkJoin([creator$, owners$]).subscribe(data => {
-                    vm.creator = data[0];
-                    vm.owners = data[1];
+        // If team has a configuration...
+        if (this.selectedTeam.configurationLink) {
+            let resources$ = this.groupService.getResources(this.selectedTeam.id);
+            let vms$ = this.groupService.getVms(this.selectedTeam.id);
+            let config$ = this.configurationService.getConfigurationByLink(this.selectedTeam.configurationLink);
+            forkJoin([members$, resources$, vms$, config$]).subscribe(data => {
+                this.selectedTeam.members = data[0];
+                this.selectedTeam.resources = data[1];
+                this.vms = data[2];
+                this.selectedTeamConfiguration = data[3];
+
+                this.updateFormValues();
+
+                // get owners and creator info about all the vms
+                this.vms.forEach((vm) => {
+                    let creator$ = this.studentService.find(vm.creatorId);
+                    let owners$ = this.vmService.getVmOwners(vm.id);
+                    forkJoin([creator$, owners$]).subscribe(data => {
+                        vm.creator = data[0];
+                        vm.owners = data[1];
+                    });
                 });
             });
-        });
+        } else { // If team hasn't a configuration
+            members$.subscribe((data) => {
+                this.selectedTeam.members = data;
+                this.selectedTeamConfiguration = new ConfigurationModel(-1, 0, 0, 0, 0, 0,
+                    0, 0, 0, this.selectedTeam.id);
+                this.updateFormValues();
+            });
+        }
+
+
     }
 
     updateFormValues() {
-        this.cpuLimit.setValue(this.selectedTeam.resources.maxVcpu);
-        this.ramLimit.setValue(this.selectedTeam.resources.maxRam);
-        this.diskLimit.setValue(this.selectedTeam.resources.maxDiskSpace);
-        this.activesLimit.setValue(this.selectedTeam.resources.maxOn);
-        this.maxLimit.setValue(this.selectedTeam.resources.maxTot);
+        this.cpuLimit.setValue(this.selectedTeamConfiguration.max_vcpu);
+        this.minCpuLimit.setValue(this.selectedTeamConfiguration.min_vcpu);
+        this.ramLimit.setValue(this.selectedTeamConfiguration.max_ram);
+        this.minRamLimit.setValue(this.selectedTeamConfiguration.min_ram);
+        this.diskLimit.setValue(this.selectedTeamConfiguration.max_disk);
+        this.minDiskLimit.setValue(this.selectedTeamConfiguration.min_disk);
+        this.activesLimit.setValue(this.selectedTeamConfiguration.max_on);
+        this.maxLimit.setValue(this.selectedTeamConfiguration.tot);
     }
 
 

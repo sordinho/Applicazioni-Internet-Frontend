@@ -130,12 +130,17 @@ export class StudentService {
             .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
             .pipe(
                 catchError(err => {
-                    // console.error('CODE: ' + err.status);
-                    if (err.status == '404') {
-                        return of(null);
-                    } // return null so i can handle the 404
+                    console.error('CODE: ' + err.status);
+                    // if (err.status == 404) {
+                    //     return of(null);
+                    // } // return null so i can handle the 404
                     // return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                    return of(null);
                 }), map(data => {
+                    console.log(data);
+                    if (data == null) {
+                        return null;
+                    }
                     let team = new Team(data.id, data.name, data.status);
                     if (data._links.virtualMachineConfiguration) {
                         team.configurationLink = data._links.virtualMachineConfiguration.href;

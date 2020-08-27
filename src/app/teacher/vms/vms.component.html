@@ -67,6 +67,8 @@
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
+			<mat-label>Global group resources</mat-label>
+			<br>
 			<mat-form-field class="input-large">
 				<mat-label>CPU</mat-label>
 				<input [formControl]="cpuLimit" matInput type="number" min="1" required>
@@ -95,6 +97,29 @@
 				<input [formControl]="activesLimit" matInput type="number" min="1" required>
 			</mat-form-field>
 			<br>
+			<br>
+
+			<mat-divider></mat-divider>
+			<br>
+			<mat-label>Per VM min resources limit</mat-label>
+			<br>
+			<mat-form-field class="input-large">
+				<mat-label>Min CPU</mat-label>
+				<input [formControl]="minCpuLimit" matInput type="number" min="1" required>
+			</mat-form-field>
+
+			<mat-form-field class="input-large">
+				<mat-label>Min RAM</mat-label>
+				<input [formControl]="minRamLimit" matInput type="number" min="1" required>
+				<span matSuffix>GB</span>
+			</mat-form-field>
+
+			<mat-form-field class="input-large">
+				<mat-label>Min DISK</mat-label>
+				<input [formControl]="minDiskLimit" matInput type="number" min="1" required>
+				<span matSuffix>MB</span>
+			</mat-form-field>
+
 			<button mat-stroked-button color="primary" (click)="saveResourcesLimits()"
 					[disabled]="!checkResourcesLimits()">Save
 			</button>

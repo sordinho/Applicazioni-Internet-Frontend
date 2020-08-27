@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EMPTY, Observable, of, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, retry} from 'rxjs/operators';
 import {Student} from '../models/student.model';
 import {StudentService} from './student.service';
 import {Resources} from '../models/resources.model';
@@ -58,7 +58,12 @@ export class GroupService {
             .pipe(
                 catchError(err => {
                     console.error(err);
-                    return throwError(`GroupService.getResources error: ${err.message}`);
+                    // return throwError(`GroupService.getResources error: ${err.message}`);
+                    return of(null);
+                }), map(data => {
+                    if (data == null) {
+                        return null;
+                    }
                 })
             );
     }

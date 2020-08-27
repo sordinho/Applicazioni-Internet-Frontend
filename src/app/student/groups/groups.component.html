@@ -26,9 +26,11 @@
 		<mat-divider></mat-divider>
 		<mat-grid-list cols="2" rowHeight="50px">
 			<mat-grid-tile>Min members: {{course.min}} &nbsp;
-				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length >= course.min">done</mat-icon></mat-grid-tile>
+				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length +1 >= course.min">done</mat-icon>
+			</mat-grid-tile>
 			<mat-grid-tile>Max members: {{course.max}} &nbsp;
-				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length <= course.max">done</mat-icon></mat-grid-tile>
+				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length <= course.max">done</mat-icon>
+			</mat-grid-tile>
 		</mat-grid-list>
 		<mat-divider></mat-divider>
 		<br>

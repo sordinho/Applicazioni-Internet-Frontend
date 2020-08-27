@@ -91,12 +91,11 @@ export class VmComponent implements OnInit {
                         }
                     );
                     this.initVmsData();
+                    forkJoin([members$, resources$]).subscribe(data => {
+                        this.team.members = data[0];
+                        this.team.resources = data[1];
+                    });
                 }
-                forkJoin([members$, resources$]).subscribe(data => {
-                    this.team.members = data[0];
-                    this.team.resources = data[1];
-
-                });
             }
         });
     }

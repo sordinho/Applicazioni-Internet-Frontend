@@ -23,6 +23,10 @@
 		</mat-grid-list>
 	</div>
 
+	<div *ngIf="!teamHasConfigValid">
+		<h2>The teacher didn't set the resources yet</h2>
+	</div>
+
 
 	<!-- VMs listing-->
 	<div *ngIf="teamHasConfigValid">
@@ -95,7 +99,8 @@
 								<mat-icon>edit</mat-icon>
 								<label> Edit</label>
 							</button>
-							<button *ngIf="vm.status==='OFF'" style="margin-left: 5px" mat-stroked-button color="warn" (click)="deleteVM(vm)">
+							<button *ngIf="vm.status==='OFF'" style="margin-left: 5px" mat-stroked-button color="warn"
+									(click)="deleteVM(vm)">
 								<mat-icon>delete</mat-icon>
 								<label> Delete</label>
 							</button>
