@@ -55,6 +55,7 @@ import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dia
 import { HomeContComponent } from './home/home-cont.component';
 import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -110,7 +111,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
         MatChipsModule,
         MatSnackBarModule,
         MatSlideToggleModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatProgressBarModule
     ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

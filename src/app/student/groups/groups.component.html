@@ -1,3 +1,9 @@
+<div *ngIf="!(dataReady && team!==null) && !allDataFetched()">
+	<br>
+	<br>
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
 <!-- Group information-->
 <div *ngIf="dataReady && team!==null">
 	<h3>Your group</h3>
@@ -19,7 +25,8 @@
 </div>
 
 <!-- Group creation/proposal-->
-<div *ngIf="dataReady && team===null">
+<!--<div *ngIf="dataReady && team===null">-->
+<div *ngIf="allDataFetched() && team===null">
 	<div>
 		<h3>Propose Group</h3>
 		<h5>You're automatically added to a new proposed group</h5>

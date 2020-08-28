@@ -37,6 +37,9 @@ export class GroupsComponent implements OnInit {
     courseId: string = '';
     course: Course = null;
 
+    studentDataFetched = false;
+    courseDataFetched = false;
+
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -53,6 +56,7 @@ export class GroupsComponent implements OnInit {
         this.courseId = this.route.snapshot.parent.url[1].toString();
         this.courseService.find(this.courseId).subscribe((data) => {
             this.course = data;
+            this.courseDataFetched = true;
         });
         this.dataSource = new MatTableDataSource<Student>([]);
         this.initStudentTeam();
@@ -95,6 +99,7 @@ export class GroupsComponent implements OnInit {
         this.courseService.queryAvailableStudents(this.courseId).subscribe((data: Student[]) => {
             let filtered: Student[] = data.filter((s: Student) => s.id != this.authService.getUserId());
             this.dataSource = new MatTableDataSource<Student>(filtered);
+            this.studentDataFetched = true;
         });
     }
 
@@ -130,6 +135,10 @@ export class GroupsComponent implements OnInit {
         this.expiryProposal.reset();
         this.proposedGroupName.reset();
         this.selectionModel.clear();
+    }
+
+    allDataFetched() {
+        return this.studentDataFetched && this.courseDataFetched;
     }
 
 }

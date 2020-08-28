@@ -29,6 +29,7 @@ export class VmComponent implements OnInit {
     teamFetched: boolean = false;
     vmDataFetched: number = 0;
     teamHasConfigValid: boolean = false;
+    allDataFetched: boolean = false;
     vms: Vm[] = [];
     courseId: string;
     vmModel: VmModel;
@@ -48,6 +49,7 @@ export class VmComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.allDataFetched = false;
         this.team = new Team('-1');
         this.courseId = this.route.snapshot.parent.url[1].toString();
         this.initCourseData();
@@ -94,8 +96,13 @@ export class VmComponent implements OnInit {
                     forkJoin([members$, resources$]).subscribe(data => {
                         this.team.members = data[0];
                         this.team.resources = data[1];
+                        this.allDataFetched = true;
                     });
+                } else {
+                    this.allDataFetched = true;
                 }
+            } else {
+                this.allDataFetched = true;
             }
         });
     }
