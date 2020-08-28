@@ -61,9 +61,7 @@ export class GroupService {
                     // return throwError(`GroupService.getResources error: ${err.message}`);
                     return of(null);
                 }), map(data => {
-                    if (data == null) {
-                        return null;
-                    }
+                    return data;
                 })
             );
     }

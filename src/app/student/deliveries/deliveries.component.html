@@ -28,7 +28,9 @@
 			Download
 		</th>
 		<td mat-cell *matCellDef="let row">
-			<button mat-stroked-button color="primary" (click)="downloadAssignment($event,row)">Download</button>
+			<button mat-stroked-button color="primary" (click)="downloadAssignment($event,row)">
+				<mat-icon>cloud_download</mat-icon>
+			</button>
 		</td>
 	</ng-container>
 
