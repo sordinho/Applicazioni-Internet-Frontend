@@ -121,9 +121,13 @@
 			</mat-form-field>
 
 			<button mat-stroked-button color="primary" (click)="saveResourcesLimits()"
-					[disabled]="!checkResourcesLimits()">Save
+					[disabled]="!checkMaxResourcesLimits() || !checkMinResourcesLimit()">Save
 			</button>
-			<p *ngIf="!checkResourcesLimits()" class="error">Error. Please check new resources limit aren't lower than
+			<p *ngIf="!checkMaxResourcesLimits()" class="error">Error. Please check new resources limit aren't lower
+				than
+				actual ones</p>
+			<p *ngIf="!checkMinResourcesLimit()" class="error">Error. Please check new VM resources limit aren't lower
+				than
 				actual ones</p>
 
 		</mat-expansion-panel>
