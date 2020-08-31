@@ -62,6 +62,7 @@ export class AssigmentsContComponent implements OnInit {
   }
 
   getPapersHistory(event) {
+    this.papersHistory = null /* reset paperHistory */
     /* get history of a student's papers */
     this.assignmentService.queryPaperHistory(event.assignmentId, event.studentId).subscribe(
       res => {

@@ -53,7 +53,7 @@ export class AssigmentsComponent implements OnInit {
   }
 
   @Input() set papers(papers: Paper[]) {
-    if(papers !== undefined && papers !== null) {
+    if(papers !== undefined) {
       this._papers = papers
       this.dataSource = new MatTableDataSource<Paper>(papers)
     }
@@ -61,7 +61,7 @@ export class AssigmentsComponent implements OnInit {
 
   /* papers history of the expanded student (papers) */ 
   @Input() set papersHistory(papersHistory: Paper[]) {
-    if(papersHistory !== undefined && papersHistory !== null) {
+    if(papersHistory !== undefined) {
       this._papersHistory = papersHistory
     }
   }  
