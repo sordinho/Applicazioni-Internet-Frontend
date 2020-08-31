@@ -17,6 +17,7 @@ import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {catchError} from 'rxjs/operators';
+import {Course} from '../../models/course.model';
 
 @Component({
     selector: 'app-groups',
@@ -34,6 +35,7 @@ export class GroupsComponent implements OnInit {
     expiryProposal = new FormControl();
     proposals: Team[] = [];
     courseId: string = '';
+    course: Course = null;
 
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -49,6 +51,9 @@ export class GroupsComponent implements OnInit {
 
     ngOnInit(): void {
         this.courseId = this.route.snapshot.parent.url[1].toString();
+        this.courseService.find(this.courseId).subscribe((data) => {
+            this.course = data;
+        });
         this.dataSource = new MatTableDataSource<Student>([]);
         this.initStudentTeam();
         this.initStudentsWithoutTeam();
@@ -64,11 +69,8 @@ export class GroupsComponent implements OnInit {
                 this.initTeamProposals();
                 return;
             }
-            let members$ = this.groupService.getMembers(team.id);
-            let resources$ = this.groupService.getResources(team.id);
-            forkJoin([members$, resources$]).subscribe(data => {
-                this.team.members = data[0];
-                this.team.resources = data[1];
+            this.groupService.getMembers(team.id).subscribe(data => {
+                this.team.members = data;
             });
         });
     }
@@ -118,8 +120,10 @@ export class GroupsComponent implements OnInit {
 
     disableProposalForm() {
         // Return true if proposal button need to be disabled
-        return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0 || this.expiryProposal === null
-            || this.expiryProposal.value === '' || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid();
+        return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0
+            || this.expiryProposal === null || this.expiryProposal.value === ''
+            || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid()
+            || this.selectionModel.selected.length < this.course.min || this.selectionModel.selected.length > this.course.max;
     }
 
     resetTeamProposalForm() {

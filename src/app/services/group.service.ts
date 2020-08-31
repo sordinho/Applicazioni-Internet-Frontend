@@ -6,6 +6,7 @@ import {Student} from '../models/student.model';
 import {StudentService} from './student.service';
 import {Resources} from '../models/resources.model';
 import {Team, TEST_GROUP} from '../models/team.model';
+import {Vm} from '../models/vm.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -41,7 +42,7 @@ export class GroupService {
                            otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
                     if (data !== null) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
+                        data._embedded.studentList.forEach((student: Student) => {
                             let stud = new Student(student.id, student.lastName, student.firstName, student.email, student.image);
                             // stud.status = 'ACCEPTED'
                             allStudents.push(stud);
@@ -88,8 +89,27 @@ export class GroupService {
                         }
                         return status;
                     }
-                ))
-            ;
+                ));
+    }
+
+    getVms(teamId: string): Observable<Vm[]> {
+        return this.http.get<any>(`${this.API_PATH}/${teamId}/virtual-machines`).pipe(
+            catchError(err => {
+                console.error(err);
+                return throwError(`GroupService.getVms error: ${err.message}`);
+            }),
+            map(data => {
+                    // console.log(JSON.stringify(data));
+                    let vms: Vm[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.virtualMachineList((vmData: any) => {
+                            let vm = new Vm(vmData.id, vmData.num_vcpu, vmData.ram, vmData.disk_space, vmData.studentId);
+                            vms.push(vm);
+                        });
+                    }
+                    return vms;
+                }
+            ));
     }
 }
 

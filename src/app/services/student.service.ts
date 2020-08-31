@@ -70,7 +70,7 @@ export class StudentService {
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.studentDTOList.forEach((student: Student) => {
+                        data._embedded.studentList.forEach((student: Student) => {
                             allStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
                         });
                     }
@@ -91,7 +91,7 @@ export class StudentService {
                 map(data => {
                     var courses: Course[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.courseDTOList.forEach((course: Course) => {
+                        data._embedded.courseList.forEach((course: Course) => {
                             courses.push(new Course(course.id, course.name, course.min, course.max, course.enabled, course.teacherId));
                         });
                     }
@@ -114,7 +114,7 @@ export class StudentService {
                     var allTeams: Team[] = [];
                     // console.log('Teams: ' + JSON.stringify(data));
                     if (data !== null) {
-                        data._embedded.teamDTOList.forEach((team:
+                        data._embedded.teamList.forEach((team:
                                                               Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });

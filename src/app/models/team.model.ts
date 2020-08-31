@@ -4,23 +4,17 @@ import {Resources} from './resources.model';
 export class Team {
     id: string;
     name: string;
-
     status: string;
-
-    vmModel: string;
-
     resources: Resources;
     members: Student[];
     proposer: Student;
 
-    constructor(id?: string, name?: string, status?: string, vmModel?: string, resources?: Resources, members?: Student[], proposer?: Student) {
+    constructor(id?: string, name?: string, status?: string) {
         this.id = id;
         this.name = name;
         this.status = status;
-        this.vmModel = vmModel;
-        this.resources = resources;
-        this.members = members;
-        this.proposer = proposer;
+        this.resources = new Resources(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        this.members = [];
     }
 
     toString(): string {
@@ -31,8 +25,8 @@ export class Team {
 export const TEST_GROUP: Team = new Team(
     '1',
     'gr1',
-    'vm1',
+    // 'vm1',
     'CONFIRMED',
-    new Resources(1, 10, 10, 10, 10, 50, 10, 10, 10, 10, 10),
-    [TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3]
+    // new Resources(1, 10, 10, 10, 10, 50, 10, 10, 10, 10, 10),
+    // [TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3]
 );

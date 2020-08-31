@@ -3,12 +3,12 @@
 	<mat-form-field>
 		<mat-label>OS</mat-label>
 		<mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
-			<mat-option *ngFor="let osType of osTypes" value="{{osType.value}}"
-						(onSelectionChange)="osModelSelected=true">{{osType.name}}</mat-option>
+			<mat-option *ngFor="let osType of osTypes" value="{{osType.id}}"
+						(onSelectionChange)="osModelSelected=true">{{osType.os}}</mat-option>
 		</mat-select>
 	</mat-form-field>
 	&nbsp;&nbsp;
-	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="editModel=true"
+	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="enableEditModel()"
 			matTooltip="By changing the model, ALL the VMs based on the previous one will be deleted!!!"
 			matTooltipClass="warning-tooltip">
 		<mat-icon>warning</mat-icon>
@@ -23,6 +23,7 @@
 
 <mat-divider></mat-divider>
 <h4>Group VM</h4>
+<h6>Total groups: {{_allTeams.length}}</h6>
 <mat-form-field>
 	<mat-label>Find group</mat-label>
 	<input type="search" matInput placeholder="Group name or ID"
@@ -48,6 +49,7 @@
 				</mat-panel-title>
 				<mat-panel-description>
 					<p>Name: {{selectedTeam.name}}</p>
+					<p>Members: {{selectedTeam.members.length}}</p>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<mat-grid-list cols="3" rowHeight="55px">
@@ -73,7 +75,7 @@
 			<mat-form-field class="input-large">
 				<mat-label>RAM</mat-label>
 				<input [formControl]="ramLimit" matInput type="number" min="256" required>
-				<span matSuffix>MB</span>
+				<span matSuffix>GB</span>
 			</mat-form-field>
 
 			<mat-form-field class="input-large">
@@ -106,64 +108,72 @@
 					Real Time Resources Usage
 				</mat-panel-title>
 				<mat-panel-description>
-					Check real time resorce usage for the group
+					Check real time resource usage for the group
 					<mat-icon> multiline_chart</mat-icon>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
 			<mat-grid-list cols="3" rowHeight="55px">
 				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: 0 / {{selectedTeam.resources.maxVcpu}}</mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>memory</mat-icon>&nbsp; RAM: 0 / {{selectedTeam.resources.maxRam}} &nbsp;MB
+					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{selectedTeam.resources.activeNumVcpu}}
+					/ {{selectedTeam.resources.maxVcpu}}
 				</mat-grid-tile>
 				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: 0 / {{selectedTeam.resources.maxDiskSpace}} &nbsp;MB
+					<mat-icon>memory</mat-icon>&nbsp; RAM: {{selectedTeam.resources.activeRam}}
+					/ {{selectedTeam.resources.maxRam}} &nbsp;GB
 				</mat-grid-tile>
-				<mat-grid-tile>Max actives VMs: 0 / {{selectedTeam.resources.maxOn}}</mat-grid-tile>
-				<mat-grid-tile>Total max VMs: 0 / {{selectedTeam.resources.maxTot}}</mat-grid-tile>
+				<mat-grid-tile>
+					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{selectedTeam.resources.activeDiskSpace}}
+					/ {{selectedTeam.resources.maxDiskSpace}} &nbsp;MB
+				</mat-grid-tile>
+				<mat-grid-tile>Max actives VMs: {{selectedTeam.resources.activeVMs}}
+					/ {{selectedTeam.resources.maxOn}}</mat-grid-tile>
+				<mat-grid-tile>Total max VMs: {{selectedTeam.resources.tot}}
+					/ {{selectedTeam.resources.maxTot}}</mat-grid-tile>
 			</mat-grid-list>
 		</mat-expansion-panel>
 	</mat-accordion>
 	<br>
 	<br>
-	<mat-divider></mat-divider>
-	<h4>VMs created</h4>
-	<div *ngIf="vms.length>1" class="expand-collapse-buttons">
-		<button mat-button (click)="openAll()">Expand All</button>
-		<button mat-button (click)="closeAll()">Collapse All</button>
+	<div *ngIf="vms.length>0">
+		<mat-divider></mat-divider>
+		<h4>VMs created</h4>
+		<div *ngIf="vms.length>1" class="expand-collapse-buttons">
+			<button mat-button (click)="openAll()">Expand All</button>
+			<button mat-button (click)="closeAll()">Collapse All</button>
+		</div>
+		<mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi>
+			<mat-expansion-panel *ngFor="let vm of vms">
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<p>({{vm.id}})</p>
+					</mat-panel-title>
+					<mat-panel-description>
+						<p>{{vmModel.os}}</p>
+						<p>({{vm.status}})</p>
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+				<mat-grid-list cols="3" rowHeight="55px">
+					<mat-grid-tile>
+						<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
+					<mat-grid-tile>
+						<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
+					</mat-grid-tile>
+					<mat-grid-tile *ngIf="vm.owners.length==1" [colspan]="2">Owner: {{vm.owners}}</mat-grid-tile>
+					<mat-grid-tile *ngIf="vm.owners.length>1" [colspan]="2">Owners:
+						<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<a *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
+							<mat-icon>link</mat-icon>
+							<label> Connect</label>
+						</a>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</mat-expansion-panel>
+		</mat-accordion>
 	</div>
-	<mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi>
-		<mat-expansion-panel *ngFor="let vm of vms">
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					<p>({{vm.id}})</p>
-				</mat-panel-title>
-				<mat-panel-description>
-					<p>{{getOsNameFromValue(vmModel.os)}}</p>
-					<p>({{vm.status}})</p>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
-				</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owners.length==1" [colspan]="2">Owner: {{vm.owners}}</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owners.length>1" [colspan]="2">Owners:
-					<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<a *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
-						<mat-icon>link</mat-icon>
-						<label> Connect</label>
-					</a>
-				</mat-grid-tile>
-			</mat-grid-list>
-		</mat-expansion-panel>
-	</mat-accordion>
 </div>

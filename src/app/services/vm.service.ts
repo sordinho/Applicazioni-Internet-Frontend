@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable, of, throwError} from 'rxjs';
-import {TEST_VM_UBUNTU, TEST_VM_WIN, Vm, VmConfigurationModel} from '../models/vm.model';
+import {Vm} from '../models/vm.model';
 import {catchError} from 'rxjs/operators';
 import {Student} from '../models/student.model';
 import {VmModel} from '../models/vmModel.model';
@@ -16,17 +16,17 @@ export class VmService {
     constructor(private http: HttpClient) {
     }
 
-    getTeamConfiguration(groupId: string): Observable<VmConfigurationModel> {
-        return this.http
-            .get<VmConfigurationModel>(`${this.API_PATH}/teams/${groupId}/configuration`)
-            .pipe(catchError(err => {
-                console.error(err);
-                return throwError(`VmService.getConfiguration error: ${err.message}`);
-            }));
-    }
+    // getTeamConfiguration(groupId: string): Observable<VmConfigurationModel> {
+    //     return this.http
+    //         .get<VmConfigurationModel>(`${this.API_PATH}/teams/${groupId}/configuration`)
+    //         .pipe(catchError(err => {
+    //             console.error(err);
+    //             return throwError(`VmService.getConfiguration error: ${err.message}`);
+    //         }));
+    // }
 
     getVmsByGroupId(groupId: string): Observable<Vm[]> {
-        return of([TEST_VM_UBUNTU, TEST_VM_WIN]);
+        // return of([TEST_VM_UBUNTU, TEST_VM_WIN]);
 
         return this.http
             .get<Vm[]>(`${this.API_PATH}/teams/${groupId}/virtual-machines`)
