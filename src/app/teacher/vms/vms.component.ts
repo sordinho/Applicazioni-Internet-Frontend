@@ -3,9 +3,8 @@ import {GroupService} from '../../services/group.service';
 import {Vm} from '../../models/vm.model';
 import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
-import {FormControl, Validators} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {VmModel} from '../../models/vmModel.model';
-import {MatOption} from '@angular/material/core';
 import {Team} from '../../models/team.model';
 import {VmModelService} from '../../services/vm-model.service';
 import {CourseService} from '../../services/course.service';
@@ -13,9 +12,9 @@ import {Course} from '../../models/course.model';
 import {ActivatedRoute} from '@angular/router';
 import {forkJoin} from 'rxjs';
 import {StudentService} from '../../services/student.service';
-import {Resources} from '../../models/resources.model';
 import {ConfigurationService} from '../../services/configuration.service';
 import {ConfigurationModel} from '../../models/configuration.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-vms',
@@ -34,6 +33,7 @@ export class VmsComponent implements OnInit {
     osTypes: VmModel[];
     vmModel: VmModel = null;
     course: Course = null;
+    disableSaveButton = false;
 
 
     // Form data from resources limits
@@ -52,7 +52,7 @@ export class VmsComponent implements OnInit {
     constructor(private groupVMsService: GroupService, private vmService: VmService,
                 private vmModelService: VmModelService, private courseService: CourseService,
                 private groupService: GroupService, private studentService: StudentService,
-                private configurationService: ConfigurationService, private route: ActivatedRoute) {
+                private configurationService: ConfigurationService, private route: ActivatedRoute, private _snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -157,6 +157,7 @@ export class VmsComponent implements OnInit {
 
 
     saveResourcesLimits() {
+        this.disableSaveButton = true;
         this.selectedTeamConfiguration.min_vcpu = this.minCpuLimit.value;
         this.selectedTeamConfiguration.max_vcpu = this.cpuLimit.value;
         this.selectedTeamConfiguration.min_ram = this.minRamLimit.value;
@@ -172,12 +173,31 @@ export class VmsComponent implements OnInit {
             this.configurationService.createNewConfiguration(this.selectedTeamConfiguration).subscribe((data) => {
                 console.log('CREATED CONFIG');
                 this.selectedTeamConfiguration = data;
+                this.disableSaveButton = false;
+                this._snackBar.open('Configuration Saved', null, {
+                    duration: 5000,
+                });
+            }, error => {
+                this.disableSaveButton = false;
+                this._snackBar.open('Error Creating Configuration, please check your values', null, {
+                    duration: 5000,
+                });
             });
         } else {
             // Update configuration
+            console.log('UPDATING: ' + this.selectedTeamConfiguration.id);
             this.configurationService.updateConfiguration(this.selectedTeamConfiguration).subscribe((data) => {
                 console.log('UPDATED CONFIG');
                 this.selectedTeamConfiguration = data;
+                this.disableSaveButton = false;
+                this._snackBar.open('Configuration Updated', null, {
+                    duration: 5000,
+                });
+            }, error => {
+                this.disableSaveButton = false;
+                this._snackBar.open('Error Updating Configuration, please check your values', null, {
+                    duration: 5000,
+                });
             });
         }
     }
@@ -225,6 +245,10 @@ export class VmsComponent implements OnInit {
                 this.activesLimit.value > actualActives &&
                 this.maxLimit.value > actualMax
             );
+        }
+
+        if (this.activesLimit.value > this.maxLimit.value) {
+            return false;
         }
 
         if (this.vms.length != 0) {

@@ -10,13 +10,11 @@ import {FormControl} from '@angular/forms';
 import * as moment from 'moment';
 import {MatAccordion} from '@angular/material/expansion';
 import {StudentService} from 'src/app/services/student.service';
-import {forkJoin} from 'rxjs';
-import {Team, TEST_GROUP} from '../../models/team.model';
+import {Team} from '../../models/team.model';
 import {CourseService} from '../../services/course.service';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {catchError} from 'rxjs/operators';
 import {Course} from '../../models/course.model';
 
 @Component({
@@ -113,7 +111,7 @@ export class GroupsComponent implements OnInit {
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
-                    this.snackBar.open('New Team proposed', '', {duration: 5000});
+                    this.snackBar.open('New Team proposed', null, {duration: 5000});
                     this.resetTeamProposalForm();
                     this.initTeamProposals();
                 },

@@ -89,12 +89,12 @@
 			<br>
 			<mat-form-field class="input-large">
 				<mat-label>Max Active VMs</mat-label>
-				<input [formControl]="maxLimit" matInput type="number" min="1" required>
+				<input [formControl]="activesLimit" matInput type="number" min="1" required>
 			</mat-form-field>
 
 			<mat-form-field class="input-large">
 				<mat-label>Max Total VMs</mat-label>
-				<input [formControl]="activesLimit" matInput type="number" min="1" required>
+				<input [formControl]="maxLimit" matInput type="number" min="1" required>
 			</mat-form-field>
 			<br>
 			<br>
@@ -119,9 +119,9 @@
 				<input [formControl]="minDiskLimit" matInput type="number" min="1" required>
 				<span matSuffix>MB</span>
 			</mat-form-field>
-
+			<br>
 			<button mat-stroked-button color="primary" (click)="saveResourcesLimits()"
-					[disabled]="!checkMaxResourcesLimits() || !checkMinResourcesLimit()">Save
+					[disabled]="!checkMaxResourcesLimits() || !checkMinResourcesLimit() || disableSaveButton">Save
 			</button>
 			<p *ngIf="!checkMaxResourcesLimits()" class="error">Error. Please check new resources limit aren't lower
 				than

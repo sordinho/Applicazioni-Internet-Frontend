@@ -52,6 +52,7 @@ export class ConfigurationService {
     updateConfiguration(config: ConfigurationModel): Observable<ConfigurationModel> {
         return this.http
             .put<any>(`${this.API_PATH}/${config.id}`, {
+                'id': config.id,
                 'min_vcpu': config.min_vcpu,
                 'max_vcpu': config.max_vcpu,
                 'min_disk': config.min_disk,
@@ -60,7 +61,7 @@ export class ConfigurationService {
                 'max_ram': config.max_ram,
                 'tot': config.tot,
                 'max_on': config.max_on,
-                'teamId': config.teamId,
+                'teamId': config.teamId
             }, httpOptions)
             .pipe(catchError(err => {
                 console.error(err);
