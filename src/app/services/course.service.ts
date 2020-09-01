@@ -220,7 +220,7 @@ export class CourseService {
                 }));
     }
 
-    addAssignment(courseId: string, expireDate: Date, file: File): Observable<Assignment> {
+    addAssignment(courseId: string, expireDate: Date, file: File): Observable<any> {
         // Add fields to prepare the request
         let body = new FormData()
         body.append("image", file, file.name)

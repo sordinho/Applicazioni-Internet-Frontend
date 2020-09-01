@@ -54,11 +54,10 @@ export class NewAssignmentDialogComponent implements OnInit {
       // all fields are valid
       this.courseService.addAssignment(this.courseId, this.expireDate.value, this.file)
             .subscribe(
-              (createdAssignment: Assignment) => {
+              succ => {
                 // console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
                 this.emitter.emit()
-                this.dialogRef.close(createdAssignment)
-                console.dir("createdAssignment: " + createdAssignment)
+                this.dialogRef.close()
               },
               err => {
                 // console.dir("addCourse (error) - err: " + err)

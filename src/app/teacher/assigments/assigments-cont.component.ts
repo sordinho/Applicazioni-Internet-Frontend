@@ -28,10 +28,10 @@ export class AssigmentsContComponent implements OnInit {
   ngOnInit(): void {
     this.courseId = this.route.snapshot.parent.url[1].toString()
 
-    this.getAssigments()
+    this.getAssignments()
   }
 
-  getAssigments() {
+  getAssignments() {
     this.courseService.queryAllAssigments(this.courseId).subscribe(
       res => {
         this.assignments = res
