@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UploadCorrectionDialogComponent } from 'src/app/dialogs/upload-correction-dialog/upload-correction-dialog.component';
+import { NewAssignmentDialogComponent } from 'src/app/dialogs/new-assignment-dialog/new-assignment-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-assigments',
@@ -27,7 +29,7 @@ export class AssigmentsComponent implements OnInit {
   
   expandedPaper: Paper | null;
 
-  status_list = [ "NULL", "READ", "DELIVERED", "REVISED" ]
+  status_list = [ "NULL", "READED", "DELIVERED", "REVISED" ]
 
   /* selectedStatus used to keep track of selected status */
   selectedStatus: SelectionModel<string> = new SelectionModel<string>(true, [])
@@ -35,6 +37,8 @@ export class AssigmentsComponent implements OnInit {
   dataSource: MatTableDataSource<Paper>
   
   selectedAssignment: string
+
+  courseId: string
 
   _assignments: Assignment[]
   _papers: Paper[]  
@@ -69,14 +73,17 @@ export class AssigmentsComponent implements OnInit {
   // component Output interfaces 
   @Output() getPapersEmitter = new EventEmitter<string>()
   @Output() getPapersHistoryEmitter = new EventEmitter<{assignmentId: string, studentId: string}>()
+  @Output() reloadAssignmentsEmitter = new EventEmitter<void>()
+
 
   colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published']
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 
-  constructor(private matDialog: MatDialog) {}
+  constructor(private matDialog: MatDialog, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.courseId = this.route.snapshot.parent.url[1].toString()
   }
 
   onSelectChange() {
@@ -167,6 +174,18 @@ export class AssigmentsComponent implements OnInit {
     console.dir("downloadPaper - TODO")
     console.dir("paper.image: " + paper.image)
 
+  }
+
+  newAssignment() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "500px";
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = { 
+      emitter: this.reloadAssignmentsEmitter,
+      courseId: this.courseId
+    }
+    
+    this.matDialog.open(NewAssignmentDialogComponent, dialogConfig)
   }
 
 }
