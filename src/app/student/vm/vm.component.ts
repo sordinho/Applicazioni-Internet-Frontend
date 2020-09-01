@@ -16,6 +16,7 @@ import {VmModel} from '../../models/vmModel.model';
 import {VmModelService} from '../../services/vm-model.service';
 import {ConfigurationModel} from '../../models/configuration.model';
 import {ConfigurationService} from '../../services/configuration.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -45,7 +46,7 @@ export class VmComponent implements OnInit {
                 private courseService: CourseService, private vmModelService: VmModelService, private configurationService: ConfigurationService,
                 private authService: AuthService,
                 private route: ActivatedRoute,
-                private shareDialog: MatDialog, private createVmDialog: MatDialog) {
+                private shareDialog: MatDialog, private createVmDialog: MatDialog, private _snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -138,7 +139,13 @@ export class VmComponent implements OnInit {
     deleteVM(vm: Vm) {
         console.log('Delete vm: ' + vm.id);
         this.vmService.deleteVm(vm.id).subscribe(() => {
-            // todo snackbar
+            this._snackBar.open('Vm ' + vm.id + ' Deleted', null, {duration: 5000});
+            this.refreshTeamResources();
+            this.initVmsData();
+        }, error => {
+            this._snackBar.open('Error deleting vm ' + vm.id, null, {duration: 5000});
+            this.refreshTeamResources();
+            this.initVmsData();
         });
     }
 
@@ -146,14 +153,18 @@ export class VmComponent implements OnInit {
         console.log('Stop vm: ' + vm.id);
         this.vmService.stopVm(vm.id).subscribe(data => {
             vm.status = 'OFF';
+            this.refreshTeamResources();
         });
 
     }
 
     startVm(vm: Vm) {
         console.log('Start vm: ' + vm.id);
-        this.vmService.stopVm(vm.id).subscribe(data => {
-            vm.status = 'RUNNING';
+        this.vmService.startVm(vm.id).subscribe(data => {
+            vm.status = 'ON';
+            this.refreshTeamResources();
+        }, error => {
+            this._snackBar.open('Error starting vm ' + vm.id, null, {duration: 5000});
         });
     }
 
@@ -191,6 +202,7 @@ export class VmComponent implements OnInit {
             }
         }).afterClosed().subscribe((res) => {
             if (res === 'OK') {
+                this.refreshTeamResources();
                 this.initVmsData();
             }
             console.log('CLOSED');
@@ -214,10 +226,17 @@ export class VmComponent implements OnInit {
             }
         }).afterClosed().subscribe((res) => {
             if (res === 'OK') {
+                this.refreshTeamResources();
                 this.initVmsData();
             }
             console.log('CLOSED');
         });
-
     }
+
+    refreshTeamResources() {
+        this.groupService.getResources(this.team.id).subscribe((data) => {
+            this.team.resources = data;
+        });
+    }
+
 }

@@ -80,7 +80,7 @@
 							<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 						</mat-grid-tile>
 						<mat-grid-tile>
-							<button *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary"
+							<button *ngIf="vm.status==='ON'" mat-stroked-button color="primary"
 									(click)="stopVm(vm)">
 								<mat-icon>stop</mat-icon>
 								<label> Stop</label>
@@ -89,7 +89,7 @@
 								<mat-icon>play_arrow</mat-icon>
 								<label> Start</label>
 							</button>
-							<a *ngIf="vm.status==='RUNNING'" style="margin-left: 5px" mat-stroked-button color="primary"
+							<a *ngIf="vm.status==='ON'" style="margin-left: 5px" mat-stroked-button color="primary"
 							   (click)="connectToVm(vm)">
 								<mat-icon>link</mat-icon>
 								<label> Connect</label>

@@ -27,7 +27,7 @@
 	</button>
 	<button mat-stroked-button color="primary" (click)="updateVm()"
 			[disabled]="!checkResourcesLimits() || !checkValidFormValues()" *ngIf="data.action=='UPDATE'">
-		<mat-icon>add</mat-icon>
+		<mat-icon>save</mat-icon>
 		<label> Save</label>
 	</button>
 	<button style="margin-left: 5px" mat-stroked-button color="warn" (click)="resetNewValues()">
