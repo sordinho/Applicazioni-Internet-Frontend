@@ -164,7 +164,7 @@
 	</mat-accordion>
 	<br>
 	<br>
-	<div *ngIf="vms.length>0">
+	<div *ngIf="vmDataFetched===vms.length">
 		<mat-divider></mat-divider>
 		<h4>VMs created</h4>
 		<div *ngIf="vms.length>1" class="expand-collapse-buttons">
@@ -196,7 +196,7 @@
 						<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 					</mat-grid-tile>
 					<mat-grid-tile>
-						<a *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
+						<a *ngIf="vm.status==='ON'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
 							<mat-icon>link</mat-icon>
 							<label> Connect</label>
 						</a>

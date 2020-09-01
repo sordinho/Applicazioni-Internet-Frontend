@@ -34,6 +34,7 @@ export class VmsComponent implements OnInit {
     vmModel: VmModel = null;
     course: Course = null;
     disableSaveButton = false;
+    vmDataFetched;
 
 
     // Form data from resources limits
@@ -123,13 +124,14 @@ export class VmsComponent implements OnInit {
                 this.updateFormValues();
 
                 // get owners and creator info about all the vms
+                this.vmDataFetched = 0;
                 this.vms.forEach((vm) => {
-                    let creator$ = this.studentService.find(vm.creatorId);
-                    let owners$ = this.vmService.getVmOwners(vm.id);
-                    forkJoin([creator$, owners$]).subscribe(data => {
-                        vm.creator = data[0];
-                        vm.owners = data[1];
-                    });
+                    this.vmService.getVmOwners(vm.id)
+                        .subscribe((data) => {
+                            vm.owners = data;
+                            this.vmDataFetched++;
+                            console.log('owner: ' + vm.owners);
+                        });
                 });
             });
         } else { // If team hasn't a configuration
@@ -272,7 +274,10 @@ export class VmsComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-        window.open('https://www.google.com');
+        let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
+        win.document.title = 'VM ' + vm.id;
+        win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
+        win.document.close();
     }
 
     openAll() {

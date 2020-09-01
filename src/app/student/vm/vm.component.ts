@@ -5,7 +5,7 @@ import {VmService} from '../../services/vm.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from './share-dialog.component';
 import {CreateVmDialogComponent} from './create-vm-dialog.component';
-import {Team, TEST_GROUP} from '../../models/team.model';
+import {Team} from '../../models/team.model';
 import {StudentService} from '../../services/student.service';
 import {GroupService} from '../../services/group.service';
 import {AuthService} from '../../services/auth.service';
@@ -67,7 +67,10 @@ export class VmComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-        let vmWindow = window.open('assets/images/' + this.vmModel.id + '.png', vm.id, 'status=no, toolbar=no, menubar=no, location=no, addressbar=no');
+        let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
+        win.document.title = 'VM ' + vm.id;
+        win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
+        win.document.close();
     }
 
     initCourseData() {
