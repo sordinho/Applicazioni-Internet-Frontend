@@ -297,14 +297,19 @@ export class VmsComponent implements OnInit {
         if (this.vmModel == null) {
             this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
                     // console.log('CREATED VMMODEL');
+                this._snackBar.open('Model Saved', null, {duration: 5000});
                 }
             );
         } else if (this.osTypeSelect.value !== this.vmModel.id) {
             this.vmModelService.deleteVmModel(this.vmModel.uniqueId).subscribe(data => {
                 this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
                         // console.log('UPDATED VMMODEL');
+                    this._snackBar.open('Model Updated', null, {duration: 5000});
                     }
                 );
+            }, error => {
+                this._snackBar.open('Error check all vms are shut down', null, {duration: 5000});
+                this.initCourseVmModel();
             });
         }
     }
