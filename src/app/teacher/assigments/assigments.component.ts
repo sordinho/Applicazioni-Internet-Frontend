@@ -49,8 +49,8 @@ export class AssigmentsComponent implements OnInit {
   @Input() set assignments(assignments: Assignment[]) {
     if(assignments !== undefined && assignments !== null) {
       this._assignments = assignments
-      if(this.selectedAssignment === undefined && this._assignments.length>0) {
-        // select last assignment as default)
+      if(this._assignments.length>0) {
+        // select last assignment as default
         this.selectedAssignment = this._assignments[this._assignments.length-1] 
         this.getPapersEmitter.emit(this.selectedAssignment.id)
       }
