@@ -29,7 +29,7 @@ export class AssigmentsComponent implements OnInit {
   
   expandedPaper: Paper | null;
 
-  status_list = [ "NULL", "READED", "DELIVERED", "REVISED" ]
+  status_list = [ "NULL", "READ", "DELIVERED", "REVISED" ]
 
   /* selectedStatus used to keep track of selected status */
   selectedStatus: SelectionModel<string> = new SelectionModel<string>(true, [])
