@@ -73,9 +73,9 @@
                             <div mat-line>{{"paper " + paper.id}}</div> 
                             <div mat-line>{{paper.published}}</div>
                             <p class="status">{{paper.status}}</p>
-                            <mat-icon class="readed" *ngIf="paper.status==='LETTO'">done</mat-icon>
-                            <mat-icon class="delivered" *ngIf="paper.status==='CONSEGNATO'">done_all</mat-icon>
-                            <mat-icon class="revised" *ngIf="paper.status==='RIVSTO'">done_all</mat-icon>
+                            <mat-icon class="readed" *ngIf="paper.status==='READ'">done</mat-icon>
+                            <mat-icon class="delivered" *ngIf="paper.status==='DELIVERED'">done_all</mat-icon>
+                            <mat-icon class="revised" *ngIf="paper.status==='REVISED'">done_all</mat-icon>
                             <mat-divider *ngIf="!last"></mat-divider>
                         </mat-list-item>
                     </mat-list>
