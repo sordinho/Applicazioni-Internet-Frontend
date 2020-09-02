@@ -27,7 +27,7 @@ import { Sort, MatSort } from '@angular/material/sort';
   ],
 })
 export class AssigmentsComponent implements OnInit {
-  
+
   expandedPaper: Paper | null;
 
   status_list = [ "NULL", "READ", "DELIVERED", "REVISED" ]
@@ -90,13 +90,11 @@ export class AssigmentsComponent implements OnInit {
   }
 
   onSelectChange() {
-    if(this.selectedAssignment !== undefined) {
+    if(this.selectedAssignment !== undefined) {      
       //console.dir("this.selectedAssignment: " + this.selectedAssignment.expired)
       this.getPapersEmitter.emit(this.selectedAssignment.id)
       /* reset status filter */
       this.selectedStatus.clear()
-      /* reset the expanded paper (if any) */
-      this.expandedPaper = null 
     }
   }
 
