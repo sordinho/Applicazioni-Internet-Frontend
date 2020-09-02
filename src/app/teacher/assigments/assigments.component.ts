@@ -12,6 +12,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UploadCorrectionDialogComponent } from 'src/app/dialogs/upload-correction-dialog/upload-correction-dialog.component';
 import { NewAssignmentDialogComponent } from 'src/app/dialogs/new-assignment-dialog/new-assignment-dialog.component';
 import { ActivatedRoute } from '@angular/router';
+import { Sort, MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-assigments',
@@ -79,6 +80,8 @@ export class AssigmentsComponent implements OnInit {
   colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published']
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort
 
   constructor(private matDialog: MatDialog, private route: ActivatedRoute) {}
 
@@ -186,6 +189,10 @@ export class AssigmentsComponent implements OnInit {
     }
     
     this.matDialog.open(NewAssignmentDialogComponent, dialogConfig)
+  }
+
+  sortData(sort: MatSort) {
+    this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, sort)
   }
 
 }
