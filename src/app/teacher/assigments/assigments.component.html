@@ -1,7 +1,7 @@
-<mat-form-field appearance="legacy">
+<mat-form-field style="width: 300px;" appearance="legacy">
     <mat-select [(value)]="selectedAssignment" (selectionChange)="onSelectChange()">
-        <mat-option *ngFor="let assignment of _assignments" [value]="assignment.id">
-          {{ assignment.id }}
+        <mat-option *ngFor="let assignment of _assignments" [value]="assignment">
+            {{ assignment.id }} ({{ assignment.published | date: 'dd/MM/yy' }} - {{ assignment.expired | date: 'dd/MM/yy' }})
         </mat-option>
     </mat-select>
 </mat-form-field>

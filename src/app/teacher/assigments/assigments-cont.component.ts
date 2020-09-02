@@ -40,6 +40,7 @@ export class AssigmentsContComponent implements OnInit {
   }
 
   getPapers(assignmentId: string) {
+    //console.dir("getPapers - " + assignmentId)
     const papersReq = this.assignmentService.queryPapers(assignmentId)
     /* it returns obj { paper: Paper, studentId: string } */
     const enrolledStudentReq = this.courseService.queryEnrolledStudent(this.courseId)
@@ -57,7 +58,7 @@ export class AssigmentsContComponent implements OnInit {
         }
       )
       this.papers = papers
-      // console.dir("this.papers: "); console.dir(this.papers)
+      //console.dir("this.papers: "); console.dir(this.papers)
     })
   }
 

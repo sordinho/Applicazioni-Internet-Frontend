@@ -33,6 +33,7 @@ export class AssignmentService {
   }
 
   queryPapers(assignmentId: string): Observable<any[]> {
+    console.dir("queryPapers: " + assignmentId)
     /* get the last papers for the assignment. */
     return this.http
                 .get<any>(`${this.API_PATH}/${assignmentId}/papers`)

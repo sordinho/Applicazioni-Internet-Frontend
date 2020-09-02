@@ -37,7 +37,7 @@ export class AssigmentsComponent implements OnInit {
 
   dataSource: MatTableDataSource<Paper>
   
-  selectedAssignment: string
+  selectedAssignment: Assignment
 
   courseId: string
 
@@ -51,8 +51,8 @@ export class AssigmentsComponent implements OnInit {
       this._assignments = assignments
       if(this.selectedAssignment === undefined && this._assignments.length>0) {
         // select last assignment as default)
-        this.selectedAssignment = this._assignments[this._assignments.length-1].id 
-        this.getPapersEmitter.emit(this.selectedAssignment)
+        this.selectedAssignment = this._assignments[this._assignments.length-1] 
+        this.getPapersEmitter.emit(this.selectedAssignment.id)
       }
     }
   }
@@ -90,12 +90,14 @@ export class AssigmentsComponent implements OnInit {
   }
 
   onSelectChange() {
-    //console.dir("this.selectedAssignment: " + this.selectedAssignment)
-    this.getPapersEmitter.emit(this.selectedAssignment)
-    /* reset status filter */
-    this.selectedStatus.clear()
-    /* reset the expanded paper (if any) */
-    this.expandedPaper = null
+    if(this.selectedAssignment !== undefined) {
+      //console.dir("this.selectedAssignment: " + this.selectedAssignment.expired)
+      this.getPapersEmitter.emit(this.selectedAssignment.id)
+      /* reset status filter */
+      this.selectedStatus.clear()
+      /* reset the expanded paper (if any) */
+      this.expandedPaper = null 
+    }
   }
 
   toggleTableRow(row: string) {
@@ -169,8 +171,10 @@ export class AssigmentsComponent implements OnInit {
 
     //console.dir("this.expandedPaper: "); console.dir(this.expandedPaper)
 
-    this.getPapersHistoryEmitter.emit({ assignmentId: this.selectedAssignment, studentId: paper.student.id })
-
+    if(this.selectedAssignment !== undefined) { 
+      this.getPapersHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, studentId: paper.student.id })
+    }
+    
   }
 
   downloadPaper(paper: Paper) {
