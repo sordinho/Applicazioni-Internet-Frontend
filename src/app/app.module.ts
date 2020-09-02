@@ -22,6 +22,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { StudentsComponent } from './teacher/students/students.component';
 import { StudentsContComponent } from './teacher/students/students-cont.component';
@@ -54,6 +56,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 import { HomeContComponent } from './home/home-cont.component';
 import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
+import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/new-assignment-dialog.component';
+
 
 
 @NgModule({
@@ -78,6 +82,7 @@ import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.co
     UploadCorrectionDialogComponent,
     HomeContComponent,
     AssigmentsContComponent,
+    NewAssignmentDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -108,9 +113,11 @@ import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.co
     MatTooltipModule,
     MatChipsModule,
     MatSnackBarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, MatDatepickerModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

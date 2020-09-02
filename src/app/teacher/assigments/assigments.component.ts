@@ -10,6 +10,9 @@ import { Subscription } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UploadCorrectionDialogComponent } from 'src/app/dialogs/upload-correction-dialog/upload-correction-dialog.component';
+import { NewAssignmentDialogComponent } from 'src/app/dialogs/new-assignment-dialog/new-assignment-dialog.component';
+import { ActivatedRoute } from '@angular/router';
+import { Sort, MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-assigments',
@@ -34,7 +37,9 @@ export class AssigmentsComponent implements OnInit {
 
   dataSource: MatTableDataSource<Paper>
   
-  selectedAssignment: string
+  selectedAssignment: Assignment
+
+  courseId: string
 
   _assignments: Assignment[]
   _papers: Paper[]  
@@ -44,16 +49,16 @@ export class AssigmentsComponent implements OnInit {
   @Input() set assignments(assignments: Assignment[]) {
     if(assignments !== undefined && assignments !== null) {
       this._assignments = assignments
-      if(this.selectedAssignment === undefined && this._assignments.length>0) {
-        // select last assignment as default)
-        this.selectedAssignment = this._assignments[this._assignments.length-1].id 
-        this.getPapersEmitter.emit(this.selectedAssignment)
+      if(this._assignments.length>0) {
+        // select last assignment as default
+        this.selectedAssignment = this._assignments[this._assignments.length-1] 
+        this.getPapersEmitter.emit(this.selectedAssignment.id)
       }
     }
   }
 
   @Input() set papers(papers: Paper[]) {
-    if(papers !== undefined && papers !== null) {
+    if(papers !== undefined) {
       this._papers = papers
       this.dataSource = new MatTableDataSource<Paper>(papers)
     }
@@ -61,7 +66,7 @@ export class AssigmentsComponent implements OnInit {
 
   /* papers history of the expanded student (papers) */ 
   @Input() set papersHistory(papersHistory: Paper[]) {
-    if(papersHistory !== undefined && papersHistory !== null) {
+    if(papersHistory !== undefined) {
       this._papersHistory = papersHistory
     }
   }  
@@ -69,23 +74,30 @@ export class AssigmentsComponent implements OnInit {
   // component Output interfaces 
   @Output() getPapersEmitter = new EventEmitter<string>()
   @Output() getPapersHistoryEmitter = new EventEmitter<{assignmentId: string, studentId: string}>()
+  @Output() reloadAssignmentsEmitter = new EventEmitter<void>()
+
 
   colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published']
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 
-  constructor(private matDialog: MatDialog) {}
+  @ViewChild(MatSort, { static: true }) sort: MatSort
+
+  constructor(private matDialog: MatDialog, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.courseId = this.route.snapshot.parent.url[1].toString()
   }
 
   onSelectChange() {
-    //console.dir("this.selectedAssignment: " + this.selectedAssignment)
-    this.getPapersEmitter.emit(this.selectedAssignment)
-    /* reset status filter */
-    this.selectedStatus.clear()
-    /* reset the expanded paper (if any) */
-    this.expandedPaper = null
+    if(this.selectedAssignment !== undefined) {
+      //console.dir("this.selectedAssignment: " + this.selectedAssignment.expired)
+      this.getPapersEmitter.emit(this.selectedAssignment.id)
+      /* reset status filter */
+      this.selectedStatus.clear()
+      /* reset the expanded paper (if any) */
+      this.expandedPaper = null 
+    }
   }
 
   toggleTableRow(row: string) {
@@ -159,14 +171,32 @@ export class AssigmentsComponent implements OnInit {
 
     //console.dir("this.expandedPaper: "); console.dir(this.expandedPaper)
 
-    this.getPapersHistoryEmitter.emit({ assignmentId: this.selectedAssignment, studentId: paper.student.id })
-
+    if(this.selectedAssignment !== undefined) { 
+      this.getPapersHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, studentId: paper.student.id })
+    }
+    
   }
 
   downloadPaper(paper: Paper) {
     console.dir("downloadPaper - TODO")
     console.dir("paper.image: " + paper.image)
 
+  }
+
+  newAssignment() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "500px";
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = { 
+      emitter: this.reloadAssignmentsEmitter,
+      courseId: this.courseId
+    }
+    
+    this.matDialog.open(NewAssignmentDialogComponent, dialogConfig)
+  }
+
+  sortData(sort: MatSort) {
+    this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, sort)
   }
 
 }

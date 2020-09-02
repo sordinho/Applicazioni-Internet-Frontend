@@ -220,6 +220,21 @@ export class CourseService {
                 }));
     }
 
+    addAssignment(courseId: string, expireDate: Date, file: File): Observable<any> {
+        // Add fields to prepare the request
+        let body = new FormData()
+        body.append("image", file, file.name)
+        body.append("expiredDate", expireDate.toLocaleDateString())
+
+        return this.http.post<any>(`${this.API_PATH}/${courseId}/assignment`, body)
+                        .pipe(
+                            catchError(err => {
+                                console.error(err);
+                                return throwError(`CourseService.addAssignment error: ${err.message}`);
+                            })
+                        );
+
+    }
 }
 
 interface groupProposal {

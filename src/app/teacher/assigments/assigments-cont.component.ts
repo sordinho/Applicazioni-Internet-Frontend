@@ -28,10 +28,10 @@ export class AssigmentsContComponent implements OnInit {
   ngOnInit(): void {
     this.courseId = this.route.snapshot.parent.url[1].toString()
 
-    this.getAssigments()
+    this.getAssignments()
   }
 
-  getAssigments() {
+  getAssignments() {
     this.courseService.queryAllAssigments(this.courseId).subscribe(
       res => {
         this.assignments = res
@@ -40,6 +40,7 @@ export class AssigmentsContComponent implements OnInit {
   }
 
   getPapers(assignmentId: string) {
+    //console.dir("getPapers - " + assignmentId)
     const papersReq = this.assignmentService.queryPapers(assignmentId)
     /* it returns obj { paper: Paper, studentId: string } */
     const enrolledStudentReq = this.courseService.queryEnrolledStudent(this.courseId)
@@ -57,11 +58,12 @@ export class AssigmentsContComponent implements OnInit {
         }
       )
       this.papers = papers
-      // console.dir("this.papers: "); console.dir(this.papers)
+      //console.dir("this.papers: "); console.dir(this.papers)
     })
   }
 
   getPapersHistory(event) {
+    this.papersHistory = null /* reset paperHistory */
     /* get history of a student's papers */
     this.assignmentService.queryPaperHistory(event.assignmentId, event.studentId).subscribe(
       res => {

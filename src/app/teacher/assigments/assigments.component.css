@@ -7,6 +7,10 @@ table {
     padding-right: 10px;
 }
 
+.new-button {
+    float: right;
+    margin-top: 12px;
+}
 
 tr.detail-row {
     height: 0;
@@ -19,7 +23,6 @@ tr.paper-row:not(.expanded-row):hover {
 tr.paper-row:not(.expanded-row):active {
     background: #efefef;
 }
-  
 
 .paper-row td {
     border-bottom-width: 0;
