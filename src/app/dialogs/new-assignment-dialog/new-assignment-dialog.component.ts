@@ -12,7 +12,9 @@ import { Assignment } from 'src/app/models/assignment.model';
 export class NewAssignmentDialogComponent implements OnInit {
 
   // date(dd/mm/yyyy) when exercise expired and the students can not upload an assignment
-  expireDate = new FormControl(new Date())
+  today = new Date()
+  tomorrow =  new Date(this.today.setDate(this.today.getDate() + 1));
+  expireDate = new FormControl(this.tomorrow)
   
   file: File
 
@@ -34,7 +36,7 @@ export class NewAssignmentDialogComponent implements OnInit {
   }
 
   fileChange(event: any) {
-    console.dir("fileChange - event: " + JSON.stringify(event))
+    //console.dir("fileChange - event: " + JSON.stringify(event))
     // when the load event is fired and the file not empty
     if(event.target.files && event.target.files.length > 0) {
       // Fill file variable with the file content
