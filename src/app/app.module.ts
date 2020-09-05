@@ -118,7 +118,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         MatSlideToggleModule,
         MatProgressSpinnerModule,
         MatProgressBarModule,
-        MatNativeDateModule
+        MatNativeDateModule,
     MatDatepickerModule,
     ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
