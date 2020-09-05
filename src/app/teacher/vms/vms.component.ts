@@ -5,7 +5,6 @@ import {MatAccordion} from '@angular/material/expansion';
 import {VmService} from '../../services/vm.service';
 import {FormControl} from '@angular/forms';
 import {VmModel} from '../../models/vmModel.model';
-import {MatOption} from '@angular/material/core';
 import {Team} from '../../models/team.model';
 import {VmModelService} from '../../services/vm-model.service';
 import {CourseService} from '../../services/course.service';
@@ -13,6 +12,9 @@ import {Course} from '../../models/course.model';
 import {ActivatedRoute} from '@angular/router';
 import {forkJoin} from 'rxjs';
 import {StudentService} from '../../services/student.service';
+import {ConfigurationService} from '../../services/configuration.service';
+import {ConfigurationModel} from '../../models/configuration.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-vms',
@@ -24,12 +26,15 @@ export class VmsComponent implements OnInit {
     _filteredTeams: Team[] = [];
     _allTeams: Team[] = [];
     selectedTeam: Team = null;
+    selectedTeamConfiguration: ConfigurationModel = null;
     editModel = false;
     osModelSelected = false;
     vms: Vm[] = [];
     osTypes: VmModel[];
     vmModel: VmModel = null;
     course: Course = null;
+    disableSaveButton = false;
+    vmDataFetched;
 
 
     // Form data from resources limits
@@ -39,19 +44,23 @@ export class VmsComponent implements OnInit {
     activesLimit = new FormControl();
     maxLimit = new FormControl();
     osTypeSelect = new FormControl();
+    minCpuLimit = new FormControl();
+    minRamLimit = new FormControl();
+    minDiskLimit = new FormControl();
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
     constructor(private groupVMsService: GroupService, private vmService: VmService,
                 private vmModelService: VmModelService, private courseService: CourseService,
-                private groupService: GroupService, private studentService: StudentService, private route: ActivatedRoute) {
+                private groupService: GroupService, private studentService: StudentService,
+                private configurationService: ConfigurationService, private route: ActivatedRoute, private _snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
         this.getAllGroups();
         this.vmModelService.getAllModels().subscribe((data) => {
             this.osTypes = data;
-            console.log(data);
+            // console.log(data);
         });
         this.initCourseVmModel();
     }
@@ -90,60 +99,170 @@ export class VmsComponent implements OnInit {
             .subscribe((data) => {
                 this._allTeams = data;
                 this._filteredTeams = data;
-                console.log(data);
+                // console.log(data);
             });
     }
 
     updateAddSelection(value: Team) {
+        this.selectedTeamConfiguration = null;
         this.selectedTeam = value;
         // Get Members
-        // Get Resources
         let members$ = this.groupService.getMembers(this.selectedTeam.id);
-        let resources$ = this.groupService.getResources(this.selectedTeam.id);
-        let vms$ = this.groupService.getVms(this.selectedTeam.id);
-        forkJoin([members$, resources$, vms$]).subscribe(data => {
-            this.selectedTeam.members = data[0];
-            this.selectedTeam.resources = data[1];
-            this.vms = data[2];
-            this.updateFormValues();
 
-            // get owners and creator info about all the vms
-            this.vms.forEach((vm) => {
-                let creator$ = this.studentService.find(vm.creatorId);
-                let owners$ = this.vmService.getVmOwners(vm.id);
-                forkJoin([creator$, owners$]).subscribe(data => {
-                    vm.creator = data[0];
-                    vm.owners = data[1];
+        // If team has a configuration...
+        if (this.selectedTeam.configurationLink) {
+            console.log(this.selectedTeam.configurationLink);
+            let resources$ = this.groupService.getResources(this.selectedTeam.id);
+            let vms$ = this.groupService.getVms(this.selectedTeam.id);
+            let config$ = this.configurationService.getConfigurationByLink(this.selectedTeam.configurationLink);
+            forkJoin([members$, resources$, vms$, config$]).subscribe(data => {
+                this.selectedTeam.members = data[0];
+                this.selectedTeam.resources = data[1];
+                this.vms = data[2];
+                this.selectedTeamConfiguration = data[3];
+
+                this.updateFormValues();
+
+                // get owners and creator info about all the vms
+                this.vmDataFetched = 0;
+                this.vms.forEach((vm) => {
+                    this.vmService.getVmOwners(vm.id)
+                        .subscribe((data) => {
+                            vm.owners = data;
+                            this.vmDataFetched++;
+                            console.log('owner: ' + vm.owners);
+                        });
                 });
             });
-        });
+        } else { // If team hasn't a configuration
+            members$.subscribe((data) => {
+                this.selectedTeam.members = data;
+                this.selectedTeamConfiguration = new ConfigurationModel(-1, 0, 0, 0, 0, 0,
+                    0, 0, 0, this.selectedTeam.id);
+                this.updateFormValues();
+            });
+        }
+
+
     }
 
     updateFormValues() {
-        this.cpuLimit.setValue(this.selectedTeam.resources.maxVcpu);
-        this.ramLimit.setValue(this.selectedTeam.resources.maxRam);
-        this.diskLimit.setValue(this.selectedTeam.resources.maxDiskSpace);
-        this.activesLimit.setValue(this.selectedTeam.resources.maxOn);
-        this.maxLimit.setValue(this.selectedTeam.resources.maxTot);
+        this.cpuLimit.setValue(this.selectedTeamConfiguration.max_vcpu);
+        this.minCpuLimit.setValue(this.selectedTeamConfiguration.min_vcpu);
+        this.ramLimit.setValue(this.selectedTeamConfiguration.max_ram);
+        this.minRamLimit.setValue(this.selectedTeamConfiguration.min_ram);
+        this.diskLimit.setValue(this.selectedTeamConfiguration.max_disk);
+        this.minDiskLimit.setValue(this.selectedTeamConfiguration.min_disk);
+        this.activesLimit.setValue(this.selectedTeamConfiguration.max_on);
+        this.maxLimit.setValue(this.selectedTeamConfiguration.tot);
     }
 
 
     saveResourcesLimits() {
-        // TODO:  UPDATE resources limits for the group. To do vm service
+        this.disableSaveButton = true;
+        this.selectedTeamConfiguration.min_vcpu = this.minCpuLimit.value;
+        this.selectedTeamConfiguration.max_vcpu = this.cpuLimit.value;
+        this.selectedTeamConfiguration.min_ram = this.minRamLimit.value;
+        this.selectedTeamConfiguration.max_ram = this.ramLimit.value;
+        this.selectedTeamConfiguration.min_disk = this.minDiskLimit.value;
+        this.selectedTeamConfiguration.max_disk = this.diskLimit.value;
+        this.selectedTeamConfiguration.max_on = this.activesLimit.value;
+        this.selectedTeamConfiguration.tot = this.maxLimit.value;
 
+        // no configuration set
+        if (this.selectedTeamConfiguration.id == -1) {
+            // Create new configuration
+            this.configurationService.createNewConfiguration(this.selectedTeamConfiguration).subscribe((data) => {
+                console.log('CREATED CONFIG');
+                this.selectedTeamConfiguration = data;
+                this.disableSaveButton = false;
+                this._snackBar.open('Configuration Saved', null, {
+                    duration: 5000,
+                });
+            }, error => {
+                this.disableSaveButton = false;
+                this._snackBar.open('Error Creating Configuration, please check your values', null, {
+                    duration: 5000,
+                });
+            });
+        } else {
+            // Update configuration
+            console.log('UPDATING: ' + this.selectedTeamConfiguration.id);
+            this.configurationService.updateConfiguration(this.selectedTeamConfiguration).subscribe((data) => {
+                console.log('UPDATED CONFIG');
+                this.selectedTeamConfiguration = data;
+                this.disableSaveButton = false;
+                this._snackBar.open('Configuration Updated', null, {
+                    duration: 5000,
+                });
+            }, error => {
+                this.disableSaveButton = false;
+                this._snackBar.open('Error Updating Configuration, please check your values', null, {
+                    duration: 5000,
+                });
+            });
+        }
     }
 
-    checkResourcesLimits(): boolean {
-        return true;
-        const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        let actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
-        let actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
-        let actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
-        let actualMax = this.vms.length;
-        let actualActives = this.vms.filter(vm => {
-            return vm.status === 'RUNNING';
-        }).length;
+    checkMinResourcesLimit(): boolean {
+        // configuration not fetched
+        if (this.selectedTeamConfiguration == null) {
+            return false;
+        }
 
+        // No configuration set
+        if (this.selectedTeamConfiguration.id == -1) {
+            return (
+                this.minCpuLimit.value > 0 &&
+                this.minRamLimit.value > 0 &&
+                this.minDiskLimit.value > 0
+            );
+        } else {
+            // Already set config
+            return (
+                this.minCpuLimit.value >= this.selectedTeamConfiguration.min_vcpu &&
+                this.minRamLimit.value >= this.selectedTeamConfiguration.min_ram &&
+                this.minDiskLimit.value >= this.selectedTeamConfiguration.min_disk
+            );
+        }
+    }
+
+    checkMaxResourcesLimits(): boolean {
+        let actualCpu = 0;
+        let actualRam = 0;
+        let actualDisk = 0;
+        let actualMax = 0;
+        let actualActives = 0;
+
+        // configuration not fetched
+        if (this.selectedTeamConfiguration == null) {
+            return false;
+        }
+
+        if (this.selectedTeamConfiguration.id == -1) {
+            return (
+                this.cpuLimit.value > 0 &&
+                this.ramLimit.value > actualRam &&
+                this.diskLimit.value > actualDisk &&
+                this.activesLimit.value > actualActives &&
+                this.maxLimit.value > actualMax
+            );
+        }
+
+        if (this.activesLimit.value > this.maxLimit.value) {
+            return false;
+        }
+
+        if (this.vms.length != 0) {
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            actualCpu = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
+            actualRam = this.vms.map(vm => vm.ram).reduce(reducer);
+            actualDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
+            actualMax = this.vms.length;
+            actualActives = this.vms.filter(vm => {
+                return vm.status === 'RUNNING';
+            }).length;
+        }
         return (
             this.cpuLimit.value >= actualCpu &&
             this.ramLimit.value >= actualRam &&
@@ -155,7 +274,10 @@ export class VmsComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-        window.open('https://www.google.com');
+        let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
+        win.document.title = 'VM ' + vm.id;
+        win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
+        win.document.close();
     }
 
     openAll() {
@@ -169,20 +291,25 @@ export class VmsComponent implements OnInit {
     saveModel() {
         this.editModel = false;
         this.osModelSelected = false;
-        console.log(this.osTypeSelect);
+        // console.log(this.osTypeSelect);
 
         // No previous vmModel
         if (this.vmModel == null) {
             this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
-                    console.log('CREATED VMMODEL');
+                    // console.log('CREATED VMMODEL');
+                this._snackBar.open('Model Saved', null, {duration: 5000});
                 }
             );
         } else if (this.osTypeSelect.value !== this.vmModel.id) {
             this.vmModelService.deleteVmModel(this.vmModel.uniqueId).subscribe(data => {
                 this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
-                        console.log('UPDATED VMMODEL');
+                        // console.log('UPDATED VMMODEL');
+                    this._snackBar.open('Model Updated', null, {duration: 5000});
                     }
                 );
+            }, error => {
+                this._snackBar.open('Error check all vms are shut down', null, {duration: 5000});
+                this.initCourseVmModel();
             });
         }
     }

@@ -212,8 +212,13 @@ export class CourseService {
                     console.log(data);
                     let teams: Team[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.teamList.forEach((t: Team) => {
-                            teams.push(new Team(t.id, t.name, t.status));
+                        data._embedded.teamList.forEach((t: any) => {
+                            let newTeam = new Team(t.id, t.name, t.status);
+                            if (t._links.virtualMachineConfiguration) {
+                                console.log('Team ' + newTeam.id + ' has config');
+                                newTeam.configurationLink = t._links.virtualMachineConfiguration.href;
+                            }
+                            teams.push(newTeam);
                         });
                     }
                     return teams;

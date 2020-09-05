@@ -67,6 +67,8 @@
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
+			<mat-label>Global group resources</mat-label>
+			<br>
 			<mat-form-field class="input-large">
 				<mat-label>CPU</mat-label>
 				<input [formControl]="cpuLimit" matInput type="number" min="1" required>
@@ -74,35 +76,62 @@
 
 			<mat-form-field class="input-large">
 				<mat-label>RAM</mat-label>
-				<input [formControl]="ramLimit" matInput type="number" min="256" required>
+				<input [formControl]="ramLimit" matInput type="number" min="1" required>
 				<span matSuffix>GB</span>
 			</mat-form-field>
 
 			<mat-form-field class="input-large">
 				<mat-label>DISK</mat-label>
-				<input [formControl]="diskLimit" matInput type="number" min="2" required>
+				<input [formControl]="diskLimit" matInput type="number" min="1" required>
 				<span matSuffix>MB</span>
 			</mat-form-field>
 			<br>
 			<br>
 			<mat-form-field class="input-large">
 				<mat-label>Max Active VMs</mat-label>
-				<input [formControl]="maxLimit" matInput type="number" min="1" required>
+				<input [formControl]="activesLimit" matInput type="number" min="1" required>
 			</mat-form-field>
 
 			<mat-form-field class="input-large">
 				<mat-label>Max Total VMs</mat-label>
-				<input [formControl]="activesLimit" matInput type="number" min="1" required>
+				<input [formControl]="maxLimit" matInput type="number" min="1" required>
+			</mat-form-field>
+			<br>
+			<br>
+
+			<mat-divider></mat-divider>
+			<br>
+			<mat-label>Per VM min resources limit</mat-label>
+			<br>
+			<mat-form-field class="input-large">
+				<mat-label>Min CPU</mat-label>
+				<input [formControl]="minCpuLimit" matInput type="number" min="1" required>
+			</mat-form-field>
+
+			<mat-form-field class="input-large">
+				<mat-label>Min RAM</mat-label>
+				<input [formControl]="minRamLimit" matInput type="number" min="1" required>
+				<span matSuffix>GB</span>
+			</mat-form-field>
+
+			<mat-form-field class="input-large">
+				<mat-label>Min DISK</mat-label>
+				<input [formControl]="minDiskLimit" matInput type="number" min="1" required>
+				<span matSuffix>MB</span>
 			</mat-form-field>
 			<br>
 			<button mat-stroked-button color="primary" (click)="saveResourcesLimits()"
-					[disabled]="!checkResourcesLimits()">Save
+					[disabled]="!checkMaxResourcesLimits() || !checkMinResourcesLimit() || disableSaveButton">Save
 			</button>
-			<p *ngIf="!checkResourcesLimits()" class="error">Error. Please check new resources limit aren't lower than
+			<p *ngIf="!checkMaxResourcesLimits()" class="error">Error. Please check new resources limit aren't lower
+				than
+				actual ones</p>
+			<p *ngIf="!checkMinResourcesLimit()" class="error">Error. Please check new VM resources limit aren't lower
+				than
 				actual ones</p>
 
 		</mat-expansion-panel>
-		<mat-expansion-panel>
+		<mat-expansion-panel *ngIf="selectedTeam.resources && vms">
 			<mat-expansion-panel-header>
 				<mat-panel-title>
 					Real Time Resources Usage
@@ -135,7 +164,7 @@
 	</mat-accordion>
 	<br>
 	<br>
-	<div *ngIf="vms.length>0">
+	<div *ngIf="vmDataFetched===vms.length">
 		<mat-divider></mat-divider>
 		<h4>VMs created</h4>
 		<div *ngIf="vms.length>1" class="expand-collapse-buttons">
@@ -157,7 +186,7 @@
 					<mat-grid-tile>
 						<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
 					<mat-grid-tile>
-						<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
+						<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;GB
 					</mat-grid-tile>
 					<mat-grid-tile>
 						<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
@@ -167,7 +196,7 @@
 						<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
 					</mat-grid-tile>
 					<mat-grid-tile>
-						<a *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
+						<a *ngIf="vm.status==='ON'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
 							<mat-icon>link</mat-icon>
 							<label> Connect</label>
 						</a>

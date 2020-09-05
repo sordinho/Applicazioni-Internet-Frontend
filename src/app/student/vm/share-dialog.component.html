@@ -1,5 +1,6 @@
 <h1 mat-dialog-title>Share VM with selected mates</h1>
-<div mat-dialog-content class="full-width">
+<mat-spinner *ngIf="working"></mat-spinner>
+<div mat-dialog-content class="full-width" *ngIf="!working">
 	<button mat-stroked-button color="primary"
 			(click)="shareWithSelected()"
 			[disabled]="!selectionModel.hasValue()">Share VM

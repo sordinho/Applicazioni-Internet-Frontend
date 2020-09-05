@@ -10,13 +10,11 @@ import {FormControl} from '@angular/forms';
 import * as moment from 'moment';
 import {MatAccordion} from '@angular/material/expansion';
 import {StudentService} from 'src/app/services/student.service';
-import {forkJoin} from 'rxjs';
-import {Team, TEST_GROUP} from '../../models/team.model';
+import {Team} from '../../models/team.model';
 import {CourseService} from '../../services/course.service';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {catchError} from 'rxjs/operators';
 import {Course} from '../../models/course.model';
 
 @Component({
@@ -37,6 +35,9 @@ export class GroupsComponent implements OnInit {
     courseId: string = '';
     course: Course = null;
 
+    studentDataFetched = false;
+    courseDataFetched = false;
+
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -53,6 +54,7 @@ export class GroupsComponent implements OnInit {
         this.courseId = this.route.snapshot.parent.url[1].toString();
         this.courseService.find(this.courseId).subscribe((data) => {
             this.course = data;
+            this.courseDataFetched = true;
         });
         this.dataSource = new MatTableDataSource<Student>([]);
         this.initStudentTeam();
@@ -95,6 +97,7 @@ export class GroupsComponent implements OnInit {
         this.courseService.queryAvailableStudents(this.courseId).subscribe((data: Student[]) => {
             let filtered: Student[] = data.filter((s: Student) => s.id != this.authService.getUserId());
             this.dataSource = new MatTableDataSource<Student>(filtered);
+            this.studentDataFetched = true;
         });
     }
 
@@ -108,7 +111,7 @@ export class GroupsComponent implements OnInit {
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
-                    this.snackBar.open('New Team proposed', '', {duration: 5000});
+                    this.snackBar.open('New Team proposed', null, {duration: 5000});
                     this.resetTeamProposalForm();
                     this.initTeamProposals();
                 },
@@ -123,13 +126,17 @@ export class GroupsComponent implements OnInit {
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0
             || this.expiryProposal === null || this.expiryProposal.value === ''
             || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid()
-            || this.selectionModel.selected.length < this.course.min || this.selectionModel.selected.length > this.course.max;
+            || this.selectionModel.selected.length + 1 < this.course.min || this.selectionModel.selected.length > this.course.max;
     }
 
     resetTeamProposalForm() {
         this.expiryProposal.reset();
         this.proposedGroupName.reset();
         this.selectionModel.clear();
+    }
+
+    allDataFetched() {
+        return this.studentDataFetched && this.courseDataFetched;
     }
 
 }
