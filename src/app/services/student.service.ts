@@ -9,6 +9,7 @@ import {GroupService} from './group.service';
 import {Resources} from '../models/resources.model';
 import {Course} from '../models/course.model';
 import {Team} from '../models/team.model';
+import {Paper} from '../models/paper.model';
 
 
 const httpOptions = {
@@ -131,13 +132,8 @@ export class StudentService {
             .pipe(
                 catchError(err => {
                     console.error('CODE: ' + err.status);
-                    // if (err.status == 404) {
-                    //     return of(null);
-                    // } // return null so i can handle the 404
-                    // return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
-                    return of(null);
+                    return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
                 }), map(data => {
-                    console.log(data);
                     if (data == null) {
                         return null;
                     }
@@ -146,6 +142,26 @@ export class StudentService {
                         team.configurationLink = data._links.virtualMachineConfiguration.href;
                     }
                     return team;
+                })
+            );
+    }
+
+    getPapersByAssignment(studentId: string, assignmentId: string): Observable<Paper[]> {
+        return this.http
+            .get<any>(`${this.API_PATH}/${studentId}/assignments/${assignmentId}/papers`)
+            .pipe(
+                catchError(err => {
+                    console.error('CODE: ' + err.status);
+                    return throwError(`StudentService.getPapersByAssignment error: ${err.message}`);
+                }), map(data => {
+                    let papers: Paper[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.paperList.forEach((p: any) => {
+                            let paper = new Paper(p.id, null, p.published, p.status, p.flag, p.score, p.image);
+                            papers.push(paper);
+                        });
+                    }
+                    return papers;
                 })
             );
     }

@@ -1,70 +1,77 @@
 <h3>Assignments and Deliveries</h3>
 <br><br>
-<table mat-table
-	   [dataSource]="dataSource" multiTemplateDataRows
-	   class="mat-elevation-z8">
+<mat-progress-bar mode="indeterminate" *ngIf="!dataFetched"></mat-progress-bar>
+<div *ngIf="dataFetched">
+    <table mat-table
+           [dataSource]="dataSource" multiTemplateDataRows
+           class="mat-elevation-z8">
 
-	<!-- Id Column -->
-	<ng-container matColumnDef="id">
-		<th mat-header-cell *matHeaderCellDef> Assignment ID</th>
-		<td mat-cell *matCellDef="let row"> {{row.id}} </td>
-	</ng-container>
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> Assignment ID</th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
 
-	<!-- release date Column -->
-	<ng-container matColumnDef="releaseDate">
-		<th mat-header-cell *matHeaderCellDef> Release Date</th>
-		<td mat-cell *matCellDef="let row"> {{row.published}} </td>
-	</ng-container>
+        <!-- release date Column -->
+        <ng-container matColumnDef="releaseDate">
+            <th mat-header-cell *matHeaderCellDef> Release Date</th>
+            <td mat-cell *matCellDef="let row"> {{row.published | date: 'dd/MM/yy'}} </td>
+        </ng-container>
 
-	<!-- release date Column -->
-	<ng-container matColumnDef="expireDate">
-		<th mat-header-cell *matHeaderCellDef> Expire Date</th>
-		<td mat-cell *matCellDef="let row"> {{row.expired}} </td>
-	</ng-container>
+        <!-- release date Column -->
+        <ng-container matColumnDef="expireDate">
+            <th mat-header-cell *matHeaderCellDef> Expire Date</th>
+            <td mat-cell *matCellDef="let row"> {{row.expired | date: 'dd/MM/yy'}} </td>
+        </ng-container>
 
-	<!-- Download button Column -->
-	<ng-container matColumnDef="download">
-		<th mat-header-cell *matHeaderCellDef>
-			Download
-		</th>
-		<td mat-cell *matCellDef="let row">
-			<button mat-stroked-button color="primary" (click)="downloadAssignment($event,row)">
-				<mat-icon>cloud_download</mat-icon>
-			</button>
-		</td>
-	</ng-container>
+        <!-- Download button Column -->
+        <ng-container matColumnDef="download">
+            <th mat-header-cell *matHeaderCellDef>
+                Download
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-stroked-button color="primary" (click)="downloadAssignment($event,row)">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+            </td>
+        </ng-container>
 
-	<!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-	<ng-container matColumnDef="expandedDetail">
-		<td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-			<div class="example-element-detail"
-				 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-				<mat-list class="history-list">
-					<div mat-subheader>History &nbsp;&nbsp;&nbsp;
-						<button mat-stroked-button color="primary" (click)="uploadTask(element)">
-							<mat-icon>cloud_upload</mat-icon>
-						</button>
-					</div>
-					<mat-list-item *ngFor="let paper of papers.get(element.id)">
-						<mat-list-item class="paper-item">{{paper.id}}</mat-list-item>
-						<mat-list-item class="paper-item">{{paper.status}}</mat-list-item>
-						<mat-list-item class="paper-item">{{paper.published}}</mat-list-item>
-						<mat-list-item class="paper-item">
-							<button mat-stroked-button color="primary" (click)="downloadDelivered(paper)">
-								<mat-icon>cloud_download</mat-icon>
-							</button>
-						</mat-list-item>
-					</mat-list-item>
-				</mat-list>
-			</div>
-		</td>
-	</ng-container>
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+                <div class="example-element-detail"
+                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    <mat-list class="history-list">
+                        <div mat-subheader>History &nbsp;&nbsp;&nbsp;
+                            <button mat-stroked-button color="primary" (click)="uploadTask(element)">
+                                <mat-icon>cloud_upload</mat-icon>
+                            </button>
+                        </div>
+                        <mat-list-item *ngFor="let paper of papers.get(element.id)">
+                            <mat-list-item class="paper-item">{{paper.id}}</mat-list-item>
+                            <mat-list-item class="paper-item">{{paper.status}}</mat-list-item>
+                            <mat-list-item class="paper-item">{{paper.published | date: 'dd/MM/yy'}}</mat-list-item>
+                            <mat-list-item class="paper-item">
+                                <button mat-stroked-button color="primary" (click)="downloadDelivered(paper)">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                            </mat-list-item>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </td>
+        </ng-container>
 
-	<tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-	<tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-		class="example-element-row"
-		[class.example-expanded-row]="expandedElement === element"
-		(click)="expandedElement = expandedElement === element ? null : element">
-	</tr>
-	<tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-</table>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+</div>
+
+<div *ngIf="imageTest">
+    <img [src]="imageTest">
+</div>
