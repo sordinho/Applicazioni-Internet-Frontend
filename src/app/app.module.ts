@@ -22,6 +22,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { StudentsComponent } from './teacher/students/students.component';
 import { StudentsContComponent } from './teacher/students/students-cont.component';
@@ -54,8 +56,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dialog/upload-correction-dialog.component';
 import { HomeContComponent } from './home/home-cont.component';
 import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
+import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/new-assignment-dialog.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 
 @NgModule({
@@ -80,6 +84,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     UploadCorrectionDialogComponent,
     HomeContComponent,
     AssigmentsContComponent,
+    NewAssignmentDialogComponent
   ],
     imports: [
         BrowserModule,
@@ -112,7 +117,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         MatSnackBarModule,
         MatSlideToggleModule,
         MatProgressSpinnerModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatNativeDateModule
+    MatDatepickerModule,
     ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

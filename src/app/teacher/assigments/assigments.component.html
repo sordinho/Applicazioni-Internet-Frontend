@@ -1,7 +1,7 @@
-<mat-form-field appearance="legacy">
+<mat-form-field style="width: 300px;" appearance="legacy">
     <mat-select [(value)]="selectedAssignment" (selectionChange)="onSelectChange()">
-        <mat-option *ngFor="let assignment of _assignments" [value]="assignment.id">
-          {{ assignment.id }}
+        <mat-option *ngFor="let assignment of _assignments" [value]="assignment">
+            {{ assignment.id }} ({{ assignment.published | date: 'dd/MM/yy' }} - {{ assignment.expired | date: 'dd/MM/yy' }})
         </mat-option>
     </mat-select>
 </mat-form-field>
@@ -26,7 +26,11 @@
     </mat-checkbox>
 </mat-menu>
 
-<table #table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+<button class="new-button" mat-raised-button color="primary" (click)="newAssignment()">
+    New Assignment
+</button>
+
+<table #table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSource" multiTemplateDataRows>
     <!-- lastName Column -->
     <ng-container matColumnDef="lastName">
         <th mat-header-cell *matHeaderCellDef> Last Name </th>
@@ -53,8 +57,8 @@
 
     <!-- statusDate Column -->
     <ng-container matColumnDef="published">
-        <th mat-header-cell *matHeaderCellDef> Status Date </th>
-        <td mat-cell *matCellDef="let paper"> {{ paper.published  }} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status Date </th>
+        <td mat-cell *matCellDef="let paper"> {{ paper.published | date: 'dd MMM. yyyy, HH:mm' }} </td>
     </ng-container>
 
     <!-- Expanded (Paper) Content -->
@@ -69,9 +73,9 @@
                             <div mat-line>{{"paper " + paper.id}}</div> 
                             <div mat-line>{{paper.published}}</div>
                             <p class="status">{{paper.status}}</p>
-                            <mat-icon class="readed" *ngIf="paper.status==='LETTO'">done</mat-icon>
-                            <mat-icon class="delivered" *ngIf="paper.status==='CONSEGNATO'">done_all</mat-icon>
-                            <mat-icon class="revised" *ngIf="paper.status==='RIVSTO'">done_all</mat-icon>
+                            <mat-icon class="readed" *ngIf="paper.status==='READ'">done</mat-icon>
+                            <mat-icon class="delivered" *ngIf="paper.status==='DELIVERED'">done_all</mat-icon>
+                            <mat-icon class="revised" *ngIf="paper.status==='REVISED'">done_all</mat-icon>
                             <mat-divider *ngIf="!last"></mat-divider>
                         </mat-list-item>
                     </mat-list>
