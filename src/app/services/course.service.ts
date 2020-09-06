@@ -193,11 +193,8 @@ export class CourseService {
                     var assignments: Assignment[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
                         data._embedded.assignmentList.forEach((a: any) => {
-                            let bytes = [];
-                            a.image.forEach(byte => {
-                                bytes.push(byte);
-                            });
-                            assignments.push(new Assignment(a.id, a.published, a.expired, new File(bytes, a.id, {type: 'image/png'})));
+                            let image = 'data:image/jpeg;base64,' + a.image;
+                            assignments.push(new Assignment(a.id, a.published, a.expired, image));
                         });
                     }
                     return assignments;

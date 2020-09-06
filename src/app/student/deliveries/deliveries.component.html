@@ -42,15 +42,29 @@
                 <div class="example-element-detail"
                      [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                     <mat-list class="history-list">
-                        <div mat-subheader>History &nbsp;&nbsp;&nbsp;
-                            <button mat-stroked-button color="primary" (click)="uploadTask(element)">
-                                <mat-icon>cloud_upload</mat-icon>
-                            </button>
-                        </div>
+                        <mat-divider></mat-divider>
+                        <mat-list-item *ngIf="uploadEnabled">
+                            <mat-list-item mat-subheader>Upload new Paper</mat-list-item>
+                            <mat-list-item><input type="file" (change)="onFileChanged($event)">
+                            </mat-list-item>
+                            <mat-list-item>
+                                <button mat-stroked-button color="primary" (click)="uploadTask(element)">
+                                    <mat-icon>cloud_upload</mat-icon>
+                                </button>
+                            </mat-list-item>
+                        </mat-list-item>
+                        <mat-list-item *ngIf="!uploadEnabled">
+                            <mat-list-item class="paper-score">Score:</mat-list-item>
+                            <mat-list-item class="paper-score">{{getScore(element.id)}}</mat-list-item>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <br>
+
                         <mat-list-item *ngFor="let paper of papers.get(element.id)">
                             <mat-list-item class="paper-item">{{paper.id}}</mat-list-item>
                             <mat-list-item class="paper-item">{{paper.status}}</mat-list-item>
                             <mat-list-item class="paper-item">{{paper.published | date: 'dd/MM/yy'}}</mat-list-item>
+
                             <mat-list-item class="paper-item">
                                 <button mat-stroked-button color="primary" (click)="downloadDelivered(paper)">
                                     <mat-icon>cloud_download</mat-icon>
@@ -70,8 +84,4 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
     </table>
-</div>
-
-<div *ngIf="imageTest">
-    <img [src]="imageTest">
 </div>

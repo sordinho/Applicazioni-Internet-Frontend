@@ -157,7 +157,8 @@ export class StudentService {
                     let papers: Paper[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
                         data._embedded.paperList.forEach((p: any) => {
-                            let paper = new Paper(p.id, null, p.published, p.status, p.flag, p.score, p.image);
+                            let image = 'data:image/jpeg;base64,' + p.image;
+                            let paper = new Paper(p.id, null, p.published, p.status, p.flag, p.score, image);
                             papers.push(paper);
                         });
                     }
