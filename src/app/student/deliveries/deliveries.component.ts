@@ -32,7 +32,7 @@ export class DeliveriesComponent implements OnInit {
     dataFetched = false;
     selectedFile: File;
     papers = new Map<string, Paper[]>();
-    uploadEnabled = false;
+    uploadEnabled = new Map<string, boolean>();
 
     constructor(private courseService: CourseService, private studentService: StudentService, private assignmentService: AssignmentService,
                 private authService: AuthService, private route: ActivatedRoute) {
@@ -45,15 +45,22 @@ export class DeliveriesComponent implements OnInit {
 
     initAssignments() {
         // Get all assignments
+        this.dataFetched = false;
         this.courseService.queryAllAssigments(this.courseId).subscribe((assignments) => {
             this.dataSource = new MatTableDataSource<Assignment>(assignments);
 
             let assignmentCounter = 0;
             assignments.forEach((assignment) => {
                 console.log(assignment);
+                this.uploadEnabled.set(assignment.id, true);
                 this.studentService.getPapersByAssignment(this.authService.getUserId(), assignment.id).subscribe((paperList) => {
                     console.log(paperList);
                     this.papers.set(assignment.id, paperList);
+                    paperList.forEach((p) => {
+                        if (p.score != null) {
+                            this.uploadEnabled.set(assignment.id, false);
+                        }
+                    });
                     assignmentCounter++;
                     this.dataFetched = assignmentCounter === assignments.length;
                 });
@@ -77,7 +84,12 @@ export class DeliveriesComponent implements OnInit {
         console.log('Download: ' + assignment);
         this.downloadImage(assignment.image);
         if (this.papers.get(assignment.id).length > 0) {
-            this.assignmentService.setAssignmentAsReadByStudent(assignment.id, this.authService.getUserId());
+            this.assignmentService.setAssignmentAsReadByStudent(assignment.id, this.authService.getUserId()).subscribe((data) => {
+                console.log(data);
+                if (data) {
+                    this.initAssignments();
+                }
+            });
         }
     }
 
@@ -103,5 +115,13 @@ export class DeliveriesComponent implements OnInit {
         a.download = 'Image.png'; // File name Here
         a.click(); // Downloaded file
         a.remove();
+    }
+
+    isDownloadable(paper: Paper): boolean {
+        if (paper.status === 'NULL' || paper.status === 'READ') {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
