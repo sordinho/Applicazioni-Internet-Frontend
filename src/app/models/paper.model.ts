@@ -1,22 +1,22 @@
-import { Student } from './student.model'
+import {Student} from './student.model';
 
 export class Paper {
-    id: string
-    student: Student
-    published: string
-    status: string
-    flag: boolean
-    score: string
-    image: any
+    id: string;
+    student: Student;
+    published: string;
+    status: string;
+    flag: boolean;
+    score: string;
+    image: any;
 
     constructor(id: string, student: Student, published: string, status: string, flag: boolean, score: string, image: any) {
-        this.id = id
-        this.student = student
-        this.published = published
-        this.status = status
-        this.flag = flag
-        this.score = score
-        this.image = image
+        this.id = id;
+        this.student = student;
+        this.published = published;
+        this.status = status;
+        this.flag = flag;
+        this.score = score;
+        this.image = image;
     }
 
     toString(): string {

@@ -37,20 +37,21 @@ export class AuthService {
     }
 
     private setSession(authResult: any) {
+        console.log(authResult.token);
         const token = JSON.parse(atob(authResult.token.split('.')[1]));
 
         localStorage.setItem('token', authResult.token);
-        
+
         //console.log('ruolo: ' + token.roles);
         localStorage.setItem('role', token.roles);
-        
+
         //console.log('username: ' + authResult.username);
         localStorage.setItem('userId', authResult.username);
-        
-        // token field exp contains epoch of exportation 
+
+        // token field exp contains epoch of exportation
         //console.dir("exp_at: " + token.exp)
         localStorage.setItem('expires_at', token.exp)
-        
+
     }
 
     logout() {
@@ -103,7 +104,7 @@ export class UserInformation {
     lastName: string
     firstName: string
     password: string
-    repeatPassword: string 
+    repeatPassword: string
 
     constructor(id: string, email: string, lastName: string, firstName: string, password: string, repeatPassword: string) {
         this.id = id

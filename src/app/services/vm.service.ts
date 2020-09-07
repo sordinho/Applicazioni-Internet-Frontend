@@ -1,57 +1,102 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EMPTY, Observable, of, throwError} from 'rxjs';
 import {Vm} from '../models/vm.model';
-import {catchError} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {Student} from '../models/student.model';
-import {VmModel} from '../models/vmModel.model';
+
+const httpOptions = {
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+    })
+};
 
 @Injectable({
     providedIn: 'root'
 })
 export class VmService {
 
-    private API_PATH = 'http://localhost:3000/'; // TODO change to server api url
+    private API_PATH = 'API/virtual-machines';
 
     constructor(private http: HttpClient) {
     }
 
-    // getTeamConfiguration(groupId: string): Observable<VmConfigurationModel> {
-    //     return this.http
-    //         .get<VmConfigurationModel>(`${this.API_PATH}/teams/${groupId}/configuration`)
-    //         .pipe(catchError(err => {
-    //             console.error(err);
-    //             return throwError(`VmService.getConfiguration error: ${err.message}`);
-    //         }));
-    // }
-
-    getVmsByGroupId(groupId: string): Observable<Vm[]> {
-        // return of([TEST_VM_UBUNTU, TEST_VM_WIN]);
-
-        return this.http
-            .get<Vm[]>(`${this.API_PATH}/teams/${groupId}/virtual-machines`)
-            .pipe(catchError(err => {
-                console.error(err);
-                return throwError(`VmService.getVmsByGroupId error: ${err.message}`);
-            }));
-    }
-
     getVmOwners(vmID: string): Observable<Student[]> {
         return this.http
-            .get<Student[]>(`${this.API_PATH}/virtual-machines/${vmID}/owners`)
+            .get<any>(`${this.API_PATH}/${vmID}/owners`)
             .pipe(catchError(err => {
-                console.error(err);
-                return throwError(`VmService.getVmOwners error: ${err.message}`);
-            }));
+                    console.error(err);
+                    return throwError(`VmService.getVmOwners error: ${err.message}`);
+                }),
+                map(data => {
+                    let owners: Student[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.studentList.forEach((studentData: any) => {
+                            let stud = new Student(studentData.id, studentData.lastName, studentData.firstName, studentData.email);
+                            owners.push(stud);
+                        });
+                    }
+                    return owners;
+                }));
     }
 
-    getVmModel(courseID: string): Observable<VmModel> {
-        return this.http
-            .get<VmModel>(`${this.API_PATH}/courses/${courseID}/model`)
-            .pipe(catchError(err => {
-                console.error(err);
-                return throwError(`VmService.getVmModel error: ${err.message}`);
-            }));
+    createNewVm(num_vcpu: number, ram: number, disk_space: number, creatorId: string, teamId: string, modelId: string): Observable<Vm> {
+        return this.http.post<any>(`${this.API_PATH}`, {
+            'num_vcpu': num_vcpu,
+            'disk_space': disk_space,
+            'ram': ram,
+            'studentId': creatorId,
+            'teamId': teamId,
+            'modelId': modelId
+        }, httpOptions).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.createNewVm error: ${err.message}`);
+        }));
+    }
+
+    updateVm(vmId: string, num_vcpu: number, ram: number, disk_space: number, creatorId: string, teamId: string, modelId: string) {
+        return this.http.put<any>(`${this.API_PATH}/${vmId}`, {
+            'id': vmId,
+            'num_vcpu': num_vcpu,
+            'disk_space': disk_space,
+            'ram': ram,
+            'studentId': creatorId,
+            'teamId': teamId,
+            'modelId': modelId
+        }, httpOptions).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.updateVm error: ${err.message}`);
+        }));
+    }
+
+    deleteVm(vmId: string) {
+        return this.http.delete(`${this.API_PATH}/${vmId}`).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.deleteVm error: ${err.message}`);
+        }));
+    }
+
+    shareVm(vmId: string, studentId: string) {
+        return this.http.post<any>(`${this.API_PATH}/${vmId}/owners`, {
+            'studentId': studentId
+        }, httpOptions).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.shareVm error: ${err.message}`);
+        }));
+    }
+
+    startVm(vmId: string) {
+        return this.http.post<any>(`${this.API_PATH}/${vmId}/on`, {}).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.startVm error: ${err.message}`);
+        }));
+    }
+
+    stopVm(vmId: string) {
+        return this.http.post<any>(`${this.API_PATH}/${vmId}/off`, {}).pipe(catchError(err => {
+            console.error(err);
+            return throwError(`VmService.stopVm error: ${err.message}`);
+        }));
     }
 
 

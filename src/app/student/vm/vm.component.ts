@@ -5,7 +5,19 @@ import {VmService} from '../../services/vm.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from './share-dialog.component';
 import {CreateVmDialogComponent} from './create-vm-dialog.component';
-import {Team, TEST_GROUP} from '../../models/team.model';
+import {Team} from '../../models/team.model';
+import {StudentService} from '../../services/student.service';
+import {GroupService} from '../../services/group.service';
+import {AuthService} from '../../services/auth.service';
+import {ActivatedRoute} from '@angular/router';
+import {forkJoin} from 'rxjs';
+import {CourseService} from '../../services/course.service';
+import {VmModel} from '../../models/vmModel.model';
+import {VmModelService} from '../../services/vm-model.service';
+import {ConfigurationModel} from '../../models/configuration.model';
+import {ConfigurationService} from '../../services/configuration.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
 
 @Component({
     selector: 'app-vm',
@@ -14,17 +26,35 @@ import {Team, TEST_GROUP} from '../../models/team.model';
 })
 export class VmComponent implements OnInit {
 
-    team: Team = TEST_GROUP;
+    team: Team;
+    teamFetched: boolean = false;
+    vmDataFetched: number = 0;
+    teamHasConfigValid: boolean = false;
+    allDataFetched: boolean = false;
     vms: Vm[] = [];
+    courseId: string;
+    vmModel: VmModel;
+    allocatedCPU = 0;
+    allocatedDisk = 0;
+    allocatedRam = 0;
+    configuration: ConfigurationModel = null;
 
 
     @ViewChild('vmsAccordion') accordion: MatAccordion;
 
-    constructor(private vmService: VmService, private shareDialog: MatDialog, private createVmDialog: MatDialog) {
+    constructor(private vmService: VmService, private studentService: StudentService, private groupService: GroupService,
+                private courseService: CourseService, private vmModelService: VmModelService, private configurationService: ConfigurationService,
+                private authService: AuthService,
+                private route: ActivatedRoute,
+                private shareDialog: MatDialog, private createVmDialog: MatDialog, private _snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
-        this.initGroupVms();
+        this.allDataFetched = false;
+        this.team = new Team('-1');
+        this.courseId = this.route.snapshot.parent.url[1].toString();
+        this.initCourseData();
+        this.initStudentGroup();
     }
 
     openAll() {
@@ -37,42 +67,108 @@ export class VmComponent implements OnInit {
 
     connectToVm(vm: Vm) {
         console.log('Connect to vm: ' + vm.id);
-        // todo set vm status running
-        window.open('https://www.google.com');
+        let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
+        win.document.title = 'VM ' + vm.id;
+        win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
+        win.document.close();
     }
 
+    initCourseData() {
+        this.courseService.find(this.courseId).subscribe((course) => {
+            if (course.vmModelLink !== null) {
+                this.vmModelService.getModelInfoByDirectLink(course.vmModelLink).subscribe((data) => {
+                    this.vmModel = data;
+                });
+            }
+        });
+    }
 
-    initGroupVms() {
-        this.vmService.getVmsByGroupId(this.team.id)
-            .subscribe((data) => {
-                this.vms = data;
+    initStudentGroup() {
+        this.studentService.getTeamByCourse(this.authService.getUserId(), this.courseId).subscribe((t: Team) => {
+            this.teamFetched = true;
+            if (t != null) {
+                this.team = t;
+                let members$ = this.groupService.getMembers(this.team.id);
+                let resources$ = this.groupService.getResources(this.team.id);
+                if (this.team.configurationLink) {
+                    this.configurationService.getConfigurationByLink(this.team.configurationLink).subscribe((data) => {
+                            this.configuration = data;
+                            this.teamHasConfigValid = true;
+                        }
+                    );
+                    this.initVmsData();
+                    forkJoin([members$, resources$]).subscribe(data => {
+                        this.team.members = data[0];
+                        this.team.resources = data[1];
+                        this.allDataFetched = true;
+                    });
+                } else {
+                    this.allDataFetched = true;
+                }
+            } else {
+                this.allDataFetched = true;
+            }
+        });
+    }
+
+    initVmsData() {
+        this.vmDataFetched = 0;
+        this.vms = [];
+        this.groupService.getVms(this.team.id).subscribe((data) => {
+            this.vms = data;
+            this.updateAllocatedResources();
+
+            // get owners info about all the vms
+            this.vms.forEach((vm) => {
+                this.vmService.getVmOwners(vm.id)
+                    .subscribe((data) => {
+                        vm.owners = data;
+                        this.vmDataFetched++;
+                        console.log('owner: ' + vm.owners);
+                    });
             });
+        });
     }
 
-    /*initStudentGroup() {
-        this.studentService.getTeamByCourse("s1", "p").subscribe((group: Group) => {
-            this.groupService.getMembers(group.id).subscribe((members: Student[]) => {
-                group.members = members
-                this.groupService.getResources(group.id).subscribe((resources: Resources) => {
-                    group.resources = resources
-                    this.group = group
-                })
-            })
-        })
-    }*/
+    updateAllocatedResources() {
+        if (this.vms.length !== 0) {
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            this.allocatedCPU = this.vms.map(vm => vm.num_vcpu).reduce(reducer);
+            this.allocatedRam = this.vms.map(vm => vm.ram).reduce(reducer);
+            this.allocatedDisk = this.vms.map(vm => vm.disk_space).reduce(reducer);
+        }
+    }
 
     deleteVM(vm: Vm) {
         console.log('Delete vm: ' + vm.id);
+        this.vmService.deleteVm(vm.id).subscribe(() => {
+            this._snackBar.open('Vm ' + vm.id + ' Deleted', null, {duration: 5000});
+            this.refreshTeamResources();
+            this.initVmsData();
+        }, error => {
+            this._snackBar.open('Error deleting vm ' + vm.id, null, {duration: 5000});
+            this.refreshTeamResources();
+            this.initVmsData();
+        });
     }
 
     stopVm(vm: Vm) {
         console.log('Stop vm: ' + vm.id);
-        vm.status = 'OFF';
+        this.vmService.stopVm(vm.id).subscribe(data => {
+            vm.status = 'OFF';
+            this.refreshTeamResources();
+        });
+
     }
 
     startVm(vm: Vm) {
         console.log('Start vm: ' + vm.id);
-        vm.status = 'RUNNING';
+        this.vmService.startVm(vm.id).subscribe(data => {
+            vm.status = 'ON';
+            this.refreshTeamResources();
+        }, error => {
+            this._snackBar.open('Error starting vm ' + vm.id, null, {duration: 5000});
+        });
     }
 
     shareVm(vm: Vm) {
@@ -82,20 +178,68 @@ export class VmComponent implements OnInit {
                 group: this.team,
                 vm: vm
             }
+        }).afterClosed().subscribe((res) => {
+            if (res === 'OK') {
+                this.initVmsData();
+            }
+            console.log('CLOSED');
         });
     }
 
     studentIsOwner(vm: Vm) {
-        // TODO check if actual user is owner of the given VM
-        return true;
+        let actualOwners: string[] = vm.owners.map((s) => {
+            return s.id;
+        });
+        return actualOwners.includes(this.authService.getUserId());
     }
 
     createNewVm() {
         this.createVmDialog.open(CreateVmDialogComponent, {
             data: {
                 group: this.team,
-                vms: this.vms
+                vms: this.vms,
+                vmModel: this.vmModel.uniqueId,
+                creatorId: this.authService.getUserId(),
+                configuration: this.configuration,
+                action: 'CREATE'
             }
+        }).afterClosed().subscribe((res) => {
+            if (res === 'OK') {
+                this.refreshTeamResources();
+                this.initVmsData();
+            }
+            console.log('CLOSED');
         });
     }
+
+    vmIsEditable(vm: Vm) {
+        return (vm.status === 'OFF' && this.studentIsOwner(vm));
+    }
+
+    updateVm(vm: Vm) {
+        this.createVmDialog.open(CreateVmDialogComponent, {
+            data: {
+                group: this.team,
+                vms: this.vms.filter(value => value != vm),
+                vmModel: this.vmModel.uniqueId,
+                creatorId: this.authService.getUserId(),
+                configuration: this.configuration,
+                action: 'UPDATE',
+                vmToUpdate: vm
+            }
+        }).afterClosed().subscribe((res) => {
+            if (res === 'OK') {
+                this.refreshTeamResources();
+                this.initVmsData();
+            }
+            console.log('CLOSED');
+        });
+    }
+
+    refreshTeamResources() {
+        this.groupService.getResources(this.team.id).subscribe((data) => {
+            this.team.resources = data;
+        });
+    }
+
 }

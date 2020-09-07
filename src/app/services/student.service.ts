@@ -9,6 +9,7 @@ import {GroupService} from './group.service';
 import {Resources} from '../models/resources.model';
 import {Course} from '../models/course.model';
 import {Team} from '../models/team.model';
+import {Paper} from '../models/paper.model';
 
 
 const httpOptions = {
@@ -113,9 +114,9 @@ export class StudentService {
                        otherwise it would be shown [Object, Object] */
                     var allTeams: Team[] = [];
                     // console.log('Teams: ' + JSON.stringify(data));
-                    if (data !== null) {
+                    if (data !== null && data._embedded) {
                         data._embedded.teamList.forEach((team:
-                                                              Team) => {
+                                                             Team) => {
                             allTeams.push(new Team(team.id, team.name, team.status));
                         });
                     }
@@ -127,14 +128,41 @@ export class StudentService {
     getTeamByCourse(studentId: string, courseId: string): Observable<Team> {
         /* find student (by studentId) */
         return this.http
-            .get<Team>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
+            .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
             .pipe(
                 catchError(err => {
-                    // console.error('CODE: ' + err.status);
-                    if (err.status == '404') {
-                        return of(null);
-                    } // return null so i can handle the 404
-                    // return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                    console.error('CODE: ' + err.status);
+                    return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                }), map(data => {
+                    if (data == null) {
+                        return null;
+                    }
+                    let team = new Team(data.id, data.name, data.status);
+                    if (data._links.virtualMachineConfiguration) {
+                        team.configurationLink = data._links.virtualMachineConfiguration.href;
+                    }
+                    return team;
+                })
+            );
+    }
+
+    getPapersByAssignment(studentId: string, assignmentId: string): Observable<Paper[]> {
+        return this.http
+            .get<any>(`${this.API_PATH}/${studentId}/assignments/${assignmentId}/papers`)
+            .pipe(
+                catchError(err => {
+                    console.error('CODE: ' + err.status);
+                    return throwError(`StudentService.getPapersByAssignment error: ${err.message}`);
+                }), map(data => {
+                    let papers: Paper[] = [];
+                    if (data !== undefined && data._embedded !== undefined) {
+                        data._embedded.paperList.forEach((p: any) => {
+                            let image = 'data:image/jpeg;base64,' + p.image;
+                            let paper = new Paper(p.id, null, p.published, p.status, p.flag, p.score, image);
+                            papers.push(paper);
+                        });
+                    }
+                    return papers;
                 })
             );
     }

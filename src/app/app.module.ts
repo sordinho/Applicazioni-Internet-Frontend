@@ -57,6 +57,8 @@ import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dia
 import { HomeContComponent } from './home/home-cont.component';
 import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
 import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/new-assignment-dialog.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 
@@ -84,40 +86,42 @@ import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/ne
     AssigmentsContComponent,
     NewAssignmentDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-    MatTabsModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatSortModule,
-    MatPaginatorModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatCardModule,
-    MatMenuModule,
-    MatGridListModule,
-    MatExpansionModule,
-    MatBadgeModule,
-    MatSelectModule,
-    MatTooltipModule,
-    MatChipsModule,
-    MatSnackBarModule,
-    MatSlideToggleModule,
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatListModule,
+        MatTabsModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatSortModule,
+        MatPaginatorModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatCardModule,
+        MatMenuModule,
+        MatGridListModule,
+        MatExpansionModule,
+        MatBadgeModule,
+        MatSelectModule,
+        MatTooltipModule,
+        MatChipsModule,
+        MatSnackBarModule,
+        MatSlideToggleModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatNativeDateModule,
     MatDatepickerModule,
-    MatNativeDateModule
-  ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, MatDatepickerModule],
+    ],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

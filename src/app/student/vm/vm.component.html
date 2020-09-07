@@ -1,89 +1,121 @@
 <h3>Group VMs management</h3>
-<br>
+<div *ngIf="teamFetched && team.id==='-1'">
+	<h2>You're not in a group!</h2>
+</div>
 
-<h4>Group resources limits</h4>
-<mat-grid-list cols="3" rowHeight="55px">
-	<mat-grid-tile>
-		<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{team.resources.maxVcpu}}</mat-grid-tile>
-	<mat-grid-tile>
-		<mat-icon>memory</mat-icon>&nbsp; RAM: {{team.resources.maxRam}} &nbsp;MB
-	</mat-grid-tile>
-	<mat-grid-tile>
-		<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{team.resources.maxDiskSpace}} &nbsp;MB
-	</mat-grid-tile>
-	<mat-grid-tile>Max actives VMs: {{team.resources.maxOn}}</mat-grid-tile>
-	<mat-grid-tile>Total max VMs: {{team.resources.maxTot}}</mat-grid-tile>
-</mat-grid-list>
-
-
-<!-- VMs listing-->
-<div *ngIf="vms.length>0">
+<div *ngIf="!allDataFetched">
 	<br>
-	<mat-divider></mat-divider>
 	<br>
-	<h4>Available VMs
-		&nbsp;&nbsp;
-		<button mat-stroked-button color="primary" (click)="createNewVm()">
-			<mat-icon>add</mat-icon>
-			<label>New VM</label></button>
-	</h4>
-	<div *ngIf="vms.length>1" class="expand-collapse-buttons">
-		<button mat-button (click)="openAll()">Expand All</button>
-		<button mat-button (click)="closeAll()">Collapse All</button>
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+
+<div *ngIf="teamFetched && team.id!=='-1'">
+	<br>
+
+	<div *ngIf="team.resources">
+		<h4>Group resources limits</h4>
+		<mat-grid-list cols="3" rowHeight="55px">
+			<mat-grid-tile>
+				<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{allocatedCPU}}
+				/ {{team.resources.maxVcpu}}</mat-grid-tile>
+			<mat-grid-tile>
+				<mat-icon>memory</mat-icon>&nbsp; RAM: {{allocatedRam}} / {{team.resources.maxRam}} &nbsp;GB
+			</mat-grid-tile>
+			<mat-grid-tile>
+				<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{allocatedDisk}}
+				/ {{team.resources.maxDiskSpace}} &nbsp;MB
+			</mat-grid-tile>
+			<mat-grid-tile>Max actives VMs: {{team.resources.activeVMs}} / {{team.resources.maxOn}}</mat-grid-tile>
+			<mat-grid-tile>Total max VMs: {{team.resources.tot}} / {{team.resources.maxTot}}</mat-grid-tile>
+		</mat-grid-list>
 	</div>
-	<mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi>
-		<mat-expansion-panel *ngFor="let vm of vms">
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					<p>{{vm.name}}</p>
-					<p>&nbsp;&nbsp;({{vm.id}})</p>
-				</mat-panel-title>
-				<mat-panel-description>
-					<p>{{vm.vmModel}}</p>
-					<p>&nbsp;&nbsp;({{vm.status}})</p>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;MB
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
-				</mat-grid-tile>
-			</mat-grid-list>
-			<mat-grid-list cols="2" rowHeight="60px">
-				<mat-grid-tile *ngIf="vm.owners.length==1">Owner: {{vm.owners}}</mat-grid-tile>
-				<mat-grid-tile *ngIf="vm.owners.length>1">Owners:
-					<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<button *ngIf="vm.status==='RUNNING'" mat-stroked-button color="primary" (click)="stopVm(vm)">
-						<mat-icon>stop</mat-icon>
-						<label> Stop</label>
-					</button>
-					<button *ngIf="vm.status==='OFF'" mat-stroked-button color="primary" (click)="startVm(vm)">
-						<mat-icon>play_arrow</mat-icon>
-						<label> Start</label>
-					</button>
-					<a *ngIf="vm.status==='RUNNING'" style="margin-left: 5px" mat-stroked-button color="primary"
-					   (click)="connectToVm(vm)">
-						<mat-icon>link</mat-icon>
-						<label> Connect</label>
-					</a>
-					<!--					TODO check if actual user is owner-->
-					<button *ngIf="studentIsOwner(vm)" style="margin-left: 5px" mat-stroked-button color="primary"
-							(click)="shareVm(vm)">
-						<mat-icon>share</mat-icon>
-						<label> Share</label>
-					</button>
-					<a style="margin-left: 5px" mat-stroked-button color="warn" (click)="deleteVM(vm)">
-						<mat-icon>delete</mat-icon>
-						<label> Delete</label>
-					</a>
-				</mat-grid-tile>
-			</mat-grid-list>
-		</mat-expansion-panel>
-	</mat-accordion>
+
+	<div *ngIf="!teamHasConfigValid && allDataFetched">
+		<h2>The teacher didn't set the resources yet</h2>
+	</div>
+
+
+	<!-- VMs listing-->
+	<div *ngIf="teamHasConfigValid && allDataFetched">
+		<br>
+		<mat-divider></mat-divider>
+		<br>
+		<h4>Available VMs
+			&nbsp;&nbsp;
+			<button mat-stroked-button color="primary" (click)="createNewVm()">
+				<mat-icon>add</mat-icon>
+				<label>New VM</label></button>
+		</h4>
+		<div *ngIf="vmDataFetched===vms.length">
+			<div *ngIf="vms.length>1" class="expand-collapse-buttons">
+				<button mat-button (click)="openAll()">Expand All</button>
+				<button mat-button (click)="closeAll()">Collapse All</button>
+			</div>
+
+			<mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi *ngIf="vmDataFetched">
+				<mat-expansion-panel *ngFor="let vm of vms">
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							<p>&nbsp;&nbsp;({{vm.id}})</p>
+						</mat-panel-title>
+						<mat-panel-description>
+							<p>{{vmModel.os}}</p>
+							<p>&nbsp;&nbsp;({{vm.status}})</p>
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+					<mat-grid-list cols="3" rowHeight="55px">
+						<mat-grid-tile>
+							<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
+						<mat-grid-tile>
+							<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;GB
+						</mat-grid-tile>
+						<mat-grid-tile>
+							<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
+						</mat-grid-tile>
+					</mat-grid-list>
+					<mat-grid-list cols="2" rowHeight="60px">
+						<mat-grid-tile *ngIf="vm.owners.length==1">Owner: {{vm.owners}}</mat-grid-tile>
+						<mat-grid-tile *ngIf="vm.owners.length>1">Owners:
+							<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
+						</mat-grid-tile>
+						<mat-grid-tile>
+							<button *ngIf="vm.status==='ON'" mat-stroked-button color="primary"
+									(click)="stopVm(vm)">
+								<mat-icon>stop</mat-icon>
+								<label> Stop</label>
+							</button>
+							<button *ngIf="vm.status==='OFF'" mat-stroked-button color="primary" (click)="startVm(vm)">
+								<mat-icon>play_arrow</mat-icon>
+								<label> Start</label>
+							</button>
+							<a *ngIf="vm.status==='ON'" style="margin-left: 5px" mat-stroked-button color="primary"
+							   (click)="connectToVm(vm)">
+								<mat-icon>link</mat-icon>
+								<label> Connect</label>
+							</a>
+							<!--					TODO check if actual user is owner-->
+							<button *ngIf="studentIsOwner(vm)" style="margin-left: 5px" mat-stroked-button
+									color="primary"
+									(click)="shareVm(vm)">
+								<mat-icon>share</mat-icon>
+								<label> Share</label>
+							</button>
+							<button *ngIf="vmIsEditable(vm)" style="margin-left: 5px" mat-stroked-button
+									color="primary"
+									(click)="updateVm(vm)">
+								<mat-icon>edit</mat-icon>
+								<label> Edit</label>
+							</button>
+							<button *ngIf="vm.status==='OFF'" style="margin-left: 5px" mat-stroked-button color="warn"
+									(click)="deleteVM(vm)">
+								<mat-icon>delete</mat-icon>
+								<label> Delete</label>
+							</button>
+						</mat-grid-tile>
+					</mat-grid-list>
+				</mat-expansion-panel>
+			</mat-accordion>
+		</div>
+	</div>
 </div>
