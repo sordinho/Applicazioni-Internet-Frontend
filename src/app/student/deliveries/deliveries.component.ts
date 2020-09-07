@@ -25,7 +25,7 @@ import {AssignmentService} from '../../services/assignment.service';
 })
 export class DeliveriesComponent implements OnInit {
 
-    columnsToDisplay = ['id'].concat('releaseDate', 'expireDate', 'download');
+    columnsToDisplay = ['id'].concat('releaseDate', 'expireDate', 'score', 'download');
     dataSource: MatTableDataSource<Assignment>;
     expandedElement: Assignment | null;
     courseId = '';
