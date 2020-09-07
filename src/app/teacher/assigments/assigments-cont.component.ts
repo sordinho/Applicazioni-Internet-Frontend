@@ -19,7 +19,7 @@ export class AssigmentsContComponent implements OnInit {
   
   papers: Paper[] /* papers of a specific assigment */
 
-  papersHistory: Paper[] /* papers history of a stydent for a specific assigment */
+  paperHistory: Paper[] /* papers history of a student for a specific assigment */
 
   courseId: string
 
@@ -33,8 +33,8 @@ export class AssigmentsContComponent implements OnInit {
 
   getAssignments() {
     this.courseService.queryAllAssigments(this.courseId).subscribe(
-      res => {
-        this.assignments = res
+      assignments => {
+        this.assignments = assignments
       }
     )
   }
@@ -62,12 +62,12 @@ export class AssigmentsContComponent implements OnInit {
     })
   }
 
-  getPapersHistory(event) {
-    this.papersHistory = null /* reset paperHistory */
+  getPaperHistory(event) {
+    this.paperHistory = null /* reset paperHistory */
     /* get history of a student's papers */
-    this.assignmentService.queryPaperHistory(event.assignmentId, event.studentId).subscribe(
-      res => {
-        this.papersHistory = res
+    this.assignmentService.queryPaperHistory(event.assignmentId, event.student).subscribe(
+      paperHistory => {
+        this.paperHistory = paperHistory
       }
     )
   }

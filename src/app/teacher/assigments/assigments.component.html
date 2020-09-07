@@ -68,7 +68,7 @@
                 [@detailExpand]="paper === expandedPaper ? 'expanded' : 'collapsed'">
                 <div class="paper-history-list">
                     <mat-list>
-                        <mat-list-item *ngFor="let paper of _papersHistory; let last = last;">
+                        <mat-list-item *ngFor="let paper of _paperHistory; let last = last;">
                             <mat-icon mat-list-icon class="download" (click)="downloadPaper(paper)">get_app</mat-icon>
                             <div mat-line>{{"paper " + paper.id}}</div> 
                             <div mat-line>{{paper.published}}</div>

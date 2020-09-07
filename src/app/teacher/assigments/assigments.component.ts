@@ -43,7 +43,7 @@ export class AssigmentsComponent implements OnInit {
 
   _assignments: Assignment[]
   _papers: Paper[]  
-  _papersHistory: Paper[] = []
+  _paperHistory: Paper[] = []
 
   // component Input interfaces 
   @Input() set assignments(assignments: Assignment[]) {
@@ -65,15 +65,15 @@ export class AssigmentsComponent implements OnInit {
   }  
 
   /* papers history of the expanded student (papers) */ 
-  @Input() set papersHistory(papersHistory: Paper[]) {
-    if(papersHistory !== undefined) {
-      this._papersHistory = papersHistory
+  @Input() set paperHistory(paperHistory: Paper[]) {
+    if(paperHistory !== undefined) {
+      this._paperHistory = paperHistory
     }
   }  
   
   // component Output interfaces 
   @Output() getPapersEmitter = new EventEmitter<string>()
-  @Output() getPapersHistoryEmitter = new EventEmitter<{assignmentId: string, studentId: string}>()
+  @Output() getPaperHistoryEmitter = new EventEmitter<{assignmentId: string, student: Student}>()
   @Output() reloadAssignmentsEmitter = new EventEmitter<void>()
 
 
@@ -170,15 +170,9 @@ export class AssigmentsComponent implements OnInit {
     //console.dir("this.expandedPaper: "); console.dir(this.expandedPaper)
 
     if(this.selectedAssignment !== undefined) { 
-      this.getPapersHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, studentId: paper.student.id })
+      this.getPaperHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, student: paper.student })
     }
     
-  }
-
-  downloadPaper(paper: Paper) {
-    console.dir("downloadPaper - TODO")
-    console.dir("paper.image: " + paper.image)
-
   }
 
   newAssignment() {
@@ -195,6 +189,19 @@ export class AssigmentsComponent implements OnInit {
 
   sortData(sort: MatSort) {
     this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, sort)
+  }
+
+  downloadPaper(paper: Paper) {
+    console.log('Download Paper: ' + paper.id + ' ' + paper.status);
+    this.downloadImage(paper.image, `${this.selectedAssignment.id}_${paper.student.id}_${paper.id}.png`);
+  }
+
+  downloadImage(image: any, name: string) {
+    const a = document.createElement('a'); // Create <a>
+    a.href = image; // Image Base64 Goes here
+    a.download = name; // File name Here
+    a.click(); // Downloaded file
+    a.remove();
   }
 
 }
