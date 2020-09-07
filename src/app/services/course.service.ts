@@ -192,8 +192,9 @@ export class CourseService {
                 map(data => {
                     var assignments: Assignment[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.assignmentList.forEach((a: Assignment) => {
-                            assignments.push(new Assignment(a.id, a.published, a.expired, a.image));
+                        data._embedded.assignmentList.forEach((a: any) => {
+                            let image = 'data:image/jpeg;base64,' + a.image;
+                            assignments.push(new Assignment(a.id, a.published, a.expired, image));
                         });
                     }
                     return assignments;
@@ -227,17 +228,17 @@ export class CourseService {
 
     addAssignment(courseId: string, expireDate: Date, file: File): Observable<any> {
         // Add fields to prepare the request
-        let body = new FormData()
-        body.append("image", file, file.name)
-        body.append("expiredDate", expireDate.toLocaleDateString())
+        let body = new FormData();
+        body.append('image', file, file.name);
+        body.append('expiredDate', expireDate.toLocaleDateString());
 
         return this.http.post<any>(`${this.API_PATH}/${courseId}/assignment`, body)
-                        .pipe(
-                            catchError(err => {
-                                console.error(err);
-                                return throwError(`CourseService.addAssignment error: ${err.message}`);
-                            })
-                        );
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`CourseService.addAssignment error: ${err.message}`);
+                })
+            );
 
     }
 }

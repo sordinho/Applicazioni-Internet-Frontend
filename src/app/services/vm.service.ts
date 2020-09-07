@@ -72,7 +72,7 @@ export class VmService {
     deleteVm(vmId: string) {
         return this.http.delete(`${this.API_PATH}/${vmId}`).pipe(catchError(err => {
             console.error(err);
-            return throwError(`VmService.updateVm deleteVm: ${err.message}`);
+            return throwError(`VmService.deleteVm error: ${err.message}`);
         }));
     }
 
@@ -81,21 +81,21 @@ export class VmService {
             'studentId': studentId
         }, httpOptions).pipe(catchError(err => {
             console.error(err);
-            return throwError(`VmService.updateVm shareVm: ${err.message}`);
+            return throwError(`VmService.shareVm error: ${err.message}`);
         }));
     }
 
     startVm(vmId: string) {
         return this.http.post<any>(`${this.API_PATH}/${vmId}/on`, {}).pipe(catchError(err => {
             console.error(err);
-            return throwError(`VmService.updateVm startVm: ${err.message}`);
+            return throwError(`VmService.startVm error: ${err.message}`);
         }));
     }
 
     stopVm(vmId: string) {
         return this.http.post<any>(`${this.API_PATH}/${vmId}/off`, {}).pipe(catchError(err => {
             console.error(err);
-            return throwError(`VmService.updateVm stopVm: ${err.message}`);
+            return throwError(`VmService.stopVm error: ${err.message}`);
         }));
     }
 
