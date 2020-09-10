@@ -77,7 +77,7 @@ export class AssigmentsComponent implements OnInit {
   @Output() reloadAssignmentsEmitter = new EventEmitter<void>()
 
 
-  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published']
+  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published', 'score']
 
   @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
 
@@ -192,8 +192,11 @@ export class AssigmentsComponent implements OnInit {
   }
 
   downloadPaper(paper: Paper) {
-    console.log('Download Paper: ' + paper.id + ' ' + paper.status);
-    this.downloadImage(paper.image, `${this.selectedAssignment.id}_${paper.student.id}_${paper.id}.png`);
+    console.dir('Download Paper: ' + paper.id + ' ' + paper.status)
+    console.dir('image: ')
+    console.dir(paper.image)
+    let date = new Date(paper.published)
+    this.downloadImage(paper.image, `A${this.selectedAssignment.id}_${paper.student.id}_${date.getFullYear()}${date.getMonth()}${date.getDate()}_(${paper.id})`);
   }
 
   downloadImage(image: any, name: string) {
