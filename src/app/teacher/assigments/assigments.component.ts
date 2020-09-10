@@ -147,9 +147,10 @@ export class AssigmentsComponent implements OnInit {
   }
 
   uploadCorrection(paper: Paper) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "500px";
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.autoFocus = false
+    dialogConfig.width = "500px"
+    dialogConfig.height = "auto"
 
     const dialogRef = this.matDialog.open(UploadCorrectionDialogComponent, dialogConfig);
 
@@ -178,6 +179,7 @@ export class AssigmentsComponent implements OnInit {
   newAssignment() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "500px";
+    dialogConfig.height = "auto"
     dialogConfig.autoFocus = true;
     dialogConfig.data = { 
       emitter: this.reloadAssignmentsEmitter,

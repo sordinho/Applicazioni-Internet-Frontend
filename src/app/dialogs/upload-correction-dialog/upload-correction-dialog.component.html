@@ -1,10 +1,21 @@
 <h1 mat-dialog-title>Upload correction</h1>
 
 <mat-dialog-content>
-    <p>TODO: </p>
-    <p> - aggiungere un bottone per caricare la correzione</p>
-    <p> - aggiungere due radio button per scegliere se attendere la revisione dello studente o se l'elaborato è definitivo</p>
-    <p>   - nel secondo caso decidere il voto</p> 
+    
+    <div>
+        <!-- upload image -->
+        <button mat-button (click)="fileInput.click()">Choose File
+            <input #fileInput type="file" style="display:none;" (change)="fileChange($event)"/> 
+        </button>
+    </div>
+    click
+    <mat-slide-toggle [(ngModel)]="ratePaper"></mat-slide-toggle>
+
+    <mat-form-field>
+        <mat-label>Rate</mat-label>
+        <input matInput [disabled]="!ratePaper">
+    </mat-form-field>
+
 </mat-dialog-content>
 
 <br>
