@@ -151,6 +151,10 @@ export class AssigmentsComponent implements OnInit {
     dialogConfig.autoFocus = false
     dialogConfig.width = "500px"
     dialogConfig.height = "auto"
+    dialogConfig.data = {
+      assignmentId: this.selectedAssignment.id,
+      studentId: paper.student.id
+    }
 
     const dialogRef = this.matDialog.open(UploadCorrectionDialogComponent, dialogConfig);
 

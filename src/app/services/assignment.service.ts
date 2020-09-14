@@ -93,4 +93,31 @@ export class AssignmentService {
         }));
     }
 
+    reviewPaper(assignmentId: string, studentId: string, file: File, score: string, flag: boolean): Observable<void> {
+        /* review withouth score --> score = 'NULL', flag = true */
+        /* review with score --> score = '...', flag = false */
+
+        // Add fields to prepare the request
+        let body = new FormData()
+        body.append('image', file, file.name)
+        
+        const request = {
+            studentId: studentId,
+            flag: flag,
+            score: score
+        }  
+        const blobRequest = new Blob([JSON.stringify(request)], {type: 'application/json',})
+
+        body.append('request', blobRequest)
+
+        return this.http.post<any>(`${this.API_PATH}/${assignmentId}/paperReview`, body)
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`AssignmentService.reviewPaper error: ${err.message}`);
+                })
+            );
+
+    }
+
 }

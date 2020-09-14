@@ -1,19 +1,26 @@
 <h1 mat-dialog-title>Upload correction</h1>
 
 <mat-dialog-content>
-    
-    <div>
+
+    <div class="upload">
         <!-- upload image -->
-        <button mat-button (click)="fileInput.click()">Choose File
+        <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
             <input #fileInput type="file" style="display:none;" (change)="fileChange($event)"/> 
         </button>
-    </div>
-    click
-    <mat-slide-toggle [(ngModel)]="ratePaper"></mat-slide-toggle>
 
+        <span class="filename" [ngClass]="{'error': fileError}">
+            {{filename}}
+        </span>
+    </div>
+
+
+    <mat-slide-toggle (change)="toggleChange($event)"></mat-slide-toggle>
+
+    <!-- score -->
     <mat-form-field>
-        <mat-label>Rate</mat-label>
-        <input matInput [disabled]="!ratePaper">
+        <mat-label>Score</mat-label>
+        <input matInput [formControl]="score">
+        <mat-error>{{ getScoreErrorMessage() }}</mat-error>
     </mat-form-field>
 
 </mat-dialog-content>
