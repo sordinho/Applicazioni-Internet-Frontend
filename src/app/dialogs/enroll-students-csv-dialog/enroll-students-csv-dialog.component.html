@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Enroll students</h1>
+
+<mat-dialog-content>
+
+    <div class="upload">
+        <!-- upload image -->
+        <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
+            <input #fileInput type="file" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
+        </button>
+
+        <span class="filename" [ngClass]="{'error': fileRequiredError}">
+            {{filename}}
+        </span>
+    </div>
+    <p *ngIf="fileError" class='file-error'>{{errorMessage}}</p>
+
+    <p *ngIf="!fileError && enrollableStudents !== 0">{{fileStudents.length}}/{{enrollableStudents}} valid students in the CSV file:</p>
+    <p *ngIf="file !== undefined && !fileError && enrollableStudents === 0">0 enrollable students found in the CSV file</p>
+    <ng-container *ngIf="!fileError">
+        <mat-list-item *ngFor="let student of fileStudents">
+            {{student.id}} - {{student.firstName}} {{student.lastName}}
+        </mat-list-item>
+    </ng-container>
+
+</mat-dialog-content>
+
+<br>
+
+<mat-dialog-actions>
+    <button mat-button (click)="cancel()" [disabled]="loading">Cancel</button>
+    <button mat-raised-button *ngIf="!loading" [disabled]="fileStudents.length === 0" color="primary" (click)="enroll()">Enroll</button>
+    <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="30" strokeWidth="4" style="margin: 0px 20px;"></mat-progress-spinner>
+</mat-dialog-actions>
