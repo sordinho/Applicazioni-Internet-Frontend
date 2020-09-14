@@ -1,5 +1,7 @@
-<h4>VM Model management</h4>
-<div>
+<h3>VM Model management</h3>
+<mat-progress-bar mode="indeterminate" *ngIf="!modelFetched"></mat-progress-bar>
+<div *ngIf="modelFetched">
+    <h5 *ngIf="!vmModel">First of all define the course's VM Model</h5>
     <mat-form-field>
         <mat-label>OS</mat-label>
         <mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
@@ -24,15 +26,16 @@
 <div *ngIf="vmModel">
     <mat-divider></mat-divider>
     <h4>Group VM</h4>
-    <h6>Total groups: {{_allTeams.length}}</h6>
-    <mat-form-field>
+    <h5>Total groups: {{allTeams.length}}</h5>
+    <h5 *ngIf="allTeams.length===0">No teams available. Wait for the students to create them.</h5>
+    <mat-form-field *ngIf="allTeams.length>0">
         <mat-label>Find group</mat-label>
         <input type="search" matInput placeholder="Group name or ID"
                [matAutocomplete]="auto"
                (keyup)="filter($event)" #searchInput/>
         <mat-autocomplete #auto [displayWith]="displayFn"
                           (optionSelected)="updateAddSelection($event.option.value)">
-            <mat-option *ngFor="let group of _filteredTeams" [value]="group">
+            <mat-option *ngFor="let group of filteredTeams" [value]="group">
                 {{ displayFn(group) }}
             </mat-option>
         </mat-autocomplete>

@@ -23,8 +23,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class VmsComponent implements OnInit {
 
-    _filteredTeams: Team[] = [];
-    _allTeams: Team[] = [];
+    filteredTeams: Team[] = [];
+    allTeams: Team[] = [];
     selectedTeam: Team = null;
     selectedTeamConfiguration: ConfigurationModel = null;
     editModel = false;
@@ -35,6 +35,7 @@ export class VmsComponent implements OnInit {
     course: Course = null;
     disableSaveButton = false;
     vmDataFetched;
+    modelFetched;
 
 
     // Form data from resources limits
@@ -53,34 +54,49 @@ export class VmsComponent implements OnInit {
     constructor(private groupVMsService: GroupService, private vmService: VmService,
                 private vmModelService: VmModelService, private courseService: CourseService,
                 private groupService: GroupService, private studentService: StudentService,
-                private configurationService: ConfigurationService, private route: ActivatedRoute, private _snackBar: MatSnackBar) {
+                private configurationService: ConfigurationService, private route: ActivatedRoute, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
         this.getAllGroups();
         this.vmModelService.getAllModels().subscribe((data) => {
             this.osTypes = data;
-            // console.log(data);
+        }, error => {
+            this.snackBar.open('Error getting OS model, please refresh the page.', null, {
+                duration: 5000,
+            });
         });
         this.initCourseVmModel();
     }
 
     initCourseVmModel() {
+        this.modelFetched = false;
         // init course object
-        this.courseService.find(this.route.snapshot.parent.url[1].toString()).subscribe((data) => {
-            this.course = data;
+        this.courseService.find(this.route.snapshot.parent.url[1].toString()).subscribe((course) => {
+            this.course = course;
             if (this.course.vmModelLink !== null) {
                 // vm model is selected for the current group
-                this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((data) => {
-                    this.vmModel = data;
+                this.vmModelService.getModelInfoByDirectLink(this.course.vmModelLink).subscribe((model) => {
+                    this.vmModel = model;
                     this.osTypeSelect.setValue(this.vmModel.id);
+                    this.modelFetched = true;
+                }, error => {
+                    this.snackBar.open('Error getting OS model, please refresh the page.', null, {
+                        duration: 5000,
+                    });
                 });
+            } else {
+                this.modelFetched = true;
             }
+        }, error => {
+            this.snackBar.open('Error getting course information, please refresh the page.', null, {
+                duration: 5000,
+            });
         });
     }
 
     displayFn(team: Team) {
-        if (team == null || typeof (team.id) == 'undefined') {
+        if (team == null || typeof (team.id) === 'undefined') {
             return '';
         }
         return team.name + ' (' + team.id + ')';
@@ -88,7 +104,7 @@ export class VmsComponent implements OnInit {
 
     filter(event) {
         let substringToFind = event.target.value.toLowerCase();
-        this._filteredTeams = this._allTeams
+        this.filteredTeams = this.allTeams
             .filter((g) =>
                 this.displayFn(g).toLocaleLowerCase().includes(substringToFind));
     }
@@ -97,8 +113,8 @@ export class VmsComponent implements OnInit {
         // this.groupVMsService.getAllGroups()
         this.courseService.getAllGroups(this.route.snapshot.parent.url[1].toString())
             .subscribe((data) => {
-                this._allTeams = data;
-                this._filteredTeams = data;
+                this.allTeams = data;
+                this.filteredTeams = data;
                 // console.log(data);
             });
     }
@@ -131,7 +147,15 @@ export class VmsComponent implements OnInit {
                             vm.owners = data;
                             this.vmDataFetched++;
                             console.log('owner: ' + vm.owners);
+                        }, error => {
+                            this.snackBar.open('Error getting VMs owners, please retry.', null, {
+                                duration: 5000,
+                            });
                         });
+                });
+            }, error => {
+                this.snackBar.open('Error getting VMs data, please retry.', null, {
+                    duration: 5000,
                 });
             });
         } else { // If team hasn't a configuration
@@ -140,6 +164,10 @@ export class VmsComponent implements OnInit {
                 this.selectedTeamConfiguration = new ConfigurationModel(-1, 0, 0, 0, 0, 0,
                     0, 0, 0, this.selectedTeam.id);
                 this.updateFormValues();
+            }, error => {
+                this.snackBar.open('Error getting VMs owners, please retry.', null, {
+                    duration: 5000,
+                });
             });
         }
 
@@ -176,12 +204,12 @@ export class VmsComponent implements OnInit {
                 console.log('CREATED CONFIG');
                 this.selectedTeamConfiguration = data;
                 this.disableSaveButton = false;
-                this._snackBar.open('Configuration Saved', null, {
+                this.snackBar.open('Configuration Saved', null, {
                     duration: 5000,
                 });
             }, error => {
                 this.disableSaveButton = false;
-                this._snackBar.open('Error Creating Configuration, please check your values', null, {
+                this.snackBar.open('Error Creating Configuration, please check your values', null, {
                     duration: 5000,
                 });
             });
@@ -192,12 +220,12 @@ export class VmsComponent implements OnInit {
                 console.log('UPDATED CONFIG');
                 this.selectedTeamConfiguration = data;
                 this.disableSaveButton = false;
-                this._snackBar.open('Configuration Updated', null, {
+                this.snackBar.open('Configuration Updated', null, {
                     duration: 5000,
                 });
             }, error => {
                 this.disableSaveButton = false;
-                this._snackBar.open('Error Updating Configuration, please check your values', null, {
+                this.snackBar.open('Error Updating Configuration, please check your values', null, {
                     duration: 5000,
                 });
             });
@@ -297,18 +325,22 @@ export class VmsComponent implements OnInit {
         if (this.vmModel == null) {
             this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
                     // console.log('CREATED VMMODEL');
-                this._snackBar.open('Model Saved', null, {duration: 5000});
+                    this.snackBar.open('Model Saved', null, {duration: 5000});
+                }, error => {
+                    this.snackBar.open('Error creating Model, please retry', null, {duration: 5000});
                 }
             );
         } else if (this.osTypeSelect.value !== this.vmModel.id) {
             this.vmModelService.deleteVmModel(this.vmModel.uniqueId).subscribe(data => {
                 this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
                         // console.log('UPDATED VMMODEL');
-                    this._snackBar.open('Model Updated', null, {duration: 5000});
+                        this.snackBar.open('Model Updated', null, {duration: 5000});
+                    }, error => {
+                        this.snackBar.open('Error updating Model, please retry', null, {duration: 5000});
                     }
                 );
             }, error => {
-                this._snackBar.open('Error check all vms are shut down', null, {duration: 5000});
+                this.snackBar.open('Error check all vms are shut down', null, {duration: 5000});
                 this.initCourseVmModel();
             });
         }
