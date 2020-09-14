@@ -17,6 +17,12 @@ export class NewAssignmentDialogComponent implements OnInit {
   expireDate = new FormControl(this.tomorrow)
   
   file: File
+  defaultFilename = 'No file chosen'
+  filename: string
+
+  fileRequiredError = false
+  fileError = false
+  errorMessage: string
 
   error = false
 
@@ -29,24 +35,30 @@ export class NewAssignmentDialogComponent implements OnInit {
     this.courseId = data.courseId
   }
 
-  ngOnInit() {}
-
+  ngOnInit(): void {
+    this.filename = this.defaultFilename
+  }
   cancel() {
     this.dialogRef.close(false)
   }
 
-  fileChange(event: any) {
-    //console.dir("fileChange - event: " + JSON.stringify(event))
+  fileChange(files: any) {
+    //console.dir("fileChange - files: " + JSON.stringify(files))
     // when the load event is fired and the file not empty
-    if(event.target.files && event.target.files.length > 0) {
+    if(files && files.length > 0) {
       // Fill file variable with the file content
-      this.file = event.target.files[0];
+      this.file = files[0]
+      this.filename = this.file.name
     }
   }
 
   addAssignment() {
 
-    if (!this.expireDate.invalid) { 
+    if(this.expireDate.invalid) {
+      this.expireDate.markAsTouched({onlySelf: true})
+    } else if(this.file === null || this.file === undefined) {
+      this.fileRequiredError = true
+    } else {
       let today = new Date()
       const pickedDate = this.expireDate.value as Date
       if(today >= pickedDate) {
@@ -66,8 +78,6 @@ export class NewAssignmentDialogComponent implements OnInit {
                 this.error = true   
               }
             )
-    } else {
-      this.expireDate.markAsTouched({onlySelf: true})
     }
   }
 
