@@ -3,7 +3,6 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Assignment} from '../../models/assignment.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Paper} from '../../models/paper.model';
-import {Student} from '../../models/student.model';
 import {CourseService} from '../../services/course.service';
 import {ActivatedRoute} from '@angular/router';
 import {StudentService} from '../../services/student.service';
@@ -25,7 +24,7 @@ import {AssignmentService} from '../../services/assignment.service';
 })
 export class DeliveriesComponent implements OnInit {
 
-    columnsToDisplay = ['id'].concat('releaseDate', 'expireDate', 'download');
+    columnsToDisplay = ['id'].concat('releaseDate', 'expireDate', 'score', 'download');
     dataSource: MatTableDataSource<Assignment>;
     expandedElement: Assignment | null;
     courseId = '';
@@ -33,6 +32,7 @@ export class DeliveriesComponent implements OnInit {
     selectedFile: File;
     papers = new Map<string, Paper[]>();
     uploadEnabled = new Map<string, boolean>();
+    uploadButtonDisabled = true;
 
     constructor(private courseService: CourseService, private studentService: StudentService, private assignmentService: AssignmentService,
                 private authService: AuthService, private route: ActivatedRoute) {
@@ -57,7 +57,7 @@ export class DeliveriesComponent implements OnInit {
                     console.log(paperList);
                     this.papers.set(assignment.id, paperList);
                     paperList.forEach((p) => {
-                        if (p.score != null) {
+                        if (!p.flag) {
                             this.uploadEnabled.set(assignment.id, false);
                         }
                     });
@@ -93,9 +93,18 @@ export class DeliveriesComponent implements OnInit {
         }
     }
 
-    uploadTask(assignment: any) {
-        console.log('Upload: ' + assignment);
-        console.log(this.selectedFile);
+    uploadTask(assignment: Assignment) {
+        // console.log('Upload: ' + assignment);
+        // console.log(this.selectedFile);
+        const paperImageData = new FormData();
+        paperImageData.append('image', this.selectedFile);
+
+        this.assignmentService.uploadStudentPaperImage(paperImageData, assignment.id, this.authService.getUserId()).subscribe(data => {
+            console.log('OK');
+            this.initAssignments();
+        }, error => {
+            console.log('FAIL');
+        });
 
     }
 
@@ -105,8 +114,14 @@ export class DeliveriesComponent implements OnInit {
     }
 
     onFileChanged(event) {
-        // Select File
-        this.selectedFile = event.target.files[0];
+        this.uploadButtonDisabled = true;
+        if (event.target.files.length > 0) {
+            console.log(event.target.files[0].type);
+            if (event.target.files[0].type.startsWith('image/')) {
+                this.selectedFile = event.target.files[0];
+                this.uploadButtonDisabled = false;
+            }
+        }
     }
 
     downloadImage(image: any) {

@@ -1,208 +1,211 @@
 <h4>VM Model management</h4>
 <div>
-	<mat-form-field>
-		<mat-label>OS</mat-label>
-		<mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
-			<mat-option *ngFor="let osType of osTypes" value="{{osType.id}}"
-						(onSelectionChange)="osModelSelected=true">{{osType.os}}</mat-option>
-		</mat-select>
-	</mat-form-field>
-	&nbsp;&nbsp;
-	<button *ngIf="!editModel" mat-stroked-button color="warn" (click)="enableEditModel()"
-			matTooltip="By changing the model, ALL the VMs based on the previous one will be deleted!!!"
-			matTooltipClass="warning-tooltip">
-		<mat-icon>warning</mat-icon>
-		<label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
-		<mat-icon>warning</mat-icon>
-	</button>
-	<button *ngIf="editModel" mat-stroked-button color="primary" [disabled]="!osModelSelected"
-			(click)="saveModel()">
-		<label>Save</label>
-	</button>
+    <mat-form-field>
+        <mat-label>OS</mat-label>
+        <mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
+            <mat-option *ngFor="let osType of osTypes" value="{{osType.id}}"
+                        (onSelectionChange)="osModelSelected=true">{{osType.os}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <button *ngIf="!editModel" mat-stroked-button color="warn" (click)="enableEditModel()"
+            matTooltip="By changing the model, ALL the VMs based on the previous one will be deleted!!!"
+            matTooltipClass="warning-tooltip">
+        <mat-icon>warning</mat-icon>
+        <label>&nbsp;&nbsp;Edit&nbsp;&nbsp;</label>
+        <mat-icon>warning</mat-icon>
+    </button>
+    <button *ngIf="editModel" mat-stroked-button color="primary" [disabled]="!osModelSelected"
+            (click)="saveModel()">
+        <label>Save</label>
+    </button>
 </div>
 
-<mat-divider></mat-divider>
-<h4>Group VM</h4>
-<h6>Total groups: {{_allTeams.length}}</h6>
-<mat-form-field>
-	<mat-label>Find group</mat-label>
-	<input type="search" matInput placeholder="Group name or ID"
-		   [matAutocomplete]="auto"
-		   (keyup)="filter($event)" #searchInput/>
-	<mat-autocomplete #auto [displayWith]="displayFn"
-					  (optionSelected)="updateAddSelection($event.option.value)">
-		<mat-option *ngFor="let group of _filteredTeams" [value]="group">
-			{{ displayFn(group) }}
-		</mat-option>
-	</mat-autocomplete>
-</mat-form-field>
+<div *ngIf="vmModel">
+    <mat-divider></mat-divider>
+    <h4>Group VM</h4>
+    <h6>Total groups: {{_allTeams.length}}</h6>
+    <mat-form-field>
+        <mat-label>Find group</mat-label>
+        <input type="search" matInput placeholder="Group name or ID"
+               [matAutocomplete]="auto"
+               (keyup)="filter($event)" #searchInput/>
+        <mat-autocomplete #auto [displayWith]="displayFn"
+                          (optionSelected)="updateAddSelection($event.option.value)">
+            <mat-option *ngFor="let group of _filteredTeams" [value]="group">
+                {{ displayFn(group) }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
 
-<div *ngIf="selectedTeam!==null">
-	<br>
-	<mat-divider></mat-divider>
-	<h4>Selected group informations</h4>
-	<mat-accordion class="example-headers-align" multi>
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					<p>ID: {{selectedTeam.id}}</p>
-				</mat-panel-title>
-				<mat-panel-description>
-					<p>Name: {{selectedTeam.name}}</p>
-					<p>Members: {{selectedTeam.members.length}}</p>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
-			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile *ngFor="let member of selectedTeam.members">{{member.toString()}}</mat-grid-tile>
-			</mat-grid-list>
-		</mat-expansion-panel>
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					Group Resources
-				</mat-panel-title>
-				<mat-panel-description>
-					Set Group resources limits
-					<mat-icon>tune</mat-icon>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
+    <div *ngIf="selectedTeam!==null">
+        <br>
+        <mat-divider></mat-divider>
+        <h4>Selected group informations</h4>
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <p>ID: {{selectedTeam.id}}</p>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <p>Name: {{selectedTeam.name}}</p>
+                        <p>Members: {{selectedTeam.members.length}}</p>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-grid-list cols="3" rowHeight="55px">
+                    <mat-grid-tile *ngFor="let member of selectedTeam.members">{{member.toString()}}</mat-grid-tile>
+                </mat-grid-list>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Group Resources
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Set Group resources limits
+                        <mat-icon>tune</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
 
-			<mat-label>Global group resources</mat-label>
-			<br>
-			<mat-form-field class="input-large">
-				<mat-label>CPU</mat-label>
-				<input [formControl]="cpuLimit" matInput type="number" min="1" required>
-			</mat-form-field>
+                <mat-label>Global group resources</mat-label>
+                <br>
+                <mat-form-field class="input-large">
+                    <mat-label>CPU</mat-label>
+                    <input [formControl]="cpuLimit" matInput type="number" min="1" required>
+                </mat-form-field>
 
-			<mat-form-field class="input-large">
-				<mat-label>RAM</mat-label>
-				<input [formControl]="ramLimit" matInput type="number" min="1" required>
-				<span matSuffix>GB</span>
-			</mat-form-field>
+                <mat-form-field class="input-large">
+                    <mat-label>RAM</mat-label>
+                    <input [formControl]="ramLimit" matInput type="number" min="1" required>
+                    <span matSuffix>GB</span>
+                </mat-form-field>
 
-			<mat-form-field class="input-large">
-				<mat-label>DISK</mat-label>
-				<input [formControl]="diskLimit" matInput type="number" min="1" required>
-				<span matSuffix>MB</span>
-			</mat-form-field>
-			<br>
-			<br>
-			<mat-form-field class="input-large">
-				<mat-label>Max Active VMs</mat-label>
-				<input [formControl]="activesLimit" matInput type="number" min="1" required>
-			</mat-form-field>
+                <mat-form-field class="input-large">
+                    <mat-label>DISK</mat-label>
+                    <input [formControl]="diskLimit" matInput type="number" min="1" required>
+                    <span matSuffix>MB</span>
+                </mat-form-field>
+                <br>
+                <br>
+                <mat-form-field class="input-large">
+                    <mat-label>Max Active VMs</mat-label>
+                    <input [formControl]="activesLimit" matInput type="number" min="1" required>
+                </mat-form-field>
 
-			<mat-form-field class="input-large">
-				<mat-label>Max Total VMs</mat-label>
-				<input [formControl]="maxLimit" matInput type="number" min="1" required>
-			</mat-form-field>
-			<br>
-			<br>
+                <mat-form-field class="input-large">
+                    <mat-label>Max Total VMs</mat-label>
+                    <input [formControl]="maxLimit" matInput type="number" min="1" required>
+                </mat-form-field>
+                <br>
+                <br>
 
-			<mat-divider></mat-divider>
-			<br>
-			<mat-label>Per VM min resources limit</mat-label>
-			<br>
-			<mat-form-field class="input-large">
-				<mat-label>Min CPU</mat-label>
-				<input [formControl]="minCpuLimit" matInput type="number" min="1" required>
-			</mat-form-field>
+                <mat-divider></mat-divider>
+                <br>
+                <mat-label>Per VM min resources limit</mat-label>
+                <br>
+                <mat-form-field class="input-large">
+                    <mat-label>Min CPU</mat-label>
+                    <input [formControl]="minCpuLimit" matInput type="number" min="1" required>
+                </mat-form-field>
 
-			<mat-form-field class="input-large">
-				<mat-label>Min RAM</mat-label>
-				<input [formControl]="minRamLimit" matInput type="number" min="1" required>
-				<span matSuffix>GB</span>
-			</mat-form-field>
+                <mat-form-field class="input-large">
+                    <mat-label>Min RAM</mat-label>
+                    <input [formControl]="minRamLimit" matInput type="number" min="1" required>
+                    <span matSuffix>GB</span>
+                </mat-form-field>
 
-			<mat-form-field class="input-large">
-				<mat-label>Min DISK</mat-label>
-				<input [formControl]="minDiskLimit" matInput type="number" min="1" required>
-				<span matSuffix>MB</span>
-			</mat-form-field>
-			<br>
-			<button mat-stroked-button color="primary" (click)="saveResourcesLimits()"
-					[disabled]="!checkMaxResourcesLimits() || !checkMinResourcesLimit() || disableSaveButton">Save
-			</button>
-			<p *ngIf="!checkMaxResourcesLimits()" class="error">Error. Please check new resources limit aren't lower
-				than
-				actual ones</p>
-			<p *ngIf="!checkMinResourcesLimit()" class="error">Error. Please check new VM resources limit aren't lower
-				than
-				actual ones</p>
+                <mat-form-field class="input-large">
+                    <mat-label>Min DISK</mat-label>
+                    <input [formControl]="minDiskLimit" matInput type="number" min="1" required>
+                    <span matSuffix>MB</span>
+                </mat-form-field>
+                <br>
+                <button mat-stroked-button color="primary" (click)="saveResourcesLimits()"
+                        [disabled]="!checkMaxResourcesLimits() || !checkMinResourcesLimit() || disableSaveButton">Save
+                </button>
+                <p *ngIf="!checkMaxResourcesLimits()" class="error">Error. Please check new resources limit aren't lower
+                    than
+                    actual ones</p>
+                <p *ngIf="!checkMinResourcesLimit()" class="error">Error. Please check new VM resources limit aren't
+                    lower
+                    than
+                    actual ones</p>
 
-		</mat-expansion-panel>
-		<mat-expansion-panel *ngIf="selectedTeam.resources && vms">
-			<mat-expansion-panel-header>
-				<mat-panel-title>
-					Real Time Resources Usage
-				</mat-panel-title>
-				<mat-panel-description>
-					Check real time resource usage for the group
-					<mat-icon> multiline_chart</mat-icon>
-				</mat-panel-description>
-			</mat-expansion-panel-header>
+            </mat-expansion-panel>
+            <mat-expansion-panel *ngIf="selectedTeam.resources && vms">
+                <mat-expansion-panel-header>l
+                    <mat-panel-title>
+                        Real Time Resources Usage
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Check real time resource usage for the group
+                        <mat-icon> multiline_chart</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
 
-			<mat-grid-list cols="3" rowHeight="55px">
-				<mat-grid-tile>
-					<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{selectedTeam.resources.activeNumVcpu}}
-					/ {{selectedTeam.resources.maxVcpu}}
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>memory</mat-icon>&nbsp; RAM: {{selectedTeam.resources.activeRam}}
-					/ {{selectedTeam.resources.maxRam}} &nbsp;GB
-				</mat-grid-tile>
-				<mat-grid-tile>
-					<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{selectedTeam.resources.activeDiskSpace}}
-					/ {{selectedTeam.resources.maxDiskSpace}} &nbsp;MB
-				</mat-grid-tile>
-				<mat-grid-tile>Max actives VMs: {{selectedTeam.resources.activeVMs}}
-					/ {{selectedTeam.resources.maxOn}}</mat-grid-tile>
-				<mat-grid-tile>Total max VMs: {{selectedTeam.resources.tot}}
-					/ {{selectedTeam.resources.maxTot}}</mat-grid-tile>
-			</mat-grid-list>
-		</mat-expansion-panel>
-	</mat-accordion>
-	<br>
-	<br>
-	<div *ngIf="vmDataFetched===vms.length">
-		<mat-divider></mat-divider>
-		<h4>VMs created</h4>
-		<div *ngIf="vms.length>1" class="expand-collapse-buttons">
-			<button mat-button (click)="openAll()">Expand All</button>
-			<button mat-button (click)="closeAll()">Collapse All</button>
-		</div>
-		<mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi>
-			<mat-expansion-panel *ngFor="let vm of vms">
-				<mat-expansion-panel-header>
-					<mat-panel-title>
-						<p>({{vm.id}})</p>
-					</mat-panel-title>
-					<mat-panel-description>
-						<p>{{vmModel.os}}</p>
-						<p>({{vm.status}})</p>
-					</mat-panel-description>
-				</mat-expansion-panel-header>
-				<mat-grid-list cols="3" rowHeight="55px">
-					<mat-grid-tile>
-						<mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
-					<mat-grid-tile>
-						<mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;GB
-					</mat-grid-tile>
-					<mat-grid-tile>
-						<mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
-					</mat-grid-tile>
-					<mat-grid-tile *ngIf="vm.owners.length==1" [colspan]="2">Owner: {{vm.owners}}</mat-grid-tile>
-					<mat-grid-tile *ngIf="vm.owners.length>1" [colspan]="2">Owners:
-						<span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
-					</mat-grid-tile>
-					<mat-grid-tile>
-						<a *ngIf="vm.status==='ON'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
-							<mat-icon>link</mat-icon>
-							<label> Connect</label>
-						</a>
-					</mat-grid-tile>
-				</mat-grid-list>
-			</mat-expansion-panel>
-		</mat-accordion>
-	</div>
+                <mat-grid-list cols="3" rowHeight="55px">
+                    <mat-grid-tile>
+                        <mat-icon>developer_board</mat-icon>&nbsp; CPU: {{selectedTeam.resources.activeNumVcpu}}
+                        / {{selectedTeam.resources.maxVcpu}}
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <mat-icon>memory</mat-icon>&nbsp; RAM: {{selectedTeam.resources.activeRam}}
+                        / {{selectedTeam.resources.maxRam}} &nbsp;GB
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{selectedTeam.resources.activeDiskSpace}}
+                        / {{selectedTeam.resources.maxDiskSpace}} &nbsp;MB
+                    </mat-grid-tile>
+                    <mat-grid-tile>Max actives VMs: {{selectedTeam.resources.activeVMs}}
+                        / {{selectedTeam.resources.maxOn}}</mat-grid-tile>
+                    <mat-grid-tile>Total max VMs: {{selectedTeam.resources.tot}}
+                        / {{selectedTeam.resources.maxTot}}</mat-grid-tile>
+                </mat-grid-list>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <br>
+        <br>
+        <div *ngIf="vmDataFetched===vms.length">
+            <mat-divider></mat-divider>
+            <h4>VMs created</h4>
+            <div *ngIf="vms.length>1" class="expand-collapse-buttons">
+                <button mat-button (click)="openAll()">Expand All</button>
+                <button mat-button (click)="closeAll()">Collapse All</button>
+            </div>
+            <mat-accordion #vmsAccordion="matAccordion" class="example-headers-align" multi>
+                <mat-expansion-panel *ngFor="let vm of vms">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <p>({{vm.id}})</p>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <p>{{vmModel.os}}</p>
+                            <p>({{vm.status}})</p>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <mat-grid-list cols="3" rowHeight="55px">
+                        <mat-grid-tile>
+                            <mat-icon>developer_board</mat-icon>&nbsp; CPU: {{vm.num_vcpu}} </mat-grid-tile>
+                        <mat-grid-tile>
+                            <mat-icon>memory</mat-icon>&nbsp; RAM: {{vm.ram}} &nbsp;GB
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <mat-icon>sd_storage</mat-icon>&nbsp; DISK: {{vm.disk_space}} &nbsp;MB
+                        </mat-grid-tile>
+                        <mat-grid-tile *ngIf="vm.owners.length==1" [colspan]="2">Owner: {{vm.owners}}</mat-grid-tile>
+                        <mat-grid-tile *ngIf="vm.owners.length>1" [colspan]="2">Owners:
+                            <span *ngFor="let owner of vm.owners">&nbsp;&nbsp;&nbsp;{{owner}}</span>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a *ngIf="vm.status==='ON'" mat-stroked-button color="primary" (click)="connectToVm(vm)">
+                                <mat-icon>link</mat-icon>
+                                <label> Connect</label>
+                            </a>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </div>
 </div>
