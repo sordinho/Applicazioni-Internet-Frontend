@@ -2,8 +2,8 @@
 
 <mat-dialog-content>
 
+    <!-- upload image -->
     <div class="upload">
-        <!-- upload image -->
         <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
             <input #fileInput type="file" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
         </button>
