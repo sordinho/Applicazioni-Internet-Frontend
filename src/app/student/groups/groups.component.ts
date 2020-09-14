@@ -66,14 +66,12 @@ export class GroupsComponent implements OnInit {
             this.team = team;
             this.dataReady = true;
             console.log('Team: ' + team);
-            if (team == null) {
-                console.log('team nullo');
-                this.initTeamProposals();
-                return;
-            }
             this.groupService.getMembers(team.id).subscribe(data => {
                 this.team.members = data;
             });
+        }, (error) => {
+            console.log('No team found initilize proposals');
+            this.initTeamProposals();
         });
     }
 

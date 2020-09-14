@@ -86,28 +86,29 @@ export class VmComponent implements OnInit {
     initStudentGroup() {
         this.studentService.getTeamByCourse(this.authService.getUserId(), this.courseId).subscribe((t: Team) => {
             this.teamFetched = true;
-            if (t != null) {
-                this.team = t;
-                let members$ = this.groupService.getMembers(this.team.id);
-                let resources$ = this.groupService.getResources(this.team.id);
-                if (this.team.configurationLink) {
-                    this.configurationService.getConfigurationByLink(this.team.configurationLink).subscribe((data) => {
-                            this.configuration = data;
-                            this.teamHasConfigValid = true;
-                        }
-                    );
-                    this.initVmsData();
-                    forkJoin([members$, resources$]).subscribe(data => {
-                        this.team.members = data[0];
-                        this.team.resources = data[1];
-                        this.allDataFetched = true;
-                    });
-                } else {
+
+            this.team = t;
+            let members$ = this.groupService.getMembers(this.team.id);
+            let resources$ = this.groupService.getResources(this.team.id);
+            if (this.team.configurationLink) {
+                this.configurationService.getConfigurationByLink(this.team.configurationLink).subscribe((data) => {
+                        this.configuration = data;
+                        this.teamHasConfigValid = true;
+                    }
+                );
+                this.initVmsData();
+                forkJoin([members$, resources$]).subscribe(data => {
+                    this.team.members = data[0];
+                    this.team.resources = data[1];
                     this.allDataFetched = true;
-                }
+                });
             } else {
                 this.allDataFetched = true;
             }
+
+        }, (error) => {
+            this.team = null;
+            this.allDataFetched = true;
         });
     }
 

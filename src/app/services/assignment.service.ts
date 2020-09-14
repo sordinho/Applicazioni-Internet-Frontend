@@ -93,6 +93,15 @@ export class AssignmentService {
         }));
     }
 
+    uploadStudentPaperImage(paperImage: any, assignmentId: string, studentId: string) {
+        return this.http.post<any>(`${this.API_PATH}/${assignmentId}/students/${studentId}/papers2`, paperImage)
+            .pipe(catchError(err => {
+                console.error(err);
+                return throwError(`AssignmentService.uploadStudentPaperImage error: ${err.message}`);
+            }));
+
+    }
+
     reviewPaper(assignmentId: string, studentId: string, file: File, score: string, flag: boolean): Observable<void> {
         /* review withouth score --> score = 'NULL', flag = true */
         /* review with score --> score = '...', flag = false */

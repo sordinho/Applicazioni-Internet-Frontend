@@ -18,10 +18,16 @@
             <td mat-cell *matCellDef="let row"> {{row.published | date: 'dd/MM/yy'}} </td>
         </ng-container>
 
-        <!-- release date Column -->
+        <!-- expire date Column -->
         <ng-container matColumnDef="expireDate">
             <th mat-header-cell *matHeaderCellDef> Expire Date</th>
             <td mat-cell *matCellDef="let row"> {{row.expired | date: 'dd/MM/yy'}} </td>
+        </ng-container>
+
+        <!-- score Column -->
+        <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef> Evaluated Score</th>
+            <td mat-cell *matCellDef="let row"> {{getScore(row.id)}} </td>
         </ng-container>
 
         <!-- Download button Column -->
@@ -42,31 +48,37 @@
                 <div class="example-element-detail"
                      [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                     <mat-list class="history-list">
-                        <mat-divider></mat-divider>
-                        <mat-list-item *ngIf="uploadEnabled">
+                        <mat-divider *ngIf="uploadEnabled.get(element.id)"></mat-divider>
+                        <mat-list-item *ngIf="uploadEnabled.get(element.id)">
                             <mat-list-item mat-subheader>Upload new Paper</mat-list-item>
-                            <mat-list-item><input type="file" (change)="onFileChanged($event)">
+                            <mat-list-item><input type="file" accept="image/jpeg, image/png"
+                                                  (change)="onFileChanged($event)">
                             </mat-list-item>
                             <mat-list-item>
-                                <button mat-stroked-button color="primary" (click)="uploadTask(element)">
+                                <button (click)="uploadTask(element)" color="primary"
+                                        disabled="{{uploadButtonDisabled}}"
+                                        mat-stroked-button>
                                     <mat-icon>cloud_upload</mat-icon>
                                 </button>
                             </mat-list-item>
                         </mat-list-item>
-                        <mat-list-item *ngIf="!uploadEnabled">
-                            <mat-list-item class="paper-score">Score:</mat-list-item>
-                            <mat-list-item class="paper-score">{{getScore(element.id)}}</mat-list-item>
-                        </mat-list-item>
                         <mat-divider></mat-divider>
                         <br>
 
+                        <mat-list-item>
+                            <mat-list-item mat-subheader class="paper-item">ID</mat-list-item>
+                            <mat-list-item mat-subheader class="paper-item">Status</mat-list-item>
+                            <mat-list-item mat-subheader class="paper-item">Date</mat-list-item>
+                            <mat-list-item mat-subheader class="paper-item">Download</mat-list-item>
+                        </mat-list-item>
                         <mat-list-item *ngFor="let paper of papers.get(element.id)">
                             <mat-list-item class="paper-item">{{paper.id}}</mat-list-item>
                             <mat-list-item class="paper-item">{{paper.status}}</mat-list-item>
                             <mat-list-item class="paper-item">{{paper.published | date: 'dd/MM/yy'}}</mat-list-item>
 
                             <mat-list-item class="paper-item">
-                                <button mat-stroked-button color="primary" (click)="downloadDelivered(paper)">
+                                <button *ngIf="isDownloadable(paper)" mat-stroked-button color="primary"
+                                        (click)="downloadDelivered(paper)">
                                     <mat-icon>cloud_download</mat-icon>
                                 </button>
                             </mat-list-item>

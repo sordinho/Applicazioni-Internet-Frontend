@@ -8,6 +8,9 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { EnrollStudentsCsvDialogComponent } from 'src/app/dialogs/enroll-students-csv-dialog/enroll-students-csv-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-students',
@@ -16,7 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class StudentsComponent implements AfterViewInit {
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar, private matDialog: MatDialog, private route: ActivatedRoute) { }
 
   /* student selected - to be added to enrolled student */
   addStudentSelection: Student = null
@@ -61,8 +64,14 @@ export class StudentsComponent implements AfterViewInit {
   // component Output interfaces 
   @Output() addStudentsEmitter = new EventEmitter<Student[]>()
   @Output() removeStudentsEmitter = new EventEmitter<Student[]>()
-  
+  @Output() reloadStudentsListEmitter = new EventEmitter<void>()
 
+  courseId: string
+
+  ngOnInit(): void {
+    this.courseId = this.route.snapshot.parent.url[1].toString()
+    //console.dir("courseId: " + this.courseId)
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort
@@ -206,6 +215,31 @@ export class StudentsComponent implements AfterViewInit {
   addStudent() {
     this.addStudentsEmitter.emit([this.addStudentSelection]);
     this.addStudentSelection = null; // reset selection
+  }
+
+  enrollStudentsCSV() {
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.autoFocus = false
+    dialogConfig.width = "500px"
+    dialogConfig.height = "auto"
+    dialogConfig.maxHeight = "500px"
+    dialogConfig.data = {
+      students: this._unenrolledStudents,
+      courseId: this.courseId
+    }
+
+    const dialogRef = this.matDialog.open(EnrollStudentsCsvDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res) {
+        //console.dir("enrollStudentsCSV() - success ");
+        this.reloadStudentsListEmitter.emit()
+      } else {
+        // user pressed cancel (?)
+        console.dir("uploadCorrection() - unsuccess");
+      }
+    })
+
   }
 
 }

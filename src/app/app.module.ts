@@ -26,6 +26,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { StudentsComponent } from './teacher/students/students.component';
 import { StudentsContComponent } from './teacher/students/students-cont.component';
@@ -59,6 +60,7 @@ import { UploadCorrectionDialogComponent } from './dialogs/upload-correction-dia
 import { HomeContComponent } from './home/home-cont.component';
 import { AssigmentsContComponent } from './teacher/assigments/assigments-cont.component';
 import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/new-assignment-dialog.component';
+import { EnrollStudentsCsvDialogComponent } from './dialogs/enroll-students-csv-dialog/enroll-students-csv-dialog.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,8 @@ import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/ne
     UploadCorrectionDialogComponent,
     HomeContComponent,
     AssigmentsContComponent,
-    NewAssignmentDialogComponent
+    NewAssignmentDialogComponent,
+    EnrollStudentsCsvDialogComponent
   ],
     imports: [
         BrowserModule,
@@ -117,7 +120,8 @@ import { NewAssignmentDialogComponent } from './dialogs/new-assignment-dialog/ne
         MatProgressSpinnerModule,
         MatProgressBarModule,
         MatNativeDateModule,
-    MatDatepickerModule,
+        MatDatepickerModule,
+        MatRadioModule,
     ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
