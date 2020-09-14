@@ -1,10 +1,9 @@
-<h3>Students enrolled in the course</h3>
-<br>
 <app-students 
     [enrolledStudents]="enrolledStudents" 
     [unenrolledStudents]="unenrolledStudents"
     [snackbarMessage]="snackbarMessage"
 
     (addStudentsEmitter)="enrollStudents($event)"
-    (removeStudentsEmitter)="unenrollStudents($event)" >
+    (removeStudentsEmitter)="unenrollStudents($event)"
+    (reloadStudentsListEmitter)="initStudentsLists()" >
 </app-students>

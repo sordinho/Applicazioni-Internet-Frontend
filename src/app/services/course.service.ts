@@ -239,7 +239,19 @@ export class CourseService {
                     return throwError(`CourseService.addAssignment error: ${err.message}`);
                 })
             );
+    }
 
+    enrollAll(file: File, courseId: string): Observable<any> {
+        let body = new FormData()
+        body.append('file', file)
+
+        return this.http.post<any>(`${this.API_PATH}/${courseId}/enrollAll`, body)
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`CourseService.enrollAll error: ${err.message}`);
+                })
+            );
     }
 }
 

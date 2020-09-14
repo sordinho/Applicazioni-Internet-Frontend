@@ -1,3 +1,4 @@
+<h3>Enroll students</h3>
 <mat-form-field>
     <mat-label>Add student</mat-label>
     <input type="search" matInput placeholder="Name of the student" 
@@ -9,12 +10,19 @@
         </mat-option>
     </mat-autocomplete>
 </mat-form-field>
-<button mat-button 
-        (click)="addStudent(); searchInput.value= ''"
-        [disabled]="searchInput.value===''">Add</button>
-<br>
-<div>
 
+<button mat-stroked-button class="enroll-button"
+        (click)="addStudent(); searchInput.value= ''"
+        [disabled]="searchInput.value===''">Enroll</button>
+
+<button mat-stroked-button color="primary"
+        (click)="enrollStudentsCSV()">Enroll students using CSV file</button>
+
+<br>
+
+<mat-divider></mat-divider>
+
+<div>
     <button mat-raised-button color="primary" 
             (click)="removeSelectedRows()"
             [disabled]="!areStudentsSelected()">Delete Selected</button>

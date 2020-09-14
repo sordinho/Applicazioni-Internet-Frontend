@@ -25,3 +25,12 @@ table {
 strong {
     font-weight: 500;
 }
+
+.mat-divider {
+    margin: 25px 0px;
+}
+
+.enroll-button {
+    margin-left: 10px;
+    margin-right: 20px;
+}
