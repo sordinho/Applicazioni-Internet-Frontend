@@ -4,7 +4,7 @@ import { Assignment } from 'src/app/models/assignment.model';
 import { CourseService } from 'src/app/services/course.service';
 import { ActivatedRoute } from '@angular/router';
 import { Student } from 'src/app/models/student.model';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { StudentService } from 'src/app/services/student.service';
 import { AssignmentService } from 'src/app/services/assignment.service';
 
@@ -19,7 +19,9 @@ export class AssigmentsContComponent implements OnInit {
   
   papers: Paper[] /* papers of a specific assigment */
 
-  papersHistory: Paper[] /* papers history of a stydent for a specific assigment */
+  enrolledStudentReq: Observable<Student[]>
+
+  paperHistory: Paper[] /* papers history of a student for a specific assigment */
 
   courseId: string
 
@@ -28,13 +30,15 @@ export class AssigmentsContComponent implements OnInit {
   ngOnInit(): void {
     this.courseId = this.route.snapshot.parent.url[1].toString()
 
+    this. enrolledStudentReq = this.courseService.queryEnrolledStudent(this.courseId)
+
     this.getAssignments()
   }
 
   getAssignments() {
     this.courseService.queryAllAssigments(this.courseId).subscribe(
-      res => {
-        this.assignments = res
+      assignments => {
+        this.assignments = assignments
       }
     )
   }
@@ -43,8 +47,7 @@ export class AssigmentsContComponent implements OnInit {
     //console.dir("getPapers - " + assignmentId)
     const papersReq = this.assignmentService.queryPapers(assignmentId)
     /* it returns obj { paper: Paper, studentId: string } */
-    const enrolledStudentReq = this.courseService.queryEnrolledStudent(this.courseId)
-    forkJoin([papersReq, enrolledStudentReq]).subscribe(data => {
+    forkJoin([papersReq, this.enrolledStudentReq]).subscribe(data => {
       let papers: Paper[] = []
       let paperObjects = data[0] /* obj [{ paper: Paper, studentId: string }] */
       const students: Student[] = data[1]
@@ -62,12 +65,12 @@ export class AssigmentsContComponent implements OnInit {
     })
   }
 
-  getPapersHistory(event) {
-    this.papersHistory = null /* reset paperHistory */
+  getPaperHistory(event) {
+    this.paperHistory = null /* reset paperHistory */
     /* get history of a student's papers */
-    this.assignmentService.queryPaperHistory(event.assignmentId, event.studentId).subscribe(
-      res => {
-        this.papersHistory = res
+    this.assignmentService.queryPaperHistory(event.assignmentId, event.student).subscribe(
+      paperHistory => {
+        this.paperHistory = paperHistory
       }
     )
   }

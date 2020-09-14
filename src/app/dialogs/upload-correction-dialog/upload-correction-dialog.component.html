@@ -1,10 +1,28 @@
 <h1 mat-dialog-title>Upload correction</h1>
 
 <mat-dialog-content>
-    <p>TODO: </p>
-    <p> - aggiungere un bottone per caricare la correzione</p>
-    <p> - aggiungere due radio button per scegliere se attendere la revisione dello studente o se l'elaborato è definitivo</p>
-    <p>   - nel secondo caso decidere il voto</p> 
+
+    <div class="upload">
+        <!-- upload image -->
+        <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
+            <input #fileInput type="file" style="display:none;" (change)="fileChange($event)"/> 
+        </button>
+
+        <span class="filename" [ngClass]="{'error': fileError}">
+            {{filename}}
+        </span>
+    </div>
+
+
+    <mat-slide-toggle (change)="toggleChange($event)"></mat-slide-toggle>
+
+    <!-- score -->
+    <mat-form-field>
+        <mat-label>Score</mat-label>
+        <input matInput [formControl]="score">
+        <mat-error>{{ getScoreErrorMessage() }}</mat-error>
+    </mat-form-field>
+
 </mat-dialog-content>
 
 <br>

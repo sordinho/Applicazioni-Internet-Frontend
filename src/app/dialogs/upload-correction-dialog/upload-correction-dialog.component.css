@@ -1,3 +1,36 @@
 .full-width {
     width: 100%;
 }
+
+.mat-form-field {
+    margin-left: 15px;
+}
+
+.upload {
+    width: 300px;
+    border: 1px solid #cacaca;
+    border-radius: 5px;
+
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    padding-right: 15px;
+    margin-bottom: 10px;
+}
+
+.file-button {
+    border-right: 1px solid #cacaca;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    color: #3F51B5;
+}
+
+.filename {
+    margin: 0px 10px;
+    color: dimgray;
+}
+
+.error {
+    color: red;
+    font-weight: 300;
+}

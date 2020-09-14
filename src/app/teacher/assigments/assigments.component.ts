@@ -27,7 +27,11 @@ import { Sort, MatSort } from '@angular/material/sort';
   ],
 })
 export class AssigmentsComponent implements OnInit {
-  
+
+  @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort
+
   expandedPaper: Paper | null;
 
   status_list = [ "NULL", "READ", "DELIVERED", "REVISED" ]
@@ -43,7 +47,9 @@ export class AssigmentsComponent implements OnInit {
 
   _assignments: Assignment[]
   _papers: Paper[]  
-  _papersHistory: Paper[] = []
+  _paperHistory: Paper[] = []
+
+  papersToFetch = 0 /* manage the case in which the user change the assignment during the loading phase of the previous assignment's papers */
 
   // component Input interfaces 
   @Input() set assignments(assignments: Assignment[]) {
@@ -52,6 +58,7 @@ export class AssigmentsComponent implements OnInit {
       if(this._assignments.length>0) {
         // select last assignment as default
         this.selectedAssignment = this._assignments[this._assignments.length-1] 
+        this.papersToFetch++
         this.getPapersEmitter.emit(this.selectedAssignment.id)
       }
     }
@@ -60,28 +67,31 @@ export class AssigmentsComponent implements OnInit {
   @Input() set papers(papers: Paper[]) {
     if(papers !== undefined) {
       this._papers = papers
-      this.dataSource = new MatTableDataSource<Paper>(papers)
+      this.papersToFetch--
+      if(this.papersToFetch == 0) {
+        this.dataSource = new MatTableDataSource<Paper>(papers)
+        if(this.sort !== undefined) {
+          this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, this.sort)
+        }
+      }
+
     }
   }  
 
   /* papers history of the expanded student (papers) */ 
-  @Input() set papersHistory(papersHistory: Paper[]) {
-    if(papersHistory !== undefined) {
-      this._papersHistory = papersHistory
+  @Input() set paperHistory(paperHistory: Paper[]) {
+    if(paperHistory !== undefined) {
+      this._paperHistory = paperHistory      
     }
   }  
   
   // component Output interfaces 
   @Output() getPapersEmitter = new EventEmitter<string>()
-  @Output() getPapersHistoryEmitter = new EventEmitter<{assignmentId: string, studentId: string}>()
+  @Output() getPaperHistoryEmitter = new EventEmitter<{assignmentId: string, student: Student}>()
   @Output() reloadAssignmentsEmitter = new EventEmitter<void>()
 
 
-  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published']
-
-  @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort
+  colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published', 'score']
 
   constructor(private matDialog: MatDialog, private route: ActivatedRoute) {}
 
@@ -90,13 +100,13 @@ export class AssigmentsComponent implements OnInit {
   }
 
   onSelectChange() {
-    if(this.selectedAssignment !== undefined) {
+    if(this.selectedAssignment !== undefined) { 
+      this.papersToFetch++    
+      this.dataSource = null
       //console.dir("this.selectedAssignment: " + this.selectedAssignment.expired)
       this.getPapersEmitter.emit(this.selectedAssignment.id)
       /* reset status filter */
       this.selectedStatus.clear()
-      /* reset the expanded paper (if any) */
-      this.expandedPaper = null 
     }
   }
 
@@ -149,16 +159,23 @@ export class AssigmentsComponent implements OnInit {
   }
 
   uploadCorrection(paper: Paper) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "500px";
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.autoFocus = false
+    dialogConfig.width = "500px"
+    dialogConfig.height = "auto"
+    dialogConfig.data = {
+      assignmentId: this.selectedAssignment.id,
+      studentId: paper.student.id
+    }
 
     const dialogRef = this.matDialog.open(UploadCorrectionDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(res => {
       if(res) {
-        //console.dir("uploadCorrection() - success ");
-        console.dir("uploadCorrection(paper: " + paper.id + ") - TODO") 
+        //console.dir("uploadCorrection() - success ");       
+        this.dataSource = null
+        this.papersToFetch++
+        this.getPapersEmitter.emit(this.selectedAssignment.id)
       } else {
         // user pressed cancel (?)
         console.dir("uploadCorrection() - unsuccess");
@@ -171,21 +188,16 @@ export class AssigmentsComponent implements OnInit {
 
     //console.dir("this.expandedPaper: "); console.dir(this.expandedPaper)
 
-    if(this.selectedAssignment !== undefined) { 
-      this.getPapersHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, studentId: paper.student.id })
+    if(this.selectedAssignment !== undefined) {
+      this.getPaperHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, student: paper.student })
     }
     
-  }
-
-  downloadPaper(paper: Paper) {
-    console.dir("downloadPaper - TODO")
-    console.dir("paper.image: " + paper.image)
-
   }
 
   newAssignment() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "500px";
+    dialogConfig.height = "auto"
     dialogConfig.autoFocus = true;
     dialogConfig.data = { 
       emitter: this.reloadAssignmentsEmitter,
@@ -196,7 +208,24 @@ export class AssigmentsComponent implements OnInit {
   }
 
   sortData(sort: MatSort) {
+    this.sort = sort
     this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, sort)
+  }
+
+  downloadPaper(paper: Paper) {
+    console.dir('Download Paper: ' + paper.id + ' ' + paper.status)
+    console.dir('image: ')
+    console.dir(paper.image)
+    let date = new Date(paper.published)
+    this.downloadImage(paper.image, `A${this.selectedAssignment.id}_${paper.student.id}_${date.getFullYear()}${date.getMonth()}${date.getDate()}_(${paper.id})`);
+  }
+
+  downloadImage(image: any, name: string) {
+    const a = document.createElement('a'); // Create <a>
+    a.href = image; // Image Base64 Goes here
+    a.download = name; // File name Here
+    a.click(); // Downloaded file
+    a.remove();
   }
 
 }

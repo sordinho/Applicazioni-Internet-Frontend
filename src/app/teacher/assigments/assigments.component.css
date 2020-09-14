@@ -38,12 +38,10 @@ tr.paper-row:not(.expanded-row):active {
 
 .upload-button {
     margin: 0px 12px 20px 0px;
-    float: right;
 }
 
 p.status {
     color: dimgrey;
-    margin-right: 10px;
 }
 
 .mat-icon.readed {
@@ -54,13 +52,14 @@ p.status {
     color: dimgray;
 }
 
-.mat-icon.revised {
-    color: deepskyblue;
-    color: skyblue;
-    color: palegreen;
-    color: mediumseagreen
+.mat-icon.null {
+    color: dimgray;
 }
 
-.mat-icon.download {
+.mat-icon.revised {
+    color: mediumseagreen;
+}
+
+.clickable {
     cursor: pointer;
 }

@@ -1,9 +1,9 @@
 <app-assigments
     [assignments]="assignments" 
     [papers]="papers" 
-    [papersHistory]="papersHistory" 
+    [paperHistory]="paperHistory" 
 
     (getPapersEmitter)="getPapers($event)"
-    (getPapersHistoryEmitter)="getPapersHistory($event)"
+    (getPaperHistoryEmitter)="getPaperHistory($event)"
     (reloadAssignmentsEmitter)="getAssignments()">
 </app-assigments>
