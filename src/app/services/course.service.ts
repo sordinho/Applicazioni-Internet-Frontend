@@ -249,7 +249,7 @@ export class CourseService {
             .pipe(
                 catchError(err => {
                     console.error(err);
-                    return throwError(`CourseService.enrollAll error: ${err.message}`);
+                    return throwError(err);
                 })
             );
     }

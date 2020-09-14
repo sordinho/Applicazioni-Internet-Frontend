@@ -15,7 +15,7 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
   selectedStudents: Student[]
   fileStudents: Student[] = []
 
-  enrollableStudents: number // number of students in the csv file
+  enrollableStudents: number = 0 // number of students in the csv file
 
   courseId: string
 
@@ -23,8 +23,9 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
   defaultFilename = 'No file chosen'
   filename: string
 
+  fileRequiredError = false
   fileError = false
-  formatError = false
+  errorMessage: string
 
   loading = false;
 
@@ -46,7 +47,7 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
     // when the load event is fired and the file not empty
     if(files && files.length > 0) {
       // Fill file variable with the file content
-      this.fileError = false
+      this.fileRequiredError = false
       this.fileStudents = [] // clear fileStudents list
       this.enrollableStudents = 0
 
@@ -54,7 +55,7 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
       this.filename = this.file.name
 
       if(this.file.type === 'text/csv') {
-        this.formatError = false
+        this.fileError = false
 
         let reader: FileReader = new FileReader()
         reader.readAsText(this.file)
@@ -72,14 +73,14 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
             .slice(1, csv.length) // remove first (header) line
             .forEach((id:string) => {
               if(id !== '') {
-                console.dir(id)
                 this.enrollableStudents++
               } 
             })
         }
       } else {
         this.filename = this.defaultFilename
-        this.formatError = true
+        this.fileError = true
+        this.errorMessage = "Invalid file format (CSV containing only the userIds, with the header)"
       }
 
     }
@@ -96,7 +97,13 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
         },
         err => {
           this.loading = false
-          // TODO   
+          this.fileError = true
+          if(err.status === 404) {
+            this.errorMessage = "1+ students not found! Check the file and try again."
+          } else {
+            this.errorMessage = err.error
+          }
+
         }
       )
   }

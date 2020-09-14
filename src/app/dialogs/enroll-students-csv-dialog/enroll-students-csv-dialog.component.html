@@ -5,20 +5,22 @@
     <div class="upload">
         <!-- upload image -->
         <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
-            <input #fileInput type="file" style="display:none;" (change)="fileChange($event.target.files)"/> 
+            <input #fileInput type="file" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
         </button>
 
-        <span class="filename" [ngClass]="{'error': fileError}">
+        <span class="filename" [ngClass]="{'error': fileRequiredError}">
             {{filename}}
         </span>
     </div>
-    <p *ngIf="formatError" class='format-error'>Invalid file format (CSV containing only the userIds, with the header)</p>
+    <p *ngIf="fileError" class='file-error'>{{errorMessage}}</p>
 
-    <p *ngIf="fileStudents.length !== 0">{{enrollableStudents}} students in the CSV file</p>
-    <p *ngIf="file !== undefined && !formatError && fileStudents.length === 0">0 enrollable students found in the CSV file</p>
-    <mat-list-item *ngFor="let student of fileStudents">
-        {{student.id}} - {{student.firstName}} {{student.lastName}}
-    </mat-list-item>
+    <p *ngIf="!fileError && enrollableStudents !== 0">{{fileStudents.length}}/{{enrollableStudents}} valid students in the CSV file:</p>
+    <p *ngIf="file !== undefined && !fileError && enrollableStudents === 0">0 enrollable students found in the CSV file</p>
+    <ng-container *ngIf="!fileError">
+        <mat-list-item *ngFor="let student of fileStudents">
+            {{student.id}} - {{student.firstName}} {{student.lastName}}
+        </mat-list-item>
+    </ng-container>
 
 </mat-dialog-content>
 

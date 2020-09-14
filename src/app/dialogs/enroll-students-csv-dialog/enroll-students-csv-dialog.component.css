@@ -27,7 +27,7 @@
     font-weight: 300;
 }
 
-.format-error {
+.file-error {
     margin-left: 5px;
     color: red;
     font-size: small;
