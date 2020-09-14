@@ -28,6 +28,10 @@ import { Sort, MatSort } from '@angular/material/sort';
 })
 export class AssigmentsComponent implements OnInit {
 
+  @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort
+
   expandedPaper: Paper | null;
 
   status_list = [ "NULL", "READ", "DELIVERED", "REVISED" ]
@@ -45,6 +49,8 @@ export class AssigmentsComponent implements OnInit {
   _papers: Paper[]  
   _paperHistory: Paper[] = []
 
+  papersToFetch = 0 /* manage the case in which the user change the assignment during the loading phase of the previous assignment's papers */
+
   // component Input interfaces 
   @Input() set assignments(assignments: Assignment[]) {
     if(assignments !== undefined && assignments !== null) {
@@ -52,6 +58,7 @@ export class AssigmentsComponent implements OnInit {
       if(this._assignments.length>0) {
         // select last assignment as default
         this.selectedAssignment = this._assignments[this._assignments.length-1] 
+        this.papersToFetch++
         this.getPapersEmitter.emit(this.selectedAssignment.id)
       }
     }
@@ -60,14 +67,21 @@ export class AssigmentsComponent implements OnInit {
   @Input() set papers(papers: Paper[]) {
     if(papers !== undefined) {
       this._papers = papers
-      this.dataSource = new MatTableDataSource<Paper>(papers)
+      this.papersToFetch--
+      if(this.papersToFetch == 0) {
+        this.dataSource = new MatTableDataSource<Paper>(papers)
+        if(this.sort !== undefined) {
+          this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, this.sort)
+        }
+      }
+
     }
   }  
 
   /* papers history of the expanded student (papers) */ 
   @Input() set paperHistory(paperHistory: Paper[]) {
     if(paperHistory !== undefined) {
-      this._paperHistory = paperHistory
+      this._paperHistory = paperHistory      
     }
   }  
   
@@ -79,10 +93,6 @@ export class AssigmentsComponent implements OnInit {
 
   colsToDisplay = ['lastName', 'firstName', 'id', 'status', 'published', 'score']
 
-  @ViewChild('masterCheckbox') private masterCheckbox: MatCheckbox
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort
-
   constructor(private matDialog: MatDialog, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -90,7 +100,9 @@ export class AssigmentsComponent implements OnInit {
   }
 
   onSelectChange() {
-    if(this.selectedAssignment !== undefined) {      
+    if(this.selectedAssignment !== undefined) { 
+      this.papersToFetch++    
+      this.dataSource = null
       //console.dir("this.selectedAssignment: " + this.selectedAssignment.expired)
       this.getPapersEmitter.emit(this.selectedAssignment.id)
       /* reset status filter */
@@ -160,8 +172,10 @@ export class AssigmentsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       if(res) {
-        //console.dir("uploadCorrection() - success ");
-        console.dir("uploadCorrection(paper: " + paper.id + ") - TODO") 
+        //console.dir("uploadCorrection() - success ");       
+        this.dataSource = null
+        this.papersToFetch++
+        this.getPapersEmitter.emit(this.selectedAssignment.id)
       } else {
         // user pressed cancel (?)
         console.dir("uploadCorrection() - unsuccess");
@@ -174,7 +188,7 @@ export class AssigmentsComponent implements OnInit {
 
     //console.dir("this.expandedPaper: "); console.dir(this.expandedPaper)
 
-    if(this.selectedAssignment !== undefined) { 
+    if(this.selectedAssignment !== undefined) {
       this.getPaperHistoryEmitter.emit({ assignmentId: this.selectedAssignment.id, student: paper.student })
     }
     
@@ -194,6 +208,7 @@ export class AssigmentsComponent implements OnInit {
   }
 
   sortData(sort: MatSort) {
+    this.sort = sort
     this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, sort)
   }
 
