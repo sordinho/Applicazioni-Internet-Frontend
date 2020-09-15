@@ -43,7 +43,12 @@ export class GroupService {
                     var allStudents: Student[] = [];
                     if (data !== null) {
                         data._embedded.studentList.forEach((student: Student) => {
-                            let stud = new Student(student.id, student.lastName, student.firstName, student.email, student.image);
+
+                            let image = null;
+                            if (student.image != null) {
+                                image = 'data:image/jpeg;base64,' + student.image;
+                            }
+                            const stud = new Student(student.id, student.lastName, student.firstName, student.email, image);
                             // stud.status = 'ACCEPTED'
                             allStudents.push(stud);
                         });

@@ -22,7 +22,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
     courseId: string;
     courseName: string;
     userId: string;
-    courseDataFetched: boolean = false;
+    courseDataFetched: boolean;
 
     userData: User;
 

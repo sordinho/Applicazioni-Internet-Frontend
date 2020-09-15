@@ -17,7 +17,8 @@
         <mat-divider></mat-divider>
         <div mat-subheader>Members</div>
         <mat-list-item *ngFor="let member of team.members">
-            <mat-icon mat-list-icon>person</mat-icon>
+            <mat-icon *ngIf="member && member.image==null" class="round-image">person</mat-icon>
+            <img *ngIf="member && member.image!=null" class="round-image" [src]="member.image">
             <div mat-line>{{member.id}}</div>
             <div mat-line> {{member.lastName}} {{member.firstName}}</div>
         </mat-list-item>
