@@ -44,7 +44,6 @@ export class AuthService {
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - registerUser() - .tap() --> token: " + res.token);
-                    this.setSession(res);
                 }),
                 catchError(err => {
                     console.error(err);

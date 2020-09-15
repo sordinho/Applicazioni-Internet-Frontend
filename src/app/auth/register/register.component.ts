@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
 
     if(this.password.value !== this.repeatPassword.value) {
       this.registerError = true
-      this.generalErrorMessage = "passwords must be equals" 
+      this.generalErrorMessage = "passwords must be equal" 
       this.password.reset()
       this.repeatPassword.reset()
     } else if(this.id.valid && this.email.valid && this.lastName.valid && this.firstName.valid && this.password.valid && this.repeatPassword.valid && this.file !== undefined){
