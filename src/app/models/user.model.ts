@@ -1,12 +1,11 @@
-export class Student {
+export class User {
     id: string;
     lastName: string;
     firstName: string;
     email: string;
-    image: string[];
-    status: string; // temporary save here status of the student inside a group
+    image: any;
 
-    constructor(id: string, lastName: string, firstName: string, email: string, image = []) {
+    constructor(id: string, lastName: string, firstName: string, email: string, image) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;

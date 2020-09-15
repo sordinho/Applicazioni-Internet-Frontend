@@ -94,7 +94,7 @@ export class AssignmentService {
     }
 
     uploadStudentPaperImage(paperImage: any, assignmentId: string, studentId: string) {
-        return this.http.post<any>(`${this.API_PATH}/${assignmentId}/students/${studentId}/papers2`, paperImage)
+        return this.http.post<any>(`${this.API_PATH}/${assignmentId}/students/${studentId}/papers`, paperImage)
             .pipe(catchError(err => {
                 console.error(err);
                 return throwError(`AssignmentService.uploadStudentPaperImage error: ${err.message}`);

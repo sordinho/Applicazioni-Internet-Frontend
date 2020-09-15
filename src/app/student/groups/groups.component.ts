@@ -56,7 +56,9 @@ export class GroupsComponent implements OnInit {
             this.course = data;
             this.courseDataFetched = true;
         }, error => {
-            this.snackBar.open('Error getting course data. Please refresh the page', null, {duration: 5000});
+            if (error.code != '401') {
+                this.snackBar.open('Error getting course data. Please refresh the page', null, {duration: 5000});
+            }
         });
         this.dataSource = new MatTableDataSource<Student>([]);
         this.initStudentTeam();
@@ -71,6 +73,7 @@ export class GroupsComponent implements OnInit {
             this.groupService.getMembers(team.id).subscribe(data => {
                 this.team.members = data;
             }, error => {
+                if (error.code != '401')
                 this.snackBar.open('Error getting team data. Please refresh the page', null, {duration: 5000});
             });
         }, (error) => {
@@ -91,10 +94,12 @@ export class GroupsComponent implements OnInit {
                         }
                     }
                 }, error => {
+                    if (error.code != '401')
                     this.snackBar.open('Error getting proposals data. Please refresh the page', null, {duration: 5000});
                 });
             });
         }, error => {
+            if (error.code != '401')
             this.snackBar.open('Error getting proposals. Please refresh the page', null, {duration: 5000});
         });
     }
@@ -105,6 +110,7 @@ export class GroupsComponent implements OnInit {
             this.dataSource = new MatTableDataSource<Student>(filtered);
             this.studentDataFetched = true;
         }, error => {
+            if (error.code != '401')
             this.snackBar.open('Error getting available students. Please refresh the page', null, {duration: 5000});
         });
     }
@@ -119,11 +125,13 @@ export class GroupsComponent implements OnInit {
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
         this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
+
                     this.snackBar.open('New Team proposed', null, {duration: 5000});
                     this.resetTeamProposalForm();
                     this.initTeamProposals();
                 },
-                (err) => {
+                (error) => {
+                    if (error.code != '401')
                     this.snackBar.open('Error creating new proposal', null, {duration: 5000});
                 }
             );

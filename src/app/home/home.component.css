@@ -24,3 +24,14 @@ p.username {
     color: #3F51B5 !important;
     background-color: #f2f4ff !important;
 }
+
+.round-image {
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    display: block;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    margin-right: 20px;
+}

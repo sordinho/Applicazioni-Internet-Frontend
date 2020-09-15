@@ -1,75 +1,81 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="toggleForMenuClick()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  &nbsp;&nbsp;
-  <a class="home-link" routerLink="/courses">VirtualLabs</a>
-  <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
-  <p class="username">{{ _userId }}</p>
-  <button mat-button (click)="logout()">Logout</button>
+    <button mat-icon-button (click)="toggleForMenuClick()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    &nbsp;&nbsp;
+    <a class="home-link" routerLink="/courses">VirtualLabs</a>
+    <span class="fill-remaining-space"></span> <!-- This fills the remaining space of the current row -->
+    <img *ngIf="_userData && _userData.image!=null" class="round-image" [src]="_userData.image">
+    <p class="username">{{ _userId }}</p>
+    <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>
-  
-<mat-toolbar *ngIf="_courseSelected"> 
-  {{ _courseName }}
+
+<mat-toolbar *ngIf="_courseSelected">
+    {{ _courseName }}
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav mode="side" opened position="start" #sidenav>
-    <mat-nav-list>
+    <mat-sidenav mode="side" opened position="start" #sidenav>
+        <mat-nav-list>
 
-      <mat-list-item class="list-item" *ngFor="let course of _courses" [routerLink]="['/courses/' + course.id]" routerLinkActive="active-list-item">
-        <span mat-line>{{ course.name }}</span>
-        &nbsp;
-        <button mat-icon-button *ngIf="_isTeacher" class="menu-button" [matMenuTriggerFor]="menu" (click)="openMenu($event, course.id)">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-      </mat-list-item>
+            <mat-list-item class="list-item" *ngFor="let course of _courses" [routerLink]="['/courses/' + course.id]"
+                           routerLinkActive="active-list-item">
+                <span mat-line>{{ course.name }}</span>
+                &nbsp;
+                <button mat-icon-button *ngIf="_isTeacher" class="menu-button" [matMenuTriggerFor]="menu"
+                        (click)="openMenu($event, course.id)">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </mat-list-item>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngIf="!courseMenuEnabled" (click)="enableCourseEmitter.emit(courseMenu)">
-          <mat-icon>link</mat-icon>
-          <span>Enable</span>
-        </button>
-        <button mat-menu-item *ngIf="courseMenuEnabled" (click)="disableCourseEmitter.emit(courseMenu)">
-          <mat-icon>link_off</mat-icon>
-          <span>Disable</span>
-        </button>
-        <button mat-menu-item (click)="editCourse()">
-          <mat-icon>edit</mat-icon>
-          <span>Edit</span>
-        </button>
-        <button mat-menu-item (click)="deleteCourse()">
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
-    
-      <mat-list-item *ngIf="_isTeacher" class="list-header" (click)="addCourse()">
-        <button mat-icon-button class="add-course-button">
-          <mat-icon>add</mat-icon>
-        </button>
-        Create new course 
-      </mat-list-item>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item *ngIf="!courseMenuEnabled" (click)="enableCourseEmitter.emit(courseMenu)">
+                    <mat-icon>link</mat-icon>
+                    <span>Enable</span>
+                </button>
+                <button mat-menu-item *ngIf="courseMenuEnabled" (click)="disableCourseEmitter.emit(courseMenu)">
+                    <mat-icon>link_off</mat-icon>
+                    <span>Disable</span>
+                </button>
+                <button mat-menu-item (click)="editCourse()">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteCourse()">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                </button>
+            </mat-menu>
 
-    </mat-nav-list>
-  </mat-sidenav>
+            <mat-list-item *ngIf="_isTeacher" class="list-header" (click)="addCourse()">
+                <button mat-icon-button class="add-course-button">
+                    <mat-icon>add</mat-icon>
+                </button>
+                Create new course
+            </mat-list-item>
 
-  <mat-sidenav-content>
-    <nav mat-tab-nav-bar>
-      <a mat-tab-link
-        [disabled]='!_courseSelected'
-        *ngFor="let link of navLinks"
-        [routerLink]="[link.path]"
-        routerLinkActive #rla="routerLinkActive"
-        [active]="rla.isActive">
-        {{link.label}}
-      </a>
-    </nav>
+        </mat-nav-list>
+    </mat-sidenav>
 
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
+    <mat-sidenav-content>
+        <nav mat-tab-nav-bar *ngIf="_courses.length>0">
+            <a mat-tab-link
+               [disabled]='!_courseSelected'
+               *ngFor="let link of navLinks"
+               [routerLink]="[link.path]"
+               routerLinkActive #rla="routerLinkActive"
+               [active]="rla.isActive">
+                {{link.label}}
+            </a>
+        </nav>
 
-  </mat-sidenav-content>
+        <mat-progress-spinner *ngIf="!_courseDataFetched" mode="indeterminate" diameter="75" strokeWidth="5"
+                              style="margin: 50px auto;"></mat-progress-spinner>
+        <div class="container">
+            <h1 *ngIf="_courses.length===0 && _courseDataFetched">You're not enrolled in any course</h1>
+            <router-outlet></router-outlet>
+        </div>
+
+    </mat-sidenav-content>
 
 </mat-sidenav-container>

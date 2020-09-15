@@ -3,6 +3,7 @@ import {Observable, throwError} from 'rxjs';
 import {Course} from '../models/course.model';
 import {HttpHeaders, HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
+import {User} from '../models/user.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -37,6 +38,22 @@ export class TeacherService {
                         });
                     }
                     return courses;
+                })
+            );
+    }
+
+    queryTeacherData(teacherId: string): Observable<User> {
+        return this.http.get<any>(`${this.API_PATH}/${teacherId}`)
+            .pipe(
+                catchError(err => {
+                    console.error('CODE: ' + err.status);
+                    return throwError(`TeacherService.queryTeacherData error: ${err.message}`);
+                }), map(data => {
+                    let image = null;
+                    if (data.image != null) {
+                        image = 'data:image/jpeg;base64,' + data.image;
+                    }
+                    return new User(data.id, data.lastName, data.firstName, data.email, image);
                 })
             );
     }

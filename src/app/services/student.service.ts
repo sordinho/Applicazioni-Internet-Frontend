@@ -10,6 +10,7 @@ import {Resources} from '../models/resources.model';
 import {Course} from '../models/course.model';
 import {Team} from '../models/team.model';
 import {Paper} from '../models/paper.model';
+import {User} from '../models/user.model';
 
 
 const httpOptions = {
@@ -163,6 +164,22 @@ export class StudentService {
                         });
                     }
                     return papers;
+                })
+            );
+    }
+
+    queryStudentData(studentId: string): Observable<User> {
+        return this.http.get<any>(`${this.API_PATH}/${studentId}`)
+            .pipe(
+                catchError(err => {
+                    console.error('CODE: ' + err.status);
+                    return throwError(`StudentService.queryStudentData error: ${err.message}`);
+                }), map(data => {
+                    let image = null;
+                    if (data.image != null) {
+                        image = 'data:image/jpeg;base64,' + data.image;
+                    }
+                    return new User(data.id, data.lastName, data.firstName, data.email, image);
                 })
             );
     }

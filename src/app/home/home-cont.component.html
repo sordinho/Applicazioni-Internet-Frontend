@@ -1,12 +1,14 @@
-<app-home 
-    [courses]="allCourses" 
-    [userId]="username"
-    [isTeacher]="userRole" 
-    [courseName]="courseName"
-    
-    (reloadCoursesEmitter)="getAllCourses()"
-    (deleteCourseEmitter)="delelteCourse($event)"
-    (enableCourseEmitter)="enableCourse($event)"
-    (disableCourseEmitter)="disableCourse($event)"
-    (logoutEmitter)="logout()" >
+<app-home
+        [courses]="allCourses"
+        [userId]="username"
+        [isTeacher]="userRole"
+        [courseName]="courseName"
+        [userData]="userData"
+        [courseDataFetched]="courseDataFetched"
+
+        (reloadCoursesEmitter)="getAllCourses()"
+        (deleteCourseEmitter)="delelteCourse($event)"
+        (enableCourseEmitter)="enableCourse($event)"
+        (disableCourseEmitter)="disableCourse($event)"
+        (logoutEmitter)="logout()">
 </app-home>
