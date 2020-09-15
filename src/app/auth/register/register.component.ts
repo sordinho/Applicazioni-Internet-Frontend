@@ -60,6 +60,8 @@ export class RegisterComponent implements OnInit {
   registerError = false;
   redirectUrl: string;
 
+  success = false
+
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.redirectUrl = this.route.snapshot.queryParams['redirect_to'] || '/';
 
@@ -95,14 +97,16 @@ export class RegisterComponent implements OnInit {
       this.password.reset()
       this.repeatPassword.reset()
     } else if(this.id.valid && this.email.valid && this.lastName.valid && this.firstName.valid && this.password.valid && this.repeatPassword.valid && this.file !== undefined){
-      this.loading = true;
+      this.loading = true
 
       //console.dir("id: " + this.id.value + " email: " + this.email.value + " lastName: " + this.lastName.value + " fistName: " + this.firstName.value + " password: " + this.password.value + " repeatPassword: " + this.repeatPassword.value)
       this.authService.registerUser(new UserInformation(this.id.value, this.email.value, this.lastName.value, this.firstName.value, this.password.value, this.repeatPassword.value), this.file)
                       .subscribe(
                         suc => {
                           //console.dir("LoginComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);
-                          this.router.navigate([this.redirectUrl]);
+                          this.loading = false
+                          this.success = true
+                          // this.router.navigate([this.redirectUrl]);
                         },
                         err => {
                           //console.dir(".subscribe (error) - result.accessToken: " + err.accessToken);
