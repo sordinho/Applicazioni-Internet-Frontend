@@ -1,61 +1,86 @@
 <mat-card class="home-card mat-elevation-z6">    
     
     <mat-card-content>
-        <h2 class="center">Create an account</h2>
-        <p *ngIf="loginError" class="error">Please check the email address and password and try again.</p>
-        
-        <!-- id -->
-        <mat-form-field class="full-width" appearance="standard">
-            <mat-label>Id</mat-label>
-            <input matInput [formControl]="id">
-            <mat-error>{{ getIdErrorMessage() }}</mat-error>
-        </mat-form-field>
 
-        <!-- email -->
-        <mat-form-field class="full-width" appearance="standard">
-            <mat-label>Email</mat-label>
-            <input matInput [formControl]="email">
-            <mat-error>{{ getEmailErrorMessage() }}</mat-error>
-        </mat-form-field>
-        
-        <!-- last name -->
-        <mat-form-field class="full-width" appearance="standard">
-            <mat-label>Last Name</mat-label>
-            <input matInput [formControl]="lastName">
-            <mat-error>{{ getLastNameErrorMessage() }}</mat-error>
-        </mat-form-field>
+        <div *ngIf="!success"> 
+            <!-- insert data for sign up -->
+            <h2 class="center">Create an account</h2>
+            <p *ngIf="registerError" class="error">{{generalErrorMessage}}</p>
+            
+            <!-- id -->
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Id</mat-label>
+                <input matInput [formControl]="id">
+                <mat-error>{{ getIdErrorMessage() }}</mat-error>
+            </mat-form-field>
 
-        <!-- first name -->
-        <mat-form-field class="full-width" appearance="standard">
-            <mat-label>First Name</mat-label>
-            <input matInput [formControl]="firstName">
-            <mat-error>{{ getFirstNameErrorMessage() }}</mat-error>
-        </mat-form-field>
+            <!-- email -->
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Email</mat-label>
+                <input matInput [formControl]="email">
+                <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+            </mat-form-field>
 
-        <!-- password -->
-        <mat-form-field class="full-width" appearance="standard">
-            <mat-label>Password</mat-label>
-            <input matInput [formControl]="password" type="password">
-            <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
-        </mat-form-field>
+            <!-- upload image -->
+            <p class="user-image">Image</p>
+            <div class="upload">
+                <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
+                    <input #fileInput type="file" accept="image/jpeg, image/png" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
+                </button>
 
-        <!-- repeat password -->
-        <mat-form-field class="full-width" appearance="standard">
-            <mat-label>Repeat Password</mat-label>
-            <input matInput [formControl]="repeatPassword" type="password">
-            <mat-error>{{ getRepeatPasswordErrorMessage() }}</mat-error>
-        </mat-form-field>
+                <span class="filename">
+                    {{filename}}
+                </span>
+            </div>
+            <p *ngIf="fileError" class='file-error'>{{errorMessage}}</p>
+            
+            <!-- last name -->
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Last Name</mat-label>
+                <input matInput [formControl]="lastName">
+                <mat-error>{{ getLastNameErrorMessage() }}</mat-error>
+            </mat-form-field>
 
+            <!-- first name -->
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>First Name</mat-label>
+                <input matInput [formControl]="firstName">
+                <mat-error>{{ getFirstNameErrorMessage() }}</mat-error>
+            </mat-form-field>
+
+            <!-- password -->
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Password</mat-label>
+                <input matInput [formControl]="password" type="password">
+                <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+            </mat-form-field>
+
+            <!-- repeat password -->
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Repeat Password</mat-label>
+                <input matInput [formControl]="repeatPassword" type="password">
+                <mat-error>{{ getRepeatPasswordErrorMessage() }}</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div *ngIf="success">
+            <!-- confirm email message -->
+            <h2 class="center">Great! You've successfully signed up.</h2>
+            <p class="center">We've sent you a link to confirm your email address. Please check your inbox.</p>
+        </div>
 
     </mat-card-content>
 
-    <mat-card-actions>
-        <button mat-raised-button [disabled]="loading" color="primary" class="full-width" (click)="register()">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-            Continue</button>
+    <mat-card-actions *ngIf="!success">
+        <button mat-raised-button [disabled]="loading" color="primary" class="full-width" (click)="register()" style="height: 40px;">
+            <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="30" strokeWidth="3" style="margin: 5px auto;"></mat-progress-spinner>
+            <span *ngIf="!loading">Continue</span></button>
     </mat-card-actions>
 
     <!-- Login -->
-    <p><a class="login-link" routerLink="/login">Already have an account?</a></p>
+    <p *ngIf="!success"><a class="login-link" routerLink="/login">Already have an account?</a></p>
+
+    <p *ngIf="success"><a class="login-link" routerLink="/login">Go to login</a></p>
 
 </mat-card>

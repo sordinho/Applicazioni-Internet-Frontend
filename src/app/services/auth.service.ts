@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map, tap, shareReplay} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {map, tap, shareReplay, catchError} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
 import * as moment from 'moment';
 import {Router} from '@angular/router';
 
@@ -25,14 +25,31 @@ export class AuthService {
             );
     }
 
-    registerUser(userInformation: UserInformation): Observable<any> {
-        return this.http.post<any>(`${this.API_PATH}/sign-up`, userInformation)
+    registerUser(userInformation: UserInformation, file: File): Observable<any> {
+        let body = new FormData()
+        const user = {
+            id: userInformation.id,
+            email: userInformation.email,
+            lastName: userInformation.lastName,
+            firstName: userInformation.firstName,
+            password: userInformation.password,
+            repeatPassword: userInformation.repeatPassword
+        }  
+        const blobUser = new Blob([JSON.stringify(user)], {type: 'application/json',})
+        
+        body.append('user', blobUser)
+        body.append('image', file)
+
+        return this.http.post<any>(`${this.API_PATH}/sign-up`, body)
             .pipe(
                 tap(res => {
                     //console.dir("AuthService - registerUser() - .tap() --> token: " + res.token);
-                    this.setSession(res);
                 }),
-                shareReplay()
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`AuthService.registerUser error: ${err.message}`);
+                }),
+                shareReplay(),
             )
     }
 
@@ -108,7 +125,7 @@ export class UserInformation {
 
     constructor(id: string, email: string, lastName: string, firstName: string, password: string, repeatPassword: string) {
         this.id = id
-        this,email = email
+        this.email = email
         this.lastName = lastName
         this.firstName = firstName
         this.password = password

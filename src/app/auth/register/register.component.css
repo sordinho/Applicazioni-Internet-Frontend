@@ -1,7 +1,7 @@
 .home-card {
     max-width: 350px;
     margin: auto;
-    margin-top: 15%;
+    margin-top: 50px;
     padding: 40px;
 }
 
@@ -28,3 +28,40 @@ a.login-link {
 a.login-link:visited {
     color: #3F51B5;
 } 
+
+
+.user-image {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: dimgray;
+}
+
+.upload {
+    width: auto;
+    border: 1px solid #cacaca;
+    border-radius: 5px;
+
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    padding-right: 15px;
+    margin-bottom: 10px;
+}
+
+.file-button {
+    border-right: 1px solid #cacaca;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    color: #3F51B5;
+}
+
+.filename {
+    margin: 0px 10px;
+    color: dimgray;
+}
+
+.file-error {
+    margin-left: 5px;
+    color: red;
+    font-size: small;
+}
