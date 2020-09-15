@@ -55,6 +55,8 @@ export class GroupsComponent implements OnInit {
         this.courseService.find(this.courseId).subscribe((data) => {
             this.course = data;
             this.courseDataFetched = true;
+        }, error => {
+            this.snackBar.open('Error getting course data. Please refresh the page', null, {duration: 5000});
         });
         this.dataSource = new MatTableDataSource<Student>([]);
         this.initStudentTeam();
@@ -68,9 +70,11 @@ export class GroupsComponent implements OnInit {
             console.log('Team: ' + team);
             this.groupService.getMembers(team.id).subscribe(data => {
                 this.team.members = data;
+            }, error => {
+                this.snackBar.open('Error getting team data. Please refresh the page', null, {duration: 5000});
             });
         }, (error) => {
-            console.log('No team found initilize proposals');
+            // console.log('No team found initilize proposals');
             this.initTeamProposals();
         });
     }
@@ -86,8 +90,12 @@ export class GroupsComponent implements OnInit {
                             team.proposer = student;
                         }
                     }
+                }, error => {
+                    this.snackBar.open('Error getting proposals data. Please refresh the page', null, {duration: 5000});
                 });
             });
+        }, error => {
+            this.snackBar.open('Error getting proposals. Please refresh the page', null, {duration: 5000});
         });
     }
 
@@ -96,6 +104,8 @@ export class GroupsComponent implements OnInit {
             let filtered: Student[] = data.filter((s: Student) => s.id != this.authService.getUserId());
             this.dataSource = new MatTableDataSource<Student>(filtered);
             this.studentDataFetched = true;
+        }, error => {
+            this.snackBar.open('Error getting available students. Please refresh the page', null, {duration: 5000});
         });
     }
 
@@ -124,7 +134,7 @@ export class GroupsComponent implements OnInit {
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0
             || this.expiryProposal === null || this.expiryProposal.value === ''
             || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid()
-            || this.selectionModel.selected.length + 1 < this.course.min || this.selectionModel.selected.length > this.course.max;
+            || this.selectionModel.selected.length + 1 < this.course.min || this.selectionModel.selected.length + 1 > this.course.max;
     }
 
     resetTeamProposalForm() {

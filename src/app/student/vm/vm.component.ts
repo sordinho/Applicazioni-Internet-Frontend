@@ -46,7 +46,7 @@ export class VmComponent implements OnInit {
                 private courseService: CourseService, private vmModelService: VmModelService, private configurationService: ConfigurationService,
                 private authService: AuthService,
                 private route: ActivatedRoute,
-                private shareDialog: MatDialog, private createVmDialog: MatDialog, private _snackBar: MatSnackBar) {
+                private shareDialog: MatDialog, private createVmDialog: MatDialog, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -80,6 +80,8 @@ export class VmComponent implements OnInit {
                     this.vmModel = data;
                 });
             }
+        }, error => {
+            this.snackBar.open('Unable to fetch course data. Please refresh the page', null, {duration: 5000});
         });
     }
 
@@ -94,6 +96,8 @@ export class VmComponent implements OnInit {
                 this.configurationService.getConfigurationByLink(this.team.configurationLink).subscribe((data) => {
                         this.configuration = data;
                         this.teamHasConfigValid = true;
+                    }, error => {
+                        this.snackBar.open('Unable to fetch resources data. Please refresh the page', null, {duration: 5000});
                     }
                 );
                 this.initVmsData();
@@ -122,12 +126,14 @@ export class VmComponent implements OnInit {
             // get owners info about all the vms
             this.vms.forEach((vm) => {
                 this.vmService.getVmOwners(vm.id)
-                    .subscribe((data) => {
-                        vm.owners = data;
+                    .subscribe((students) => {
+                        vm.owners = students;
                         this.vmDataFetched++;
                         console.log('owner: ' + vm.owners);
                     });
             });
+        }, error => {
+            this.snackBar.open('Unable to fetch VMs data. Please refresh the page', null, {duration: 5000});
         });
     }
 
@@ -143,11 +149,11 @@ export class VmComponent implements OnInit {
     deleteVM(vm: Vm) {
         console.log('Delete vm: ' + vm.id);
         this.vmService.deleteVm(vm.id).subscribe(() => {
-            this._snackBar.open('Vm ' + vm.id + ' Deleted', null, {duration: 5000});
+            this.snackBar.open('Vm ' + vm.id + ' Deleted', null, {duration: 5000});
             this.refreshTeamResources();
             this.initVmsData();
         }, error => {
-            this._snackBar.open('Error deleting vm ' + vm.id, null, {duration: 5000});
+            this.snackBar.open('Error deleting vm ' + vm.id, null, {duration: 5000});
             this.refreshTeamResources();
             this.initVmsData();
         });
@@ -168,7 +174,7 @@ export class VmComponent implements OnInit {
             vm.status = 'ON';
             this.refreshTeamResources();
         }, error => {
-            this._snackBar.open('Error starting vm ' + vm.id, null, {duration: 5000});
+            this.snackBar.open('Error starting vm ' + vm.id, null, {duration: 5000});
         });
     }
 
@@ -182,6 +188,9 @@ export class VmComponent implements OnInit {
         }).afterClosed().subscribe((res) => {
             if (res === 'OK') {
                 this.initVmsData();
+                this.snackBar.open('Vm shared', null, {duration: 5000});
+            } else {
+                this.snackBar.open('Error sharing vm', null, {duration: 5000});
             }
             console.log('CLOSED');
         });
@@ -208,6 +217,9 @@ export class VmComponent implements OnInit {
             if (res === 'OK') {
                 this.refreshTeamResources();
                 this.initVmsData();
+                this.snackBar.open('Vm created', null, {duration: 5000});
+            } else {
+                this.snackBar.open('Error creating vm', null, {duration: 5000});
             }
             console.log('CLOSED');
         });
@@ -232,6 +244,9 @@ export class VmComponent implements OnInit {
             if (res === 'OK') {
                 this.refreshTeamResources();
                 this.initVmsData();
+                this.snackBar.open('Vm updated', null, {duration: 5000});
+            } else {
+                this.snackBar.open('Error updating vm', null, {duration: 5000});
             }
             console.log('CLOSED');
         });

@@ -10,8 +10,13 @@
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 
+<div *ngIf="allDataFetched && !vmModel">
+    <br>
+    <h2>The teacher didn't set a VM model yet</h2>
+</div>
 
-<div *ngIf="teamFetched && team.id!=='-1'">
+
+<div *ngIf="teamFetched && team.id!=='-1' && vmModel">
     <br>
 
     <div *ngIf="team.resources">
