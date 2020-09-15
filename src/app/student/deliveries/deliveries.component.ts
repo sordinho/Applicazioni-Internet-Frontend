@@ -8,6 +8,7 @@ import {ActivatedRoute} from '@angular/router';
 import {StudentService} from '../../services/student.service';
 import {AuthService} from '../../services/auth.service';
 import {AssignmentService} from '../../services/assignment.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class DeliveriesComponent implements OnInit {
     uploadButtonDisabled = true;
 
     constructor(private courseService: CourseService, private studentService: StudentService, private assignmentService: AssignmentService,
-                private authService: AuthService, private route: ActivatedRoute) {
+                private authService: AuthService, private route: ActivatedRoute, private snackbar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -50,21 +51,27 @@ export class DeliveriesComponent implements OnInit {
             this.dataSource = new MatTableDataSource<Assignment>(assignments);
 
             let assignmentCounter = 0;
-            assignments.forEach((assignment) => {
-                console.log(assignment);
-                this.uploadEnabled.set(assignment.id, true);
-                this.studentService.getPapersByAssignment(this.authService.getUserId(), assignment.id).subscribe((paperList) => {
-                    console.log(paperList);
-                    this.papers.set(assignment.id, paperList);
-                    paperList.forEach((p) => {
-                        if (!p.flag) {
-                            this.uploadEnabled.set(assignment.id, false);
-                        }
+            if (assignments.length === 0) {
+                this.dataFetched = true;
+            } else {
+                assignments.forEach((assignment) => {
+                    console.log(assignment);
+                    this.uploadEnabled.set(assignment.id, true);
+                    this.studentService.getPapersByAssignment(this.authService.getUserId(), assignment.id).subscribe((paperList) => {
+                        console.log(paperList);
+                        this.papers.set(assignment.id, paperList);
+                        paperList.forEach((p) => {
+                            if (!p.flag) {
+                                this.uploadEnabled.set(assignment.id, false);
+                            }
+                        });
+                        assignmentCounter++;
+                        this.dataFetched = assignmentCounter === assignments.length;
                     });
-                    assignmentCounter++;
-                    this.dataFetched = assignmentCounter === assignments.length;
                 });
-            });
+            }
+        }, error => {
+            this.snackbar.open('Error fetching assignments', null, {duration: 5000});
         });
     }
 
@@ -102,8 +109,10 @@ export class DeliveriesComponent implements OnInit {
         this.assignmentService.uploadStudentPaperImage(paperImageData, assignment.id, this.authService.getUserId()).subscribe(data => {
             console.log('OK');
             this.initAssignments();
+            this.snackbar.open('Paper uploaded', null, {duration: 5000});
         }, error => {
             console.log('FAIL');
+            this.snackbar.open('Error uploading paper', null, {duration: 5000});
         });
 
     }

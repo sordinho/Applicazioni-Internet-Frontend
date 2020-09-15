@@ -2,7 +2,12 @@
 <br><br>
 <mat-progress-bar mode="indeterminate" *ngIf="!dataFetched"></mat-progress-bar>
 <div *ngIf="dataFetched">
-    <table mat-table
+
+    <div *ngIf="dataSource.data.length===0">
+        <h2>There are no assignments</h2>
+    </div>
+
+    <table mat-table *ngIf="dataSource.data.length>0"
            [dataSource]="dataSource" multiTemplateDataRows
            class="mat-elevation-z8">
 

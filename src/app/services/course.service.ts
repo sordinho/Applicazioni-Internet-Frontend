@@ -186,7 +186,6 @@ export class CourseService {
             .get<any>(`${this.API_PATH}/${courseId}/assignments`)
             .pipe(
                 catchError(err => {
-                    console.error(JSON.stringify(err));
                     return throwError(`CourseService.queryAllAssignments error: ${err}`);
                 }),
                 map(data => {
