@@ -2,7 +2,7 @@
     
     <mat-card-content>
         <h2 class="center">Create an account</h2>
-        <p *ngIf="loginError" class="error">Please check the email address and password and try again.</p>
+        <p *ngIf="registerError" class="error">{{generalErrorMessage}}</p>
         
         <!-- id -->
         <mat-form-field class="full-width" appearance="standard">
@@ -17,6 +17,19 @@
             <input matInput [formControl]="email">
             <mat-error>{{ getEmailErrorMessage() }}</mat-error>
         </mat-form-field>
+
+        <!-- upload image -->
+        <p class="user-image">Image</p>
+        <div class="upload">
+            <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
+                <input #fileInput type="file" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
+            </button>
+
+            <span class="filename">
+                {{filename}}
+            </span>
+        </div>
+        <p *ngIf="fileError" class='file-error'>{{errorMessage}}</p>
         
         <!-- last name -->
         <mat-form-field class="full-width" appearance="standard">
