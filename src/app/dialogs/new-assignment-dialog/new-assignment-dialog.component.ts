@@ -26,6 +26,8 @@ export class NewAssignmentDialogComponent implements OnInit {
 
   error = false
 
+  loading = false;
+
   emitter: EventEmitter<void>
 
   courseId: string
@@ -66,16 +68,19 @@ export class NewAssignmentDialogComponent implements OnInit {
         return
       }
       // all fields are valid
+      this.loading = true
       this.courseService.addAssignment(this.courseId, this.expireDate.value, this.file)
             .subscribe(
               succ => {
                 // console.dir("course " + createdCourse.id + " created successfully - owner: " + createdCourse.teacherId)
                 this.emitter.emit()
+                this.loading = false
                 this.dialogRef.close()
               },
               err => {
                 // console.dir("addCourse (error) - err: " + err)
-                this.error = true   
+                this.error = true                             
+                this.loading = false
               }
             )
     }

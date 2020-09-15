@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit {
     }
 
     @Input() set courseDataFetched(courseDataFetched: boolean) {
-        console.log(courseDataFetched);
         this._courseDataFetched = courseDataFetched;
     }
 

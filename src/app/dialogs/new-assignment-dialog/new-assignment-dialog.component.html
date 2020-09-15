@@ -31,6 +31,9 @@
 <br>
 
 <mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="addAssignment()">Add</button>
+  <button mat-button [disabled]="loading" (click)="cancel()">Cancel</button>
+  <button mat-raised-button [disabled]="loading" color="primary" (click)="addAssignment()" style="height: 40px;">
+    <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="30" strokeWidth="3" style="margin: 5px auto;"></mat-progress-spinner>
+    <span *ngIf="!loading">Add</span></button>
+
 </mat-dialog-actions>
