@@ -1,18 +1,25 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {AuthService} from '../services/auth.service';
-import {state} from '@angular/animations';
+import { Course } from '../models/course.model';
+import { StudentService } from '../services/student.service';
+import { TeacherService } from '../services/teacher.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, OnInit {
 
-    constructor(private authService: AuthService, private router: Router) {
+
+    constructor(private authService: AuthService, private router: Router, private studentService: StudentService, private teacherService: TeacherService) {
     }
 
-    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    ngOnInit(): void  {
+        
+    }
+
+    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         let url: string = state.url;
         //console.dir("AuthGuard - canActivate() - checkLogin(" + url + ") --> " + this.checkLogin(url));
 
@@ -22,14 +29,20 @@ export class AuthGuard implements CanActivate {
             if (courseId === null) {
                 return true;
             }
+            
+            const userRole = this.authService.getRole()
+            const userId = this.authService.getUserId()
+            const service = userRole === "ROLE_STUDENT" ? this.studentService : this.teacherService 
 
-            // TODO tmp solution --> always true -> check if the course in the link exists in the db
-            if (courseId === 'PdS' || courseId === 'AI' || courseId === 'MAD' || true) {
-                return true;
-            } else {
-                this.router.navigate(['/courses']);
-                return false;
-            }
+            return new Observable<boolean>(obs => service.queryCourses(userId).subscribe((data) => {
+                                                                        if (data.find(course => course.id === courseId) !== undefined) {
+                                                                            return obs.next(true);
+                                                                        } else {
+                                                                            this.router.navigate(['/courses']);
+                                                                            return obs.next(false);
+                                                                        }
+
+                                                                    }))
         }
 
         //console.dir("AuthGuard - url = " + url);
