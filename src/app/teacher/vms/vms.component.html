@@ -4,7 +4,7 @@
     <h5 *ngIf="!vmModel">First of all define the course's VM Model</h5>
     <mat-form-field>
         <mat-label>OS</mat-label>
-        <mat-select [disabled]="!editModel" [formControl]="osTypeSelect" required>
+        <mat-select [formControl]="osTypeSelect" required>
             <mat-option *ngFor="let osType of osTypes" value="{{osType.id}}"
                         (onSelectionChange)="osModelSelected=true">{{osType.os}}</mat-option>
         </mat-select>

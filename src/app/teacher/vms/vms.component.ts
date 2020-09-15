@@ -44,7 +44,12 @@ export class VmsComponent implements OnInit {
     diskLimit = new FormControl();
     activesLimit = new FormControl();
     maxLimit = new FormControl();
-    osTypeSelect = new FormControl();
+    osTypeSelect = new FormControl(
+        {
+            value: '', 
+            disabled: true
+        },
+    );
     minCpuLimit = new FormControl();
     minRamLimit = new FormControl();
     minDiskLimit = new FormControl();
@@ -318,6 +323,7 @@ export class VmsComponent implements OnInit {
 
     saveModel() {
         this.editModel = false;
+        this.osTypeSelect.disable()
         this.osModelSelected = false;
         // console.log(this.osTypeSelect);
 
@@ -350,6 +356,7 @@ export class VmsComponent implements OnInit {
 
     enableEditModel() {
         this.editModel = true;
+        this.osTypeSelect.enable()
     }
 
 }
