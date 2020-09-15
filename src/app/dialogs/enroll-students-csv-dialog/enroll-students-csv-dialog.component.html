@@ -5,7 +5,7 @@
     <!-- upload image -->
     <div class="upload">
         <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
-            <input #fileInput type="file" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
+            <input #fileInput type="file" accept="image/jpeg, image/png" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
         </button>
 
         <span class="filename" [ngClass]="{'error': fileRequiredError}">
