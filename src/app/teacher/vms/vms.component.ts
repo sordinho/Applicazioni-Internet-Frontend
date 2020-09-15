@@ -325,6 +325,7 @@ export class VmsComponent implements OnInit {
         if (this.vmModel == null) {
             this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
                     // console.log('CREATED VMMODEL');
+                    this.vmModel = data;
                     this.snackBar.open('Model Saved', null, {duration: 5000});
                 }, error => {
                     this.snackBar.open('Error creating Model, please retry', null, {duration: 5000});
@@ -332,8 +333,9 @@ export class VmsComponent implements OnInit {
             );
         } else if (this.osTypeSelect.value !== this.vmModel.id) {
             this.vmModelService.deleteVmModel(this.vmModel.uniqueId).subscribe(data => {
-                this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(data => {
+                this.vmModelService.createVmModel(this.course.id, this.osTypeSelect.value).subscribe(newModel => {
                         // console.log('UPDATED VMMODEL');
+                        this.vmModel = newModel;
                         this.snackBar.open('Model Updated', null, {duration: 5000});
                     }, error => {
                         this.snackBar.open('Error updating Model, please retry', null, {duration: 5000});

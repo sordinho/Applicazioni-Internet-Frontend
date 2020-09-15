@@ -67,12 +67,17 @@ export class VmModelService {
                 }));
     }
 
-    createVmModel(courseId: string, os: string): Observable<any> {
+    createVmModel(courseId: string, os: string): Observable<VmModel> {
         return this.http.post<any>(`${this.API_PATH}`, {os, courseId})
             .pipe(
                 catchError(err => {
                     console.error(err);
                     return throwError(`VmModelService.createVmModel error: ${err.message}`);
+                }),
+                map(data => {
+                    let model = new VmModel(data.os);
+                    model.uniqueId = data.id;
+                    return model;
                 }));
 
     }
