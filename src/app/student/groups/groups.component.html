@@ -1,125 +1,125 @@
 <div *ngIf="!(dataReady && team!==null) && !allDataFetched()">
-	<br>
-	<br>
-	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <br>
+    <br>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 
 <!-- Group information-->
 <div *ngIf="dataReady && team!==null">
-	<h3>Your group</h3>
-	<br>
-	<mat-list style="width: fit-content">
-		<div mat-subheader>Name</div>
-		<mat-list-item>
-			<mat-icon mat-list-icon>class</mat-icon>
-			<div mat-line>{{team.name}}</div>
-		</mat-list-item>
-		<mat-divider></mat-divider>
-		<div mat-subheader>Members</div>
-		<mat-list-item *ngFor="let member of team.members">
-			<mat-icon mat-list-icon>person</mat-icon>
-			<div mat-line>{{member.id}}</div>
-			<div mat-line> {{member.lastName}} {{member.firstName}}</div>
-		</mat-list-item>
-	</mat-list>
+    <h3>Your group</h3>
+    <br>
+    <mat-list style="width: fit-content">
+        <div mat-subheader>Name</div>
+        <mat-list-item>
+            <mat-icon mat-list-icon>class</mat-icon>
+            <div mat-line>{{team.name}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <div mat-subheader>Members</div>
+        <mat-list-item *ngFor="let member of team.members">
+            <mat-icon mat-list-icon>person</mat-icon>
+            <div mat-line>{{member.id}}</div>
+            <div mat-line> {{member.lastName}} {{member.firstName}}</div>
+        </mat-list-item>
+    </mat-list>
 </div>
 
 <!-- Group creation/proposal-->
 <!--<div *ngIf="dataReady && team===null">-->
 <div *ngIf="allDataFetched() && team===null">
-	<div>
-		<h3>Propose Group</h3>
-		<h5>You're automatically added to a new proposed group</h5>
-		<mat-divider></mat-divider>
-		<mat-grid-list cols="2" rowHeight="50px">
-			<mat-grid-tile>Min members: {{course.min}} &nbsp;
-				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length +1 >= course.min">done</mat-icon>
-			</mat-grid-tile>
-			<mat-grid-tile>Max members: {{course.max}} &nbsp;
-				<mat-icon mat-list-icon *ngIf="selectionModel.selected.length <= course.max">done</mat-icon>
-			</mat-grid-tile>
-		</mat-grid-list>
-		<mat-divider></mat-divider>
-		<br>
-		<div>
-			<mat-form-field style="width: 50%">
-				<mat-label>Group Name</mat-label>
-				<input [formControl]="proposedGroupName" matInput type="text" required>
-			</mat-form-field>
-			&nbsp;&nbsp;
-			<mat-form-field style="width: 20%">
-				<mat-label>Expiry Date</mat-label>
-				<input [formControl]="expiryProposal" matInput type="date" required>
-			</mat-form-field>
-			&nbsp;&nbsp;
-			<button mat-stroked-button color="primary" (click)="proposeGroup()"
-					[disabled]="disableProposalForm()">
-				Propose
-			</button>
-		</div>
-		<table #table mat-table matSort [dataSource]="dataSource">
-			<!-- Checkbox Column -->
-			<ng-container matColumnDef="select">
-				<th mat-header-cell *matHeaderCellDef>
-					Select
-				</th>
-				<td mat-cell *matCellDef="let row">
-					<mat-checkbox
-							(change)="toggleTableRow($event, row)"
-							[checked]="selectionModel.isSelected(row)">
-					</mat-checkbox>
-				</td>
-			</ng-container>
+    <div>
+        <h3>Propose Group</h3>
+        <h5>You're automatically added to a new proposed group</h5>
+        <mat-divider></mat-divider>
+        <mat-grid-list cols="2" rowHeight="50px">
+            <mat-grid-tile>Min members: {{course.min}} &nbsp;
+                <mat-icon mat-list-icon *ngIf="selectionModel.selected.length +1 >= course.min">done</mat-icon>
+            </mat-grid-tile>
+            <mat-grid-tile>Max members: {{course.max}} &nbsp;
+                <mat-icon mat-list-icon *ngIf="selectionModel.selected.length +1 <= course.max">done</mat-icon>
+            </mat-grid-tile>
+        </mat-grid-list>
+        <mat-divider></mat-divider>
+        <br>
+        <div>
+            <mat-form-field style="width: 50%">
+                <mat-label>Group Name</mat-label>
+                <input [formControl]="proposedGroupName" matInput type="text" required>
+            </mat-form-field>
+            &nbsp;&nbsp;
+            <mat-form-field style="width: 20%">
+                <mat-label>Expiry Date</mat-label>
+                <input [formControl]="expiryProposal" matInput type="date" required>
+            </mat-form-field>
+            &nbsp;&nbsp;
+            <button mat-stroked-button color="primary" (click)="proposeGroup()"
+                    [disabled]="disableProposalForm()">
+                Propose
+            </button>
+        </div>
+        <table #table mat-table matSort [dataSource]="dataSource">
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    Select
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox
+                            (change)="toggleTableRow($event, row)"
+                            [checked]="selectionModel.isSelected(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
 
-			<!-- Id Column -->
-			<ng-container matColumnDef="id">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header> Student ID</th>
-				<td mat-cell *matCellDef="let row"> {{row.id}} </td>
-			</ng-container>
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Student ID</th>
+                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            </ng-container>
 
-			<!-- LastName Column -->
-			<ng-container matColumnDef="lastName">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name</th>
-				<td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
-			</ng-container>
+            <!-- LastName Column -->
+            <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name</th>
+                <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+            </ng-container>
 
-			<!-- firstName Column -->
-			<ng-container matColumnDef="firstName">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
-				<td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
-			</ng-container>
+            <!-- firstName Column -->
+            <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
+                <td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+            </ng-container>
 
-			<tr mat-header-row *matHeaderRowDef="colsToDisplay"></tr>
-			<tr mat-row *matRowDef="let row; columns: colsToDisplay"></tr>
-		</table>
-		<mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-	</div>
-	<br>
-	<div *ngIf="proposals.length>0">
-		<mat-divider></mat-divider>
-		<h4>Group Proposals</h4>
-		<div *ngIf="proposals.length>1" class="expand-collapse-buttons">
-			<button mat-button (click)="accordion.openAll()">Expand All</button>
-			<button mat-button (click)="accordion.closeAll()">Collapse All</button>
-		</div>
-		<mat-accordion class="example-headers-align" multi>
-			<mat-expansion-panel *ngFor="let prop of proposals">
-				<mat-expansion-panel-header>
-					<mat-panel-title>
-						{{prop.name}}
-					</mat-panel-title>
-					<mat-panel-description>
-						{{prop.proposer}}
-					</mat-panel-description>
-				</mat-expansion-panel-header>
-				<mat-grid-list cols="3" rowHeight="55px">
-					<mat-grid-tile *ngFor="let m of prop.members">
-						<mat-icon mat-list-icon>person</mat-icon>
-						{{m}} &nbsp;&nbsp;&nbsp;
-						<mat-icon mat-list-icon *ngIf="m.status==='ACCEPTED' || m.status==='PROPONENT'">done</mat-icon>
-					</mat-grid-tile>
-				</mat-grid-list>
-			</mat-expansion-panel>
-		</mat-accordion>
-	</div>
+            <tr mat-header-row *matHeaderRowDef="colsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: colsToDisplay"></tr>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+    <br>
+    <div *ngIf="proposals.length>0">
+        <mat-divider></mat-divider>
+        <h4>Group Proposals</h4>
+        <div *ngIf="proposals.length>1" class="expand-collapse-buttons">
+            <button mat-button (click)="accordion.openAll()">Expand All</button>
+            <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+        </div>
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel *ngFor="let prop of proposals">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{prop.name}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{prop.proposer}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-grid-list cols="3" rowHeight="55px">
+                    <mat-grid-tile *ngFor="let m of prop.members">
+                        <mat-icon mat-list-icon>person</mat-icon>
+                        {{m}} &nbsp;&nbsp;&nbsp;
+                        <mat-icon mat-list-icon *ngIf="m.status==='ACCEPTED' || m.status==='PROPONENT'">done</mat-icon>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
 </div>

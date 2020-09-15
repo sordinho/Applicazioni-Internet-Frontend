@@ -134,7 +134,7 @@ export class GroupsComponent implements OnInit {
         return this.proposedGroupName.value === null || this.proposedGroupName.value === '' || this.selectionModel.selected.length === 0
             || this.expiryProposal === null || this.expiryProposal.value === ''
             || !moment(this.expiryProposal.value, 'YYYY-MM-DD', true).isValid()
-            || this.selectionModel.selected.length + 1 < this.course.min || this.selectionModel.selected.length > this.course.max;
+            || this.selectionModel.selected.length + 1 < this.course.min || this.selectionModel.selected.length + 1 > this.course.max;
     }
 
     resetTeamProposalForm() {
