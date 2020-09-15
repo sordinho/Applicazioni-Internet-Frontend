@@ -132,7 +132,7 @@ export class StudentService {
             .get<any>(`${this.API_PATH}/${studentId}/courses/${courseId}/team`)
             .pipe(
                 catchError(err => {
-                    console.error('CODE: ' + err.status);
+                    //console.error('CODE: ' + err.status);
                     return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
                 }), map(data => {
                     if (data == null) {
@@ -152,7 +152,7 @@ export class StudentService {
             .get<any>(`${this.API_PATH}/${studentId}/assignments/${assignmentId}/papers`)
             .pipe(
                 catchError(err => {
-                    console.error('CODE: ' + err.status);
+                    //console.error('CODE: ' + err.status);
                     return throwError(`StudentService.getPapersByAssignment error: ${err.message}`);
                 }), map(data => {
                     let papers: Paper[] = [];
@@ -172,7 +172,7 @@ export class StudentService {
         return this.http.get<any>(`${this.API_PATH}/${studentId}`)
             .pipe(
                 catchError(err => {
-                    console.error('CODE: ' + err.status);
+                    //console.error('CODE: ' + err.status);
                     return throwError(`StudentService.queryStudentData error: ${err.message}`);
                 }), map(data => {
                     let image = null;

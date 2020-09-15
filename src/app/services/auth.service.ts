@@ -54,7 +54,7 @@ export class AuthService {
     }
 
     private setSession(authResult: any) {
-        console.log(authResult.token);
+        //console.log(authResult.token);
         const token = JSON.parse(atob(authResult.token.split('.')[1]));
 
         localStorage.setItem('token', authResult.token);

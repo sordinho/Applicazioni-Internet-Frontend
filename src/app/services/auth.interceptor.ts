@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse} from '@angular/common/http';
-import {EMPTY, Observable, of, throwError} from 'rxjs';
+import {EMPTY, observable, Observable, of, throwError} from 'rxjs';
 import {AuthService} from './auth.service';
 import {Router} from '@angular/router';
 import {catchError} from 'rxjs/operators';
@@ -16,20 +16,23 @@ export class AuthInterceptor implements HttpInterceptor {
         if (accessToken) {
             const cloned = request.clone({
                 headers: request.headers.set('Authorization', 'Bearer ' + accessToken)
-            });
-            return next.handle(cloned).pipe(
-                catchError((error) => {
-                    if (error.code !== 401) {
-                        // 401 handled in auth.interceptor
-                        this.router.navigate(['/login']);
-                    }
-                    return of(null);
-                }));
+            })
 
+            return next.handle(cloned).pipe(
+                catchError( (error: HttpErrorResponse) => {
+                    if(error.status === 401){
+                        this.router.navigate(['/login'])
+                        return of(null);
+                    }
+                    else{
+                        return throwError(error);
+                    }    
+                }))
+                
             //console.log('AuthInterceptor accessToken found: ' + JSON.stringify(accessToken));
         } else {
             // console.log('AuthInterceptor accessToken not found');
-            return next.handle(request);
+            return next.handle(request)
         }
     }
 

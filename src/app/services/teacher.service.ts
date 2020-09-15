@@ -46,7 +46,7 @@ export class TeacherService {
         return this.http.get<any>(`${this.API_PATH}/${teacherId}`)
             .pipe(
                 catchError(err => {
-                    console.error('CODE: ' + err.status);
+                    //console.error('CODE: ' + err.status);
                     return throwError(`TeacherService.queryTeacherData error: ${err.message}`);
                 }), map(data => {
                     let image = null;
