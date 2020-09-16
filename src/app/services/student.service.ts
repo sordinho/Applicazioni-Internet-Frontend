@@ -133,7 +133,8 @@ export class StudentService {
             .pipe(
                 catchError(err => {
                     //console.error('CODE: ' + err.status);
-                    return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                    // return throwError(`StudentService.getTeamByCourse error: ${err.message}`);
+                    return throwError(err);
                 }), map(data => {
                     if (data == null) {
                         return null;

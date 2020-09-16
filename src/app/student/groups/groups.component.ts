@@ -73,10 +73,12 @@ export class GroupsComponent implements OnInit {
             this.groupService.getMembers(team.id).subscribe(data => {
                 this.team.members = data;
             }, error => {
-                if (error.code != '401')
-                this.snackBar.open('Error getting team data. Please refresh the page', null, {duration: 5000});
+                if (error.code != '401') {
+                    this.snackBar.open('Error getting team data. Please refresh the page', null, {duration: 5000});
+                }
             });
         }, (error) => {
+            console.log(JSON.stringify(error));
             // console.log('No team found initilize proposals');
             this.initTeamProposals();
         });
@@ -87,6 +89,7 @@ export class GroupsComponent implements OnInit {
             this.proposals = teams;
             this.proposals.forEach((team: Team) => {
                 this.groupService.getMembersStatus(team.id).subscribe((data: Student[]) => {
+                    console.log(data);
                     team.members = data;
                     for (let student of team.members) {
                         if (student.status === 'PROPONENT') {
@@ -94,13 +97,15 @@ export class GroupsComponent implements OnInit {
                         }
                     }
                 }, error => {
-                    if (error.code != '401')
-                    this.snackBar.open('Error getting proposals data. Please refresh the page', null, {duration: 5000});
+                    if (error.code != '401') {
+                        this.snackBar.open('Error getting proposals data. Please refresh the page', null, {duration: 5000});
+                    }
                 });
             });
         }, error => {
-            if (error.code != '401')
-            this.snackBar.open('Error getting proposals. Please refresh the page', null, {duration: 5000});
+            if (error.code != '401') {
+                this.snackBar.open('Error getting proposals. Please refresh the page', null, {duration: 5000});
+            }
         });
     }
 
@@ -110,8 +115,9 @@ export class GroupsComponent implements OnInit {
             this.dataSource = new MatTableDataSource<Student>(filtered);
             this.studentDataFetched = true;
         }, error => {
-            if (error.code != '401')
-            this.snackBar.open('Error getting available students. Please refresh the page', null, {duration: 5000});
+            if (error.code != '401') {
+                this.snackBar.open('Error getting available students. Please refresh the page', null, {duration: 5000});
+            }
         });
     }
 
@@ -131,8 +137,9 @@ export class GroupsComponent implements OnInit {
                     this.initTeamProposals();
                 },
                 (error) => {
-                    if (error.code != '401')
-                    this.snackBar.open('Error creating new proposal', null, {duration: 5000});
+                    if (error.code != '401') {
+                        this.snackBar.open('Error creating new proposal', null, {duration: 5000});
+                    }
                 }
             );
     }
