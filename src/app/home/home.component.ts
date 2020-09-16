@@ -18,8 +18,8 @@ export class HomeComponent implements OnInit {
     _courses: Course[] = [];
     _userId: string;
     _isTeacher: boolean = false;
-    _courseName: string = null;
-    _courseSelected: boolean = false;
+    _selectedCourse: Course = null;
+    _courseEnabled: boolean = true
     _userData: User = null;
     _courseDataFetched: boolean = false;
 
@@ -36,9 +36,8 @@ export class HomeComponent implements OnInit {
         this._isTeacher = (userRole === 'ROLE_TEACHER');
     }
 
-    @Input() set courseName(courseName: string) {
-        this._courseName = courseName;
-        this._courseSelected = (this._courseName !== undefined);
+    @Input() set selectedCourse(selectedCourse: Course) {
+        this._selectedCourse = selectedCourse;
     }
 
     @Input() set userData(userData: User) {

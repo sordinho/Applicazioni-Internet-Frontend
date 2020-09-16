@@ -5,6 +5,7 @@ import {AuthService} from '../services/auth.service';
 import { Course } from '../models/course.model';
 import { StudentService } from '../services/student.service';
 import { TeacherService } from '../services/teacher.service';
+import { CourseService } from '../services/course.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ import { TeacherService } from '../services/teacher.service';
 export class AuthGuard implements CanActivate, OnInit {
 
 
-    constructor(private authService: AuthService, private router: Router, private studentService: StudentService, private teacherService: TeacherService) {
+    constructor(private authService: AuthService, private router: Router, private studentService: StudentService, private teacherService: TeacherService, private courseService: CourseService) {
     }
 
     ngOnInit(): void  {
@@ -41,7 +42,6 @@ export class AuthGuard implements CanActivate, OnInit {
                                                                             this.router.navigate(['/courses']);
                                                                             return obs.next(false);
                                                                         }
-
                                                                     }))
         }
 
@@ -60,11 +60,21 @@ export class AuthGuard implements CanActivate, OnInit {
     canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         //console.log('Can Activate Child: ' + this.authService.getRole());
         if (this.authService.isTeacher()) {
-            if (state.url.endsWith('vms') || state.url.endsWith('students') || state.url.endsWith('assignments')) {
-                return true;
-            } else {
-                this.router.navigate(['/courses']);
-            }
+            const courseId = next.parent.paramMap.get('courseId');
+            return new Observable<boolean>(obs => this.courseService.find(courseId).subscribe((course) => {
+                if(!course.enabled) {
+                    this.router.navigate(['/courses']);
+                    return obs.next(false);
+                } else {
+                    if (state.url.endsWith('vms') || state.url.endsWith('students') || state.url.endsWith('assignments')) {
+                        return obs.next(true);
+                    } else {
+                        this.router.navigate(['/courses']);
+                        return obs.next(false);
+                    }
+                }
+            }))
+
         } else if (this.authService.isStudent()) {
             if (state.url.endsWith('vm') || state.url.endsWith('groups') || state.url.endsWith('deliveries')) {
                 return true;

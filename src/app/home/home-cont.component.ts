@@ -3,7 +3,7 @@ import {CourseService} from '../services/course.service';
 import {Course} from '../models/course.model';
 import {AuthService} from '../services/auth.service';
 import {Router, ActivatedRoute, ParamMap} from '@angular/router';
-import {Subscription, Observable} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {StudentService} from '../services/student.service';
 import {TeacherService} from '../services/teacher.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -20,7 +20,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
     username: string;
     userRole: string;
     courseId: string;
-    courseName: string;
+    selectedCourse: Course;
     userId: string;
     courseDataFetched: boolean;
 
@@ -36,7 +36,8 @@ export class HomeContComponent implements OnInit, OnDestroy {
         this.paramMapSub = this.activatedRoute.paramMap.subscribe(
             (params: ParamMap) => {
                 this.courseId = params.get('courseId');
-                this.setCourseName();
+                this.setSelectedCourse();
+                this.setSelectedCourse()
             });
 
         this.getUserRole();
@@ -70,7 +71,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
                 this.allCourses = data;
                 this.courseDataFetched = true;
                 if (this.courseId !== null) {
-                    this.setCourseName();
+                    this.setSelectedCourse();
                 }
             });
         } else if (this.userRole === 'ROLE_TEACHER') {
@@ -78,18 +79,14 @@ export class HomeContComponent implements OnInit, OnDestroy {
                 this.allCourses = data;
                 this.courseDataFetched = true;
                 if (this.courseId !== null) {
-                    this.setCourseName();
+                    this.setSelectedCourse();
                 }
             });
         }
     }
 
-    setCourseName() {
-        for (let c of this.allCourses) {
-            if (c.id === this.courseId) {
-                this.courseName = c.name;
-            }
-        }
+    setSelectedCourse() {
+        this.selectedCourse = this.allCourses.find(course => course.id === this.courseId)
     }
 
     getUsername() {

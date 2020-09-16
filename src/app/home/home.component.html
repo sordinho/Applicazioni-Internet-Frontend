@@ -10,8 +10,8 @@
     <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>
 
-<mat-toolbar *ngIf="_courseSelected">
-    {{ _courseName }}
+<mat-toolbar *ngIf="_selectedCourse">
+    {{ _selectedCourse ? _selectedCourse.name : '' }}
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
@@ -29,14 +29,6 @@
             </mat-list-item>
 
             <mat-menu #menu="matMenu">
-                <button mat-menu-item *ngIf="!courseMenuEnabled" (click)="enableCourseEmitter.emit(courseMenu)">
-                    <mat-icon>link</mat-icon>
-                    <span>Enable</span>
-                </button>
-                <button mat-menu-item *ngIf="courseMenuEnabled" (click)="disableCourseEmitter.emit(courseMenu)">
-                    <mat-icon>link_off</mat-icon>
-                    <span>Disable</span>
-                </button>
                 <button mat-menu-item (click)="editCourse()">
                     <mat-icon>edit</mat-icon>
                     <span>Edit</span>
@@ -44,6 +36,14 @@
                 <button mat-menu-item (click)="deleteCourse()">
                     <mat-icon>delete</mat-icon>
                     <span>Delete</span>
+                </button>
+                <button mat-menu-item *ngIf="!courseMenuEnabled" (click)="enableCourseEmitter.emit(courseMenu)">
+                    <mat-icon>link</mat-icon>
+                    <span>Enable</span>
+                </button>
+                <button mat-menu-item *ngIf="courseMenuEnabled" (click)="disableCourseEmitter.emit(courseMenu)">
+                    <mat-icon>link_off</mat-icon>
+                    <span>Disable</span>
                 </button>
             </mat-menu>
 
@@ -60,7 +60,7 @@
     <mat-sidenav-content>
         <nav mat-tab-nav-bar *ngIf="_courses.length>0">
             <a mat-tab-link
-               [disabled]='!_courseSelected'
+               [disabled]='!_selectedCourse || (_isTeacher && !_selectedCourse.enabled)'
                *ngFor="let link of navLinks"
                [routerLink]="[link.path]"
                routerLinkActive #rla="routerLinkActive"

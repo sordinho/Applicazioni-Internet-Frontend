@@ -21,6 +21,8 @@ export class EditCourseDialogComponent implements OnInit {
   min: FormControl
   max: FormControl
 
+  enabled = false
+
   course: Course
   emitter: EventEmitter<void>
 
@@ -87,21 +89,25 @@ export class EditCourseDialogComponent implements OnInit {
       }
       
       /* all fields are valid... */
-      if(( this.course.name !== this.name.value || this.course.id !== this.id.value || this.course.min !== this.min.value || this.course.max !== this.max.value )) {
+      if(( this.course.name !== this.name.value || this.course.id !== this.id.value || this.course.min !== this.min.value || this.course.max !== this.max.value || this.enabled)) {
         // at least one value has changed... edit the course 
-        console.dir("editing the course...")
-        this.courseService.edit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.course.enabled, this.teacherId))
+        //console.dir("editing the course...")
+        this.courseService.edit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
           .subscribe(
             (editedCourse: Course) => {
-              // console.dir("course " + editedCourse.id + " edited successfully - owner: " + editedCourse.teacherId)
-              this.emitter.emit()
-              this.dialogRef.close(editedCourse)
+                // console.dir("course " + editedCourse.id + " edited successfully - owner: " + editedCourse.teacherId)
+                this.emitter.emit()
+                this.dialogRef.close(editedCourse)
             },
             err => {
+              console.dir(JSON.stringify(err))
               const snackbarMessage = new SnackbarMessage(err.error)
               this.snackBar.open(snackbarMessage.message, null, { duration: 5000 })
             }
           )
+      } else {
+        /* no changes */
+        this.dialogRef.close(this.course)
       }
     } else {
       this.id.markAsTouched({onlySelf: true})
