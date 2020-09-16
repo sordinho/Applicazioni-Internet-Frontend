@@ -44,25 +44,28 @@ export class AssigmentsContComponent implements OnInit {
   }
 
   getPapers(assignmentId: string) {
-    //console.dir("getPapers - " + assignmentId)
     const papersReq = this.assignmentService.queryPapers(assignmentId)
     /* it returns obj { paper: Paper, studentId: string } */
-    forkJoin([papersReq, this.enrolledStudentReq]).subscribe(data => {
-      let papers: Paper[] = []
-      let paperObjects = data[0] /* obj [{ paper: Paper, studentId: string }] */
-      const students: Student[] = data[1]
+    forkJoin([papersReq, this.enrolledStudentReq]).subscribe(
+      data => {
+        let papers: Paper[] = []
+        let paperObjects = data[0] /* obj [{ paper: Paper, studentId: string }] */
+        const students: Student[] = data[1]
 
-      paperObjects.forEach(
-        (paperObj) => {
-          /* for each paper associate the right student from students */ 
-          let paper: Paper = paperObj.paper
-          paper.student = students.find((s) => s.id === paperObj.studentId)
-          papers.push(paper)
-        }
-      )
-      this.papers = papers
-      //console.dir("this.papers: "); console.dir(this.papers)
-    })
+        paperObjects.forEach(
+          (paperObj) => {
+            /* for each paper associate the right student from students */ 
+            let paper: Paper = paperObj.paper
+            paper.student = students.find((s) => s.id === paperObj.studentId)
+            papers.push(paper)
+          }
+        )
+        this.papers = papers
+      },
+      error => {
+        // TODO snackbar with error...
+        this.papers = []
+      })
   }
 
   getPaperHistory(event) {
