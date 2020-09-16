@@ -127,9 +127,11 @@ export class GroupsComponent implements OnInit {
     }
 
     proposeGroup() {
+        let groupName = this.proposedGroupName.value;
+        this.proposedGroupName.setValue('');
         let expiry = moment(this.expiryProposal.value, 'YYYY-MM-DD');
         let members: string[] = this.selectionModel.selected.map((student) => student.id);
-        this.courseService.createTeam(this.courseId, this.proposedGroupName.value, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
+        this.courseService.createTeam(this.courseId, groupName, members, this.authService.getUserId(), expiry.format('DD/MM/YYYY'))
             .subscribe((proposed: Team) => {
 
                     this.snackBar.open('New Team proposed', null, {duration: 5000});
@@ -137,9 +139,7 @@ export class GroupsComponent implements OnInit {
                     this.initTeamProposals();
                 },
                 (error) => {
-                    if (error.code != '401') {
-                        this.snackBar.open('Error creating new proposal', null, {duration: 5000});
-                    }
+                    this.snackBar.open('Error creating new proposal', null, {duration: 5000});
                 }
             );
     }
