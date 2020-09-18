@@ -118,10 +118,8 @@ export class AuthService {
             .get(`${this.API_PATH}/refreshToken`)
             .pipe(
                 tap(res => {
-                    console.dir("DEBUG - error")
                     this.setSession(res);
-                }),
-                shareReplay()
+                })
             );
     }
 

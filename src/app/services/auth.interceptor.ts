@@ -24,15 +24,12 @@ export class AuthInterceptor implements HttpInterceptor {
                         this.authService.refreshToken().subscribe(
                             succ => {
                                 console.dir("refresh - success")
-                                //this.intercept(request, next)
-                                return next.handle(cloned)
+                                this.intercept(request, next)
+                                return of(null)
                             }, 
                             err => {
                                 this.router.navigate(['/login'])
                                 return of(null);
-                            },
-                            () => {
-                                console.dir("DEBUG - ()")
                             }
                         )
                     }
