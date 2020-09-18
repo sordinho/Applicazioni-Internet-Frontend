@@ -21,8 +21,20 @@ export class AuthInterceptor implements HttpInterceptor {
             return next.handle(cloned).pipe(
                 catchError( (error: HttpErrorResponse) => {
                     if(error.status === 401){
-                        this.router.navigate(['/login'])
-                        return of(null);
+                        this.authService.refreshToken().subscribe(
+                            succ => {
+                                console.dir("refresh - success")
+                                //this.intercept(request, next)
+                                return next.handle(cloned)
+                            }, 
+                            err => {
+                                this.router.navigate(['/login'])
+                                return of(null);
+                            },
+                            () => {
+                                console.dir("DEBUG - ()")
+                            }
+                        )
                     }
                     else{
                         return throwError(error);

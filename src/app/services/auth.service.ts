@@ -113,6 +113,18 @@ export class AuthService {
         return !this.isLoggedIn()
     }
 
+    refreshToken(): Observable<any> {
+        return this.http
+            .get(`${this.API_PATH}/refreshToken`)
+            .pipe(
+                tap(res => {
+                    console.dir("DEBUG - error")
+                    this.setSession(res);
+                }),
+                shareReplay()
+            );
+    }
+
 }
 
 export class UserInformation {
