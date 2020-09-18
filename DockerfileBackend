@@ -1,0 +1,15 @@
+FROM openjdk:8-jre-alpine
+EXPOSE 8080
+
+# cerco il file jar in target
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+
+# aggiungo un nuovo utente per evitare che venga eseguito tutto come root
+RUN addgroup -S app && adduser -S app -G app
+
+# uso il nuovo utente app:app (user:group)
+USER app
+
+# do il comando con cui deve startare il container
+ENTRYPOINT ["java","-jar", "/app.jar"]

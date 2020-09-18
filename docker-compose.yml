@@ -7,7 +7,7 @@ services:
   #MySQL Database for the application
   backend-db:
     image: "mysql"
-    container_name: AI_Backend_DB
+    container_name: AI_Backend_DB0
     #Volume mounted for database for the storage
     volumes:
       - db-data:/var/lib/mysql
@@ -16,27 +16,28 @@ services:
 
     #Environment variable for DB name, user and password
     environment:
-      - MYSQL_ROOT_PASSWORD=scrum
+      - MYSQL_ROOT_PASSWORD=password
 
   #Back-end Spring Boot Application
   backend-app:
     #The docker file in scrum-app build the jar and provides the docker image with the following name.
-#    build: ./scrum-app
+    #    build: ./scrum-app
+    image: "backend-app"
     container_name: backend-app
-
     ports:
       - 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
-    links:
+    depends_on:
       - backend-db
 
   #Fron-end Angular Application
-  frontend-app:
-#    build: ./scrum-ui
-    container_name: frontend-app
-    ports:
-      - 4200:80
-    links:
-      - backend-app
+#  frontend-app:
+##    build: ./scrum-ui
+#    image: "frontend-app"
+#    container_name: frontend-app
+#    ports:
+#      - 4200:80
+#    links:
+#      - backend-app
 
 #Volumes for DB data
 volumes:
