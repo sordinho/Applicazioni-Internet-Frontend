@@ -20,7 +20,7 @@ export class NewCourseDialogComponent implements OnInit {
   })
 
   id = new FormControl('', {
-    updateOn: 'submit',
+    updateOn: 'blur',
     validators: [Validators.required]
   })
 
@@ -52,17 +52,6 @@ export class NewCourseDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  onNameChange(value: string) {
-    if(value === '') this.id.setValue('')
-    else this.id.setValue(this.getInitials(value))
-  }
-
-  getInitials(str: string) {
-    var matches = str.match(/\b(\w)/g)
-    if(matches !== null) return matches.join('')
-    else return ''
   }
 
   cancel() {
@@ -108,7 +97,7 @@ export class NewCourseDialogComponent implements OnInit {
   }
 
   getNameErrorMessage() {
-    if (this.id.hasError('required')) {
+    if (this.name.hasError('required')) {
       return 'Name is required'
     } else {
       return ''

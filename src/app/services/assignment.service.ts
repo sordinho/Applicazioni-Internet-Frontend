@@ -39,10 +39,6 @@ export class AssignmentService {
         return this.http
             .get<any>(`${this.API_PATH}/${assignmentId}/papers`)
             .pipe(
-                catchError(err => {
-                    console.error(JSON.stringify(err));
-                    return throwError(`assignmentService.queryPapers error: ${err}`);
-                }),
                 map(data => {
                     /* convert explicitly the result to Paper[] */
                     var papers: any[] = [];
@@ -58,6 +54,10 @@ export class AssignmentService {
                         });
                     }
                     return papers;
+                }),
+                catchError(err => {
+                    console.error(JSON.stringify(err));
+                    return throwError(`assignmentService.queryPapers error: ${err}`);
                 })
             );
 

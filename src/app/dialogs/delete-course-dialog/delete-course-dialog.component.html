@@ -1,10 +1,11 @@
 <h1 mat-dialog-title>Delete course</h1>
 
-<p>Delete the course "<span class="bold">{{ course.name }}</span>"?</p>
-
+<p>Are you sure you want to delete the course <span class="bold">{{ course.name }}</span> and all its relationships (enrolled students, vms, assignment, papers...)?</p> 
+<p>This cannot be undone.</p>
+    
 <br>
 
 <mat-dialog-actions>
-    <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="deleteCourse()">Delete</button>
+    <button mat-button (click)="cancel()">No</button>
+    <button mat-raised-button color="primary" (click)="deleteCourse()">Yes</button>
 </mat-dialog-actions>

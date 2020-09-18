@@ -1,17 +1,16 @@
+<h1 mat-dialog-title>New assignment</h1>
 
 <mat-dialog-content>
-  <h1 mat-dialog-title>New assignment</h1>
-
   <p *ngIf="error" class="error">Error...</p>
 
-  <!-- expire date -->
-  <mat-form-field class="full-width" appearance="outline">
-    <mat-label>Expire Date</mat-label>
-    <input matInput readonly [formControl]="expireDate" [matDatepicker]="expireDatePicker" (click)="expireDatePicker.open(); $event.stopPropagation();">
-    <mat-datepicker-toggle matSuffix [for]="expireDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #expireDatePicker></mat-datepicker>
-    <mat-error>{{ getExpireDateErrorMessage() }}</mat-error>
-  </mat-form-field>
+    <!-- expire date -->
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Expire Date</mat-label>
+      <input matInput readonly [formControl]="expireDate" [matDatepicker]="expireDatePicker" (click)="expireDatePicker.open(); $event.stopPropagation();">
+      <mat-datepicker-toggle matSuffix [for]="expireDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #expireDatePicker></mat-datepicker>
+      <mat-error>{{ getExpireDateErrorMessage() }}</mat-error>
+    </mat-form-field>
 
     <!-- upload image -->
     <div class="upload">

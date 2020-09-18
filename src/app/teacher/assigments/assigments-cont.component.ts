@@ -19,7 +19,7 @@ export class AssigmentsContComponent implements OnInit {
   
   papers: Paper[] /* papers of a specific assigment */
 
-  enrolledStudentReq: Observable<Student[]>
+  allStudentsReq: Observable<Student[]>
 
   paperHistory: Paper[] /* papers history of a student for a specific assigment */
 
@@ -30,7 +30,7 @@ export class AssigmentsContComponent implements OnInit {
   ngOnInit(): void {
     this.courseId = this.route.snapshot.parent.url[1].toString()
 
-    this. enrolledStudentReq = this.courseService.queryEnrolledStudent(this.courseId)
+    this.allStudentsReq = this.studentService.queryAll()
 
     this.getAssignments()
   }
@@ -46,17 +46,17 @@ export class AssigmentsContComponent implements OnInit {
   getPapers(assignmentId: string) {
     const papersReq = this.assignmentService.queryPapers(assignmentId)
     /* it returns obj { paper: Paper, studentId: string } */
-    forkJoin([papersReq, this.enrolledStudentReq]).subscribe(
-      data => {
+    forkJoin([papersReq, this.allStudentsReq]).subscribe(
+      data => {        
         let papers: Paper[] = []
         let paperObjects = data[0] /* obj [{ paper: Paper, studentId: string }] */
-        const students: Student[] = data[1]
+        const allStudents: Student[] = data[1]
 
         paperObjects.forEach(
           (paperObj) => {
             /* for each paper associate the right student from students */ 
             let paper: Paper = paperObj.paper
-            paper.student = students.find((s) => s.id === paperObj.studentId)
+            paper.student = allStudents.find((s) => s.id === paperObj.studentId)
             papers.push(paper)
           }
         )

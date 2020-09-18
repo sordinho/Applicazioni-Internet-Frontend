@@ -6,8 +6,6 @@ import { CourseService } from 'src/app/services/course.service';
 import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-course-dialog',
@@ -17,7 +15,6 @@ import { Observable } from 'rxjs';
 export class EditCourseDialogComponent implements OnInit {
   
   name: FormControl
-  id: FormControl
   min: FormControl
   max: FormControl
 
@@ -35,13 +32,6 @@ export class EditCourseDialogComponent implements OnInit {
     this.name = new FormControl(data.course.name, 
       {
         updateOn: 'blur',
-        validators: [Validators.required]
-      }
-    )
-  
-    this.id = new FormControl(data.course.id,
-      {
-        updateOn: 'submit',
         validators: [Validators.required]
       }
     )
@@ -64,11 +54,6 @@ export class EditCourseDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onNameChange(value: string) {
-    if(value === '') this.id.setValue('')
-    else this.id.setValue(this.getInitials(value))
-  }
-
   getInitials(str: string) {
     var matches = str.match(/\b(\w)/g)
     if(matches !== null) return matches.join('')
@@ -80,19 +65,24 @@ export class EditCourseDialogComponent implements OnInit {
   }
 
   editCourse() {
-    if (!this.id.invalid && !this.name.invalid && !this.min.invalid && !this.max.invalid) { 
-      if(this.min.value > this.max.value) {
-        /* error in min and max values */
-        this.max.setErrors({'invalid': true})
-        this.min.setErrors({'invalid': true})
-        return
-      }
-      
+    if(this.min.value > this.max.value) {
+      /* error in min and max values */
+      this.max.setErrors({'invalid': true})
+      this.min.setErrors({'invalid': true})
+      return 
+    } else {
+      this.max.setErrors({'invalid': null})
+      this.min.setErrors({'invalid': null})
+      this.max.updateValueAndValidity()
+      this.min.updateValueAndValidity()
+    }
+
+    if (!this.name.invalid && !this.min.invalid && !this.max.invalid) { 
       /* all fields are valid... */
-      if(( this.course.name !== this.name.value || this.course.id !== this.id.value || this.course.min !== this.min.value || this.course.max !== this.max.value || this.enabled)) {
+      if(( this.course.name !== this.name.value || this.course.min !== this.min.value || this.course.max !== this.max.value || this.enabled)) {
         // at least one value has changed... edit the course 
         //console.dir("editing the course...")
-        this.courseService.edit(new Course(this.id.value, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
+        this.courseService.edit(new Course(this.course.id, this.name.value, this.min.value, this.max.value, this.enabled, this.teacherId))
           .subscribe(
             (editedCourse: Course) => {
                 // console.dir("course " + editedCourse.id + " edited successfully - owner: " + editedCourse.teacherId)
@@ -110,23 +100,14 @@ export class EditCourseDialogComponent implements OnInit {
         this.dialogRef.close(this.course)
       }
     } else {
-      this.id.markAsTouched({onlySelf: true})
       this.name.markAsTouched({onlySelf: true})
       this.min.markAsTouched({onlySelf: true})
       this.max.markAsTouched({onlySelf: true})
     }
   }
 
-  getIdErrorMessage() {
-    if (this.id.hasError('required')) {
-      return 'Id is required'
-    } else {
-      return ''
-    }
-  }
-
   getNameErrorMessage() {
-    if (this.id.hasError('required')) {
+    if (this.name.hasError('required')) {
       return 'Name is required'
     } else {
       return ''

@@ -68,6 +68,7 @@ export class StudentService {
                     return throwError(`StudentService.queryAll error: ${err.message}`);
                 }),
                 map(data => {
+
                     /* convert explicitly the result to Student[]: important to be shown in the mat autocomplete (StudentComponent),
                        otherwise it would be shown [Object, Object] */
                     var allStudents: Student[] = [];

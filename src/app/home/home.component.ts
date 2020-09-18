@@ -127,7 +127,9 @@ export class HomeComponent implements OnInit {
 
         const dialogConfig = new MatDialogConfig();
         dialogConfig.autoFocus = true;
-        dialogConfig.width = '500px';
+        dialogConfig.width = "500px"
+        dialogConfig.height = "auto"
+        dialogConfig.autoFocus = true;
         dialogConfig.data = {
             course: this._courses[index],
             emitter: this.reloadCoursesEmitter

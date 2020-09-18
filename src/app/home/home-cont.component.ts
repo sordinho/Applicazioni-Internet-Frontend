@@ -130,6 +130,9 @@ export class HomeContComponent implements OnInit, OnDestroy {
         this.courseService.disable(courseId).subscribe(
             succ => {
                 this.allCourses.find(course => course.id === courseId).enabled = false;
+                if(this.courseId !== undefined) {
+                    this.router.navigate([`/courses/${this.courseId}`])
+                }
                 this.snackBar.open('Course disabled', null, {duration: 3000});
             }
         );

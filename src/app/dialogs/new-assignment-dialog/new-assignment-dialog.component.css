@@ -9,20 +9,6 @@ p.error {
     border-radius: 6px;
 }
 
-.groups-size-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.groups-size-title {
-    margin-right: 10px;
-}
-
-.groups-size-input {
-    margin: 0px 10px;
-}
-
 .mat-dialog-actions {
       justify-content: flex-end;
 }

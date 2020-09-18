@@ -1,19 +1,19 @@
+<h1 mat-dialog-title>New course</h1>
 
 <mat-dialog-content>
-  <h1 mat-dialog-title>New course</h1>
 
   <p *ngIf="error" class="error">Conflict... For example there is already another course with the same id.</p>
 
   <!-- course name -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Name</mat-label>
-    <input matInput #nameInput [formControl]="name" (keyup)="onNameChange(nameInput.value)">
+    <input matInput [formControl]="name">
     <mat-error>{{ getNameErrorMessage() }}</mat-error>
   </mat-form-field>
 
   <!-- course id -->
   <mat-form-field class="full-width" appearance="standard">
-    <mat-label>ID</mat-label>
+    <mat-label>Code (ID)</mat-label>
     <input matInput [formControl]="id"> 
     <mat-error>{{ getIdErrorMessage() }}</mat-error>
   </mat-form-field>
@@ -38,12 +38,11 @@
   <!-- course enabled -->
   <mat-slide-toggle [(ngModel)]="enabled" color="primary">Enable</mat-slide-toggle>
 
-  <br>
-
-  <mat-dialog-actions>
-    <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="addCourse()">Create</button>
-  </mat-dialog-actions>
-  
 </mat-dialog-content>
 
+<br>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="addCourse()">Create</button>
+</mat-dialog-actions>
