@@ -4,41 +4,29 @@ version: '3'
 #Define services
 services:
 
-  #MySQL Database for the application
-  backend-db:
-    image: "mysql"
-    container_name: AI_Backend_DB0
-    #Volume mounted for database for the storage
-    volumes:
-      - db-data:/var/lib/mysql
-    ports:
-      - 3306:3306 # Forward the exposed port 3306 on the container to port 3306 on the host machine
-
-    #Environment variable for DB name, user and password
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-
   #Back-end Spring Boot Application
   backend-app:
     #The docker file in scrum-app build the jar and provides the docker image with the following name.
-    #    build: ./scrum-app
     image: "backend-app"
     container_name: backend-app
+    #    networks:
+    #      - angular-spring
     ports:
       - 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+
+  #Front-end Angular Application
+  frontend-app:
+    image: "frontend-app"
+    container_name: frontend-app
+    #    networks:
+    #      - angular-spring
+    ports:
+      - 4200:80
+    #    expose:
+    #      - 4200
     depends_on:
-      - backend-db
+      - backend-app
 
-  #Fron-end Angular Application
-#  frontend-app:
-##    build: ./scrum-ui
-#    image: "frontend-app"
-#    container_name: frontend-app
-#    ports:
-#      - 4200:80
-#    links:
-#      - backend-app
-
-#Volumes for DB data
-volumes:
-  db-data:
+#networks:
+#  angular-spring:
+#    driver: bridge
