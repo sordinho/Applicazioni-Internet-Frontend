@@ -13,7 +13,7 @@
         </span>
     </div>
 
-    <mat-slide-toggle (change)="toggleChange($event)"></mat-slide-toggle>
+    <mat-slide-toggle *ngIf="!expired" (change)="toggleChange($event)"></mat-slide-toggle>
 
     <!-- score -->
     <mat-form-field>

@@ -2,7 +2,10 @@ import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Assignment } from 'src/app/models/assignment.model';
 import { AssignmentService } from 'src/app/services/assignment.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-upload-correction-dialog',
@@ -11,8 +14,9 @@ import { AssignmentService } from 'src/app/services/assignment.service';
 })
 export class UploadCorrectionDialogComponent implements OnInit {
 
-  assignmentId: string
+  assignment: Assignment
   studentId: string
+  expired: boolean = false
 
   file: File
   defaultFilename = 'No file chosen'
@@ -33,9 +37,14 @@ export class UploadCorrectionDialogComponent implements OnInit {
 
   fileError = false
 
-  constructor(private dialogRef: MatDialogRef<UploadCorrectionDialogComponent>, @Inject(MAT_DIALOG_DATA) public data, private assignmentService: AssignmentService) { 
-    this.assignmentId = data.assignmentId
+  constructor(private dialogRef: MatDialogRef<UploadCorrectionDialogComponent>, @Inject(MAT_DIALOG_DATA) public data, private assignmentService: AssignmentService, private snackBar: MatSnackBar) { 
     this.studentId = data.studentId
+    this.assignment = data.assignment
+    this.expired = moment(this.assignment.expired, '', true).isBefore(moment())
+    if(this.expired) {
+      this.score.enable()
+      this.scorePaper = true
+    }
   }
 
   ngOnInit(): void {
@@ -77,13 +86,15 @@ export class UploadCorrectionDialogComponent implements OnInit {
       this.score.markAsTouched({onlySelf: true})
     } else {
       /* all fields are valid */
-      this.assignmentService.reviewPaper(this.assignmentId, this.studentId, this.file, (this.scorePaper ? this.score.value : 'NULL'), !this.scorePaper) /* review with score => flag = false */ 
+      this.assignmentService.reviewPaper(this.assignment.id, this.studentId, this.file, (this.scorePaper ? this.score.value : 'NULL'), !this.scorePaper) /* review with score => flag = false */ 
             .subscribe(
               succ => {
                 this.dialogRef.close(true)
               },
               err => {
-                // TODO   
+                this.snackBar.open("Error uploading the correction, please check all fields and retry.", null, {
+                  duration: 5000,
+                }); 
               }
             )
     }

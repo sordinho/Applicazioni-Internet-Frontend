@@ -122,7 +122,6 @@ export class AssignmentService {
         return this.http.post<any>(`${this.API_PATH}/${assignmentId}/paperReview`, body)
             .pipe(
                 catchError(err => {
-                    console.error(err);
                     return throwError(`AssignmentService.reviewPaper error: ${err.message}`);
                 })
             );
