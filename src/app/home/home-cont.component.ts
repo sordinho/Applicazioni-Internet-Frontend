@@ -68,7 +68,7 @@ export class HomeContComponent implements OnInit, OnDestroy {
     getAllCourses() {
         if (this.userRole === 'ROLE_STUDENT') {
             this.studentService.queryCourses(this.userId).subscribe((data) => {
-                this.allCourses = data;
+                this.allCourses = data.filter(course => course.enabled)
                 this.courseDataFetched = true;
                 if (this.courseId !== null) {
                     this.setSelectedCourse();
