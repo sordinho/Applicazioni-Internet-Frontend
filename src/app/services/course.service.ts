@@ -111,7 +111,7 @@ export class CourseService {
                         })
                     }
                     //console.dir(enrolledStudents)
-                    return enrolledStudents;
+                    return enrolledStudents.sort((s1, s2) => s1.id.localeCompare(s2.id));
                 })
             );
     }
