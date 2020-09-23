@@ -1,12 +1,12 @@
-<mat-card class="home-card mat-elevation-z6">    
-    
+<mat-card class="home-card mat-elevation-z6">
+
     <mat-card-content>
 
-        <div *ngIf="!success"> 
+        <div *ngIf="!success">
             <!-- insert data for sign up -->
             <h2 class="center">Create an account</h2>
             <p *ngIf="registerError" class="error">{{generalErrorMessage}}</p>
-            
+
             <!-- id -->
             <mat-form-field class="full-width" appearance="standard">
                 <mat-label>Id</mat-label>
@@ -25,7 +25,7 @@
             <p class="user-image">Image</p>
             <div class="upload">
                 <button mat-flat-button class="file-button" (click)="fileInput.click()">Choose File
-                    <input #fileInput type="file" accept="image/jpeg, image/png" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/> 
+                    <input #fileInput type="file" accept="image/jpeg, image/png" style="display:none;" (change)="fileChange($event.target.files); $event.target.value = ''"/>
                 </button>
 
                 <span class="filename">
@@ -33,7 +33,7 @@
                 </span>
             </div>
             <p *ngIf="fileError" class='file-error'>{{errorMessage}}</p>
-            
+
             <!-- last name -->
             <mat-form-field class="full-width" appearance="standard">
                 <mat-label>Last Name</mat-label>

@@ -17,22 +17,22 @@ export class RegisterComponent implements OnInit {
   fileError = false
   errorMessage: string
 
-  id = new FormControl('s01', {
+  id = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required]
   });
 
-  email = new FormControl('s01@studenti.polito.it', {
+  email = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.email]
   });
   
-  lastName = new FormControl('Sinagra', {
+  lastName = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required]
   });
 
-  firstName = new FormControl('Simone', {
+  firstName = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required]
   });
@@ -46,12 +46,12 @@ export class RegisterComponent implements OnInit {
     * Contains at least one char within a set of special chars (@#%$^ etc.)
     * Does not contain space, tab, etc.
     * */
-  password = new FormControl('Password1#', {
+  password = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required, Validators.minLength(8), Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])([a-zA-Z0-9@#$%^&+=]+)$")]
   })
 
-  repeatPassword = new FormControl('Password1#', {
+  repeatPassword = new FormControl('', {
     updateOn: 'blur',
     validators: [Validators.required]
   });
