@@ -62,13 +62,13 @@ export class AuthService {
         //console.log('ruolo: ' + token.roles);
         localStorage.setItem('role', token.roles);
 
-        //console.log('username: ' + authResult.username);
-        localStorage.setItem('userId', authResult.username);
-
+        //console.log('username: ' + token.sub);
+        localStorage.setItem('userId', token.sub);
+        
         // token field exp contains epoch of exportation
         //console.dir("exp_at: " + token.exp)
         localStorage.setItem('expires_at', token.exp)
-
+        
     }
 
     logout() {
@@ -118,7 +118,7 @@ export class AuthService {
             .get(`${this.API_PATH}/refreshToken`)
             .pipe(
                 tap(res => {
-                    this.setSession(res);
+                    this.setSession(res)
                 })
             );
     }

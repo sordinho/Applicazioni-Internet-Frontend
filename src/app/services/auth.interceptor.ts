@@ -15,10 +15,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         
-        this.refreshToken()
+        this.refreshToken() // check if token need to be refreshed
 
         const accessToken = localStorage.getItem('token');
-        console.dir("token: " + accessToken)
         if (accessToken) {
             const cloned = request.clone({
                 headers: request.headers.set('Authorization', 'Bearer ' + accessToken)
@@ -27,14 +26,15 @@ export class AuthInterceptor implements HttpInterceptor {
             return next.handle(cloned).pipe(
                 catchError( (error: HttpErrorResponse) => {
                     if(error.status === 401){
+                        console.dir("token expired - login redirect")
                         this.router.navigate(['/login'])
                         return of(null);
-                    } 
-                    return of(null); 
+                    } else 
+                        return throwError(error)
                 }))
 
         } else {
-            // console.log('AuthInterceptor accessToken not found');
+            // console.log('AuthInterceptor accessToken not found'); // (sing-in)
             return next.handle(request)
         }
     }
@@ -43,9 +43,8 @@ export class AuthInterceptor implements HttpInterceptor {
         let expiresAt = parseInt(localStorage.getItem('expires_at')) * 1000
         const diff = expiresAt - new Date().getTime()
 
-        
-        if(diff > 0 && diff < 30000 && !this.refreshing) {
-            console.dir(expiresAt - new Date().getTime())
+        if(diff > 0 && diff < 1800000 && !this.refreshing) {
+            //console.dir(expiresAt - new Date().getTime())
             this.refreshing = true
             this.authService.refreshToken().subscribe(
                 succ => {
@@ -53,6 +52,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     this.refreshing = false
                 }, 
                 err => {
+                    /* never reached */
                     console.dir("refresh - error")
                     this.router.navigate(['/login'])
                 }
