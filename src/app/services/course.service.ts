@@ -101,13 +101,16 @@ export class CourseService {
                     return throwError(`CourseService.queryEnrolledStudent ${courseId} error: ${err.message}`);
                 }),
                 map(data => {
+                    // {"_embedded":{"jSONObjects":[{"teamName":"","student":
                     /* convert explicitly the result to Student[] */
                     var enrolledStudents: Student[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.studentList.forEach((student: Student) => {
-                            enrolledStudents.push(new Student(student.id, student.lastName, student.firstName, student.email, student.image));
-                        });
+                        data._embedded.jSONObjects.forEach((obj: {teamName: string, student: Student}) => {
+                            const stud: Student = obj.student
+                            enrolledStudents.push(new Student(stud.id, stud.lastName, stud.firstName, stud.email, stud.image, obj.teamName))
+                        })
                     }
+                    //console.dir(enrolledStudents)
                     return enrolledStudents;
                 })
             );
@@ -209,7 +212,6 @@ export class CourseService {
                     return throwError(`CourseService.getAllGroups error: ${err}`);
                 }),
                 map(data => {
-                    console.log(data);
                     let teams: Team[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
                         data._embedded.teamList.forEach((t: any) => {
