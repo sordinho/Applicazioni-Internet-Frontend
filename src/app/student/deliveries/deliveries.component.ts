@@ -67,10 +67,18 @@ export class DeliveriesComponent implements OnInit {
                         });
                         assignmentCounter++;
                         this.dataFetched = assignmentCounter === assignments.length;
+                    }, error => {
+                        // this.dataFetched = true;
+                        this.papers.set(assignment.id, []);
+                        assignmentCounter++;
+                        this.dataFetched = assignmentCounter === assignments.length;
+                        // this.snackbar.open('Error fetching assignments', null, {duration: 5000});
+                        // return;
                     });
-                });
+                });d
             }
         }, error => {
+            this.dataFetched = true;
             this.snackbar.open('Error fetching assignments', null, {duration: 5000});
         });
     }

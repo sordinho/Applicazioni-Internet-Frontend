@@ -51,7 +51,8 @@
         <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
                 <div class="example-element-detail"
-                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+                     *ngIf="papers.get(element.id).length!=0">
                     <mat-list class="history-list">
                         <mat-divider *ngIf="uploadEnabled.get(element.id)"></mat-divider>
                         <mat-list-item *ngIf="uploadEnabled.get(element.id)">
