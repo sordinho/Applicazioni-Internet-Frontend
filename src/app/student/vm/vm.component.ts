@@ -66,7 +66,7 @@ export class VmComponent implements OnInit {
     }
 
     connectToVm(vm: Vm) {
-        console.log('Connect to vm: ' + vm.id);
+        // console.log('Connect to vm: ' + vm.id);
         let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
         win.document.title = 'VM ' + vm.id;
         win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
@@ -129,7 +129,7 @@ export class VmComponent implements OnInit {
                     .subscribe((students) => {
                         vm.owners = students;
                         this.vmDataFetched++;
-                        console.log('owner: ' + vm.owners);
+                        // console.log('owner: ' + vm.owners);
                     });
             });
         }, error => {
@@ -147,7 +147,7 @@ export class VmComponent implements OnInit {
     }
 
     deleteVM(vm: Vm) {
-        console.log('Delete vm: ' + vm.id);
+        // console.log('Delete vm: ' + vm.id);
         this.vmService.deleteVm(vm.id).subscribe(() => {
             this.snackBar.open('Vm ' + vm.id + ' Deleted', null, {duration: 5000});
             this.refreshTeamResources();
@@ -160,7 +160,7 @@ export class VmComponent implements OnInit {
     }
 
     stopVm(vm: Vm) {
-        console.log('Stop vm: ' + vm.id);
+        // console.log('Stop vm: ' + vm.id);
         this.vmService.stopVm(vm.id).subscribe(data => {
             vm.status = 'OFF';
             this.refreshTeamResources();
@@ -169,7 +169,7 @@ export class VmComponent implements OnInit {
     }
 
     startVm(vm: Vm) {
-        console.log('Start vm: ' + vm.id);
+        // console.log('Start vm: ' + vm.id);
         this.vmService.startVm(vm.id).subscribe(data => {
             vm.status = 'ON';
             this.refreshTeamResources();
@@ -192,7 +192,7 @@ export class VmComponent implements OnInit {
             } else {
                 this.snackBar.open('Error sharing vm', null, {duration: 5000});
             }
-            console.log('CLOSED');
+            // console.log('CLOSED');
         });
     }
 
@@ -221,7 +221,7 @@ export class VmComponent implements OnInit {
             } else {
                 this.snackBar.open('Error creating vm', null, {duration: 5000});
             }
-            console.log('CLOSED');
+            // console.log('CLOSED');
         });
     }
 
@@ -248,7 +248,7 @@ export class VmComponent implements OnInit {
             } else {
                 this.snackBar.open('Error updating vm', null, {duration: 5000});
             }
-            console.log('CLOSED');
+            // console.log('CLOSED');
         });
     }
 

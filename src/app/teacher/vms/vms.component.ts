@@ -132,7 +132,7 @@ export class VmsComponent implements OnInit {
 
         // If team has a configuration...
         if (this.selectedTeam.configurationLink) {
-            console.log(this.selectedTeam.configurationLink);
+            // console.log(this.selectedTeam.configurationLink);
             let resources$ = this.groupService.getResources(this.selectedTeam.id);
             let vms$ = this.groupService.getVms(this.selectedTeam.id);
             let config$ = this.configurationService.getConfigurationByLink(this.selectedTeam.configurationLink);
@@ -151,7 +151,7 @@ export class VmsComponent implements OnInit {
                         .subscribe((data) => {
                             vm.owners = data;
                             this.vmDataFetched++;
-                            console.log('owner: ' + vm.owners);
+                            // console.log('owner: ' + vm.owners);
                         }, error => {
                             this.snackBar.open('Error getting VMs owners, please retry.', null, {
                                 duration: 5000,
@@ -206,7 +206,7 @@ export class VmsComponent implements OnInit {
         if (this.selectedTeamConfiguration.id == -1) {
             // Create new configuration
             this.configurationService.createNewConfiguration(this.selectedTeamConfiguration).subscribe((data) => {
-                console.log('CREATED CONFIG');
+                // console.log('CREATED CONFIG');
                 this.selectedTeamConfiguration = data;
                 this.disableSaveButton = false;
                 this.snackBar.open('Configuration Saved', null, {
@@ -220,9 +220,9 @@ export class VmsComponent implements OnInit {
             });
         } else {
             // Update configuration
-            console.log('UPDATING: ' + this.selectedTeamConfiguration.id);
+            // console.log('UPDATING: ' + this.selectedTeamConfiguration.id);
             this.configurationService.updateConfiguration(this.selectedTeamConfiguration).subscribe((data) => {
-                console.log('UPDATED CONFIG');
+                // console.log('UPDATED CONFIG');
                 this.selectedTeamConfiguration = data;
                 this.disableSaveButton = false;
                 this.snackBar.open('Configuration Updated', null, {
@@ -306,7 +306,7 @@ export class VmsComponent implements OnInit {
     }
 
     connectToVm(vm: Vm) {
-        console.log('Connect to vm: ' + vm.id);
+        // console.log('Connect to vm: ' + vm.id);
         let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
         win.document.title = 'VM ' + vm.id;
         win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');

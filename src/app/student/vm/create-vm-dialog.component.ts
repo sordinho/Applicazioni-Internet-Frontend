@@ -90,12 +90,12 @@ export class CreateVmDialogComponent implements OnInit {
     }
 
     saveNewVm() {
-        console.log(this.newVmCpu.value);
-        console.log(this.newVmRam.value);
-        console.log(this.newVmDisk.value);
-        console.log(this.data.creatorId);
-        console.log(this.team.id);
-        console.log(this.data.vmModel);
+        // console.log(this.newVmCpu.value);
+        // console.log(this.newVmRam.value);
+        // console.log(this.newVmDisk.value);
+        // console.log(this.data.creatorId);
+        // console.log(this.team.id);
+        // console.log(this.data.vmModel);
         this.working = true;
         this.vmService.createNewVm(this.newVmCpu.value, this.newVmRam.value, this.newVmDisk.value, this.data.creatorId,
             this.team.id, this.data.vmModel).subscribe((data) => {
@@ -104,14 +104,14 @@ export class CreateVmDialogComponent implements OnInit {
     }
 
     updateVm() {
-        console.log('UPDATE');
-        console.log(this.data.vmToUpdate.id);
-        console.log(this.newVmCpu.value);
-        console.log(this.newVmRam.value);
-        console.log(this.newVmDisk.value);
-        console.log(this.data.creatorId);
-        console.log(this.team.id);
-        console.log(this.data.vmModel);
+        // console.log('UPDATE');
+        // console.log(this.data.vmToUpdate.id);
+        // console.log(this.newVmCpu.value);
+        // console.log(this.newVmRam.value);
+        // console.log(this.newVmDisk.value);
+        // console.log(this.data.creatorId);
+        // console.log(this.team.id);
+        // console.log(this.data.vmModel);
         this.working = true;
         this.vmService.updateVm(this.data.vmToUpdate.id, this.newVmCpu.value, this.newVmRam.value, this.newVmDisk.value, this.data.creatorId,
             this.team.id, this.data.vmModel).subscribe((data) => {

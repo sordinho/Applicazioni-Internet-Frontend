@@ -50,7 +50,7 @@ export class VmModelService {
                     return throwError(`VmModelService.getModelInfoByDirectLink error: ${err.message}`);
                 }),
                 map(data => {
-                    console.log('model: ' + data.os);
+                    // console.log('model: ' + data.os);
                     let model = new VmModel(data.os);
                     model.uniqueId = data.id;
                     return model;

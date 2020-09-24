@@ -26,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
             return next.handle(cloned).pipe(
                 catchError( (error: HttpErrorResponse) => {
                     if(error.status === 401){
-                        console.dir("token expired - login redirect")
+                        // console.dir("token expired - login redirect")
                         this.router.navigate(['/login'])
                         return of(null);
                     } else 
@@ -48,12 +48,12 @@ export class AuthInterceptor implements HttpInterceptor {
             this.refreshing = true
             this.authService.refreshToken().subscribe(
                 succ => {
-                    console.dir("refresh - success")
+                    // console.dir("refresh - success")
                     this.refreshing = false
                 }, 
                 err => {
                     /* never reached */
-                    console.dir("refresh - error")
+                    // console.dir("refresh - error")
                     this.router.navigate(['/login'])
                 }
             )

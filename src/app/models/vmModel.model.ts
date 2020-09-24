@@ -7,7 +7,7 @@ export class VmModel {
     constructor(id: string) {
         this.id = id;
         this.os = this.generateValueFromId(id);
-        console.log(this.os);
+        // console.log(this.os);
     }
 
     generateValueFromId(id: string): string {

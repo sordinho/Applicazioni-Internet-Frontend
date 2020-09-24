@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Student} from '../models/student.model';
 import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ConfigurationModel} from '../models/configuration.model';

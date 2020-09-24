@@ -22,12 +22,3 @@ export class Team {
         return this.name + ' (' + this.id + ')';
     }
 }
-
-export const TEST_GROUP: Team = new Team(
-    '1',
-    'gr1',
-    // 'vm1',
-    'CONFIRMED',
-    // new Resources(1, 10, 10, 10, 10, 50, 10, 10, 10, 10, 10),
-    // [TEST_STUDENT1, TEST_STUDENT2, TEST_STUDENT3]
-);

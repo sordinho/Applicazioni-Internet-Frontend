@@ -217,7 +217,7 @@ export class CourseService {
                         data._embedded.teamList.forEach((t: any) => {
                             let newTeam = new Team(t.id, t.name, t.status);
                             if (t._links.virtualMachineConfiguration) {
-                                console.log('Team ' + newTeam.id + ' has config');
+                                // console.log('Team ' + newTeam.id + ' has config');
                                 newTeam.configurationLink = t._links.virtualMachineConfiguration.href;
                             }
                             teams.push(newTeam);

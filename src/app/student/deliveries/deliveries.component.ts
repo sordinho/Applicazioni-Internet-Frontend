@@ -55,10 +55,10 @@ export class DeliveriesComponent implements OnInit {
                 this.dataFetched = true;
             } else {
                 assignments.forEach((assignment) => {
-                    console.log(assignment);
+                    // console.log(assignment);
                     this.uploadEnabled.set(assignment.id, true);
                     this.studentService.getPapersByAssignment(this.authService.getUserId(), assignment.id).subscribe((paperList) => {
-                        console.log(paperList);
+                        // console.log(paperList);
                         this.papers.set(assignment.id, paperList);
                         paperList.forEach((p) => {
                             if (!p.flag) {
@@ -75,7 +75,7 @@ export class DeliveriesComponent implements OnInit {
                         // this.snackbar.open('Error fetching assignments', null, {duration: 5000});
                         // return;
                     });
-                });d
+                });
             }
         }, error => {
             this.dataFetched = true;
@@ -96,11 +96,11 @@ export class DeliveriesComponent implements OnInit {
 
     downloadAssignment(event: any, assignment: Assignment) {
         event.stopPropagation();
-        console.log('Download: ' + assignment);
+        // console.log('Download: ' + assignment);
         this.downloadImage(assignment.image);
         if (this.papers.get(assignment.id).length > 0) {
             this.assignmentService.setAssignmentAsReadByStudent(assignment.id, this.authService.getUserId()).subscribe((data) => {
-                console.log(data);
+                // console.log(data);
                 if (data) {
                     this.initAssignments();
                 }
@@ -115,25 +115,25 @@ export class DeliveriesComponent implements OnInit {
         paperImageData.append('image', this.selectedFile);
 
         this.assignmentService.uploadStudentPaperImage(paperImageData, assignment.id, this.authService.getUserId()).subscribe(data => {
-            console.log('OK');
+            // console.log('OK');
             this.initAssignments();
             this.snackbar.open('Paper uploaded', null, {duration: 5000});
         }, error => {
-            console.log('FAIL');
+            // console.log('FAIL');
             this.snackbar.open('Error uploading paper', null, {duration: 5000});
         });
 
     }
 
     downloadDelivered(paper: Paper) {
-        console.log('Download: ' + paper.id + ' ' + paper.status);
+        // console.log('Download: ' + paper.id + ' ' + paper.status);
         this.downloadImage(paper.image);
     }
 
     onFileChanged(event) {
         this.uploadButtonDisabled = true;
         if (event.target.files.length > 0) {
-            console.log(event.target.files[0].type);
+            // console.log(event.target.files[0].type);
             if (event.target.files[0].type.startsWith('image/')) {
                 this.selectedFile = event.target.files[0];
                 this.uploadButtonDisabled = false;

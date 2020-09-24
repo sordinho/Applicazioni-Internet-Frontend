@@ -67,14 +67,14 @@ export class GroupsComponent implements OnInit {
         this.studentService.getTeamByCourse(this.authService.getUserId(), this.courseId).subscribe((team: Team) => {
             this.team = team;
             this.dataReady = true;
-            console.log('Team: ' + team);
+            // console.log('Team: ' + team);
             this.groupService.getMembers(team.id).subscribe(data => {
                 this.team.members = data;
             }, error => {
                     this.snackBar.open('Error getting team data. Please refresh the page', null, {duration: 5000});
             });
         }, (error) => {
-            console.log(JSON.stringify(error));
+            // console.log(JSON.stringify(error));
             // console.log('No team found initilize proposals');
             this.initTeamProposals();
         });
@@ -85,7 +85,7 @@ export class GroupsComponent implements OnInit {
             this.proposals = teams;
             this.proposals.forEach((team: Team) => {
                 this.groupService.getMembersStatus(team.id).subscribe((data: Student[]) => {
-                    console.log(data);
+                    // console.log(data);
                     team.members = data;
                     for (let student of team.members) {
                         if (student.status === 'PROPONENT') {

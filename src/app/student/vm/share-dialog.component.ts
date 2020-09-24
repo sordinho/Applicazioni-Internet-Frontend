@@ -47,15 +47,15 @@ export class ShareDialogComponent implements OnInit {
 
     shareWithSelected() {
         this.working = true;
-        console.log('Selected: ' + this.selectionModel.selected.length);
+        // console.log('Selected: ' + this.selectionModel.selected.length);
         let requests = [];
         this.selectionModel.selected.forEach((s) => {
-            console.log(s.id);
+            // console.log(s.id);
             let req = this.vmService.shareVm(this.data.vm.id, s.id);
             requests.push(req);
         });
         forkJoin(requests).subscribe(results => {
-            console.log('Req: ' + requests.length);
+            // console.log('Req: ' + requests.length);
             this.closeDialog('OK');
         });
 

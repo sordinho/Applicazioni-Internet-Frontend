@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Assignment} from '../models/assignment.model';
-import {Observable, throwError, forkJoin} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {HttpHeaders, HttpClient} from '@angular/common/http';
-import {catchError, map, concatMap, flatMap} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {Paper} from '../models/paper.model';
-import { Student } from '../models/student.model';
+import {Student} from '../models/student.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -28,7 +28,7 @@ export class AssignmentService {
             .get<Assignment>(`${this.API_PATH}/${assignmentId}`)
             .pipe(
                 catchError(err => {
-                    console.error(JSON.stringify(err));
+                    // console.error(JSON.stringify(err));
                     return throwError(`assignmentService.find error: ${err}`);
                 })
             );
@@ -56,7 +56,7 @@ export class AssignmentService {
                     return papers;
                 }),
                 catchError(err => {
-                    console.error(JSON.stringify(err));
+                    // console.error(JSON.stringify(err));
                     return throwError(`assignmentService.queryPapers error: ${err}`);
                 })
             );
@@ -69,7 +69,7 @@ export class AssignmentService {
             .get<any>(`${this.API_PATH}/${assignmentId}/papers/history`, {params: {studentId: student.id}})
             .pipe(
                 catchError(err => {
-                    console.error(JSON.stringify(err));
+                    // console.error(JSON.stringify(err));
                     return throwError(`assignmentService.queryPaperHistory error: ${err}`);
                 }),
                 map(data => {
@@ -88,7 +88,7 @@ export class AssignmentService {
 
     setAssignmentAsReadByStudent(assignmentId: string, studentId: string): Observable<boolean> {
         return this.http.post<any>(`${this.API_PATH}/${assignmentId}/students/${studentId}/paperRead`, {}).pipe(catchError(err => {
-            console.error(err);
+            // console.error(err);
             return throwError(`AssignmentService.setAssignmentAsReadByStudent error: ${err.message}`);
         }));
     }
@@ -96,7 +96,7 @@ export class AssignmentService {
     uploadStudentPaperImage(paperImage: any, assignmentId: string, studentId: string) {
         return this.http.post<any>(`${this.API_PATH}/${assignmentId}/students/${studentId}/papers`, paperImage)
             .pipe(catchError(err => {
-                console.error(err);
+                // console.error(err);
                 return throwError(`AssignmentService.uploadStudentPaperImage error: ${err.message}`);
             }));
 
@@ -107,17 +107,17 @@ export class AssignmentService {
         /* review with score --> score = '...', flag = false */
 
         // Add fields to prepare the request
-        let body = new FormData()
-        body.append('image', file, file.name)
-        
+        let body = new FormData();
+        body.append('image', file, file.name);
+
         const request = {
             studentId: studentId,
             flag: flag,
             score: score
-        }  
-        const blobRequest = new Blob([JSON.stringify(request)], {type: 'application/json',})
+        };
+        const blobRequest = new Blob([JSON.stringify(request)], {type: 'application/json',});
 
-        body.append('request', blobRequest)
+        body.append('request', blobRequest);
 
         return this.http.post<any>(`${this.API_PATH}/${assignmentId}/paperReview`, body)
             .pipe(
