@@ -12,10 +12,8 @@ import { CourseService } from 'src/app/services/course.service';
 export class EnrollStudentsCsvDialogComponent implements OnInit {
 
   students: Student[]
-  selectedStudents: Student[]
-  enrollableStudents: Student[] = []
-
-  totalStudents: number = 0 // number of students in the csv file
+  enrollableStudents: Student[] = [] /* enrollable list (from the CSV file) */
+  totalStudents: number = 0 /* total number of students (in the CSV file) */
 
   courseId: string
 
@@ -25,7 +23,7 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
 
   fileRequiredError = false
   fileError = false
-  errorMessage: string
+  errorMessage: string = "1+ invalid student! Check the file and upload again." // default error message
 
   loading = false;
 
@@ -43,14 +41,13 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
   }
 
   fileChange(files: any) {
-    //console.dir("fileChange - files: " + JSON.stringify(files))
-    // when the load event is fired and the file not empty
+    /* when the load event is fired and the file not empty */
     if(files && files.length > 0) {
-      // Fill file variable with the file content
       this.fileRequiredError = false
       this.enrollableStudents = [] // clear enrollableStudents list
       this.totalStudents = 0
 
+      /* Fill file variable with the file content */
       this.file = files[0]
       this.filename = this.file.name
 
@@ -59,32 +56,36 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
 
         let reader: FileReader = new FileReader()
         reader.readAsText(this.file)
-        reader.onload = (e) => {
+        reader.onload = _ => {
           let csv: string = reader.result as string
+          const csvSeparator = ','
+
+          const colId = csv.split('\n')
+              .slice(0, 1)[0] /* get first (header) line */
+              .split(csvSeparator) 
+              .indexOf('id') /* find the 'id' column number */
 
           csv.split('\n')
-              .slice(1, csv.length) // remove first (header) line
-              .forEach((id:string) => {
-                let foundStudent = this.students.find(stud => stud.id == id)
-                if(foundStudent !== undefined) this.enrollableStudents.push(foundStudent)
-                
-                if(id !== '') {
-                  this.totalStudents++
+              .slice(1, csv.length) /* skip first (header) line */
+              .forEach((line: string) => {
+                let id = line.split(csvSeparator)[colId] /* get the student id */
+                if(id !== undefined) { /* id = can be undefined for example for the last line of the csv file */ 
+                  let foundStudent = this.students.find(stud => stud.id == id) /* find the student id in the (all) students list */
+                  if(foundStudent !== undefined) this.enrollableStudents.push(foundStudent) /* count enrollable students in the CSV file */
+                  this.totalStudents++ /* count total students in the CSV file */
                 }
               })
         }
       } else {
         this.filename = this.defaultFilename
         this.fileError = true
-        this.errorMessage = "Invalid file format (CSV containing only the userIds, with the header)"
+        this.errorMessage = "Invalid file format (CSV containing student ids)"
       }
-
     }
   }
 
   enroll() {
     this.loading = true    
-
     this.courseService.enrollAll(this.file, this.courseId)
       .subscribe(
         succ => {

@@ -63,7 +63,6 @@ export class AssigmentsContComponent implements OnInit {
         this.papers = papers
       },
       error => {
-        // TODO snackbar with error...
         this.papers = []
       })
   }

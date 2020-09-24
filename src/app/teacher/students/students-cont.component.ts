@@ -69,13 +69,19 @@ export class StudentsContComponent implements OnInit {
     this.courseService.unenroll(students, this.courseId)
                           .subscribe( 
                             res => {
-                              for(let error of res)
+                              let errorNum = 0
+                              for(let error of res) {
                                 if(error !== null) {
                                   /* look at course.service unenroll function to understand why I managed 
                                      error in this way (the res is the result of a forkJoin operation */ 
-                                  // console.dir("error.message: " + error.message)
-                                  this.snackbarMessage = new SnackbarMessage(error.message)
+                                  errorNum++
                                 }
+                              }
+                              if(errorNum > 1) {
+                                this.snackbarMessage = new SnackbarMessage(`${errorNum} student/s cannot be unenrolled (i.e. they belong to a group)`)
+                              } else if(errorNum === 1) {
+                                this.snackbarMessage = new SnackbarMessage(`${errorNum} student cannot be unenrolled (i.e. he belongs to a group)`)
+                              }
                               this.reloadEnrolledStudents() // reload students list
                             }
                           )

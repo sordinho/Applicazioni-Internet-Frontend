@@ -28,8 +28,12 @@
 }
 
 .file-error {
-    margin-left: 5px;
     color: red;
+}
+
+.file-msg {
+    margin-left: 5px;
+    color: dimgray;
     font-size: small;
 }
 

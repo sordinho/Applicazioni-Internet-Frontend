@@ -12,15 +12,16 @@
             {{filename}}
         </span>
     </div>
-    <p *ngIf="fileError" class='file-error'>{{errorMessage}}</p>
-
-    <p *ngIf="!fileError && totalStudents !== 0">{{enrollableStudents.length}}/{{totalStudents}} enrollable (valid or not yet enrolled) students:</p>
-    <p *ngIf="file !== undefined && !fileError && enrollableStudents.length === 0">0 enrollable students found in the CSV file</p>
-    <ng-container *ngIf="!fileError">
-        <mat-list-item *ngFor="let student of enrollableStudents">
-            {{student.id}} - {{student.firstName}} {{student.lastName}}
-        </mat-list-item>
-    </ng-container>
+    <div class='file-msg'>
+        <p *ngIf="fileError || enrollableStudents.length !== totalStudents" class='file-error'>{{errorMessage}}</p>
+        <p *ngIf="totalStudents !== 0">{{enrollableStudents.length}}/{{totalStudents}} enrollable (valid or not yet enrolled) students:</p>
+        <p *ngIf="file !== undefined && enrollableStudents.length === 0">0 enrollable students found in the CSV file</p>
+        <ng-container *ngIf="!fileError">
+            <mat-list-item *ngFor="let student of enrollableStudents">
+                {{student.id}} - {{student.firstName}} {{student.lastName}}
+            </mat-list-item>
+        </ng-container>
+    </div>
 
 </mat-dialog-content>
 
@@ -28,6 +29,6 @@
 
 <mat-dialog-actions>
     <button mat-button (click)="cancel()" [disabled]="loading">Cancel</button>
-    <button mat-raised-button *ngIf="!loading" [disabled]="enrollableStudents.length === 0" color="primary" (click)="enroll()">Enroll</button>
+    <button mat-raised-button *ngIf="!loading" [disabled]="enrollableStudents.length === 0 || enrollableStudents.length !== totalStudents" color="primary" (click)="enroll()">Enroll</button>
     <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="30" strokeWidth="4" style="margin: 0px 20px;"></mat-progress-spinner>
 </mat-dialog-actions>

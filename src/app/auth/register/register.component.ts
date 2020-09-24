@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
     validators: [Validators.required]
   });
 
-  generalErrorMessage: string
+  generalErrorMessage: string;
 
   /** Password must be:
     * At least 8 chars
@@ -112,7 +112,7 @@ export class RegisterComponent implements OnInit {
                           //console.dir(".subscribe (error) - result.accessToken: " + err.accessToken);
                           this.loading = false
                           this.registerError = true
-                          this.generalErrorMessage = err
+                          this.generalErrorMessage = "Something gone wrong! Please check the email address and password and try again."
                           this.password.reset()
                           this.repeatPassword.reset()
                         }
