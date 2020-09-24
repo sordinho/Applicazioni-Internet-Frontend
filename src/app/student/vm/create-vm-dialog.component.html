@@ -35,7 +35,7 @@
 		<label> Reset</label>
 	</button>
 	<button style="margin-left: 5px" mat-stroked-button color="warn"
-			(click)="closeDialog()">
+			(click)="closeDialog('NOP')">
 		Close
 	</button>
 	<p *ngIf="!checkResourcesLimits()" class="error">Error. Exceeded resources limit!</p>

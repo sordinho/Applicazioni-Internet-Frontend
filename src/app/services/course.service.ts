@@ -105,10 +105,10 @@ export class CourseService {
                     /* convert explicitly the result to Student[] */
                     var enrolledStudents: Student[] = [];
                     if (data !== undefined && data._embedded !== undefined) {
-                        data._embedded.jSONObjects.forEach((obj: {teamName: string, student: Student}) => {
-                            const stud: Student = obj.student
-                            enrolledStudents.push(new Student(stud.id, stud.lastName, stud.firstName, stud.email, stud.image, obj.teamName))
-                        })
+                        data._embedded.jSONObjects.forEach((obj: { teamName: string, student: Student }) => {
+                            const stud: Student = obj.student;
+                            enrolledStudents.push(new Student(stud.id, stud.lastName, stud.firstName, stud.email, stud.image, obj.teamName));
+                        });
                     }
                     //console.dir(enrolledStudents)
                     return enrolledStudents.sort((s1, s2) => s1.id.localeCompare(s2.id));
@@ -119,12 +119,12 @@ export class CourseService {
     enroll(student: Student, courseId: string): Observable<any[]> {
 
         return this.http.post<any>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id})
-                    .pipe(
-                        catchError(err => {
-                            console.error(err);
-                            return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`);
-                        })
-                    )
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`);
+                })
+            );
     }
 
     unenroll(students: Student[], courseId: string): Observable<any> {
@@ -236,8 +236,8 @@ export class CourseService {
     }
 
     enrollAll(file: File, courseId: string): Observable<any> {
-        let body = new FormData()
-        body.append('file', file)
+        let body = new FormData();
+        body.append('file', file);
 
         return this.http.post<any>(`${this.API_PATH}/${courseId}/enrollAll`, body)
             .pipe(

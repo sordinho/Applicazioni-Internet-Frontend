@@ -189,7 +189,7 @@ export class VmComponent implements OnInit {
             if (res === 'OK') {
                 this.initVmsData();
                 this.snackBar.open('Vm shared', null, {duration: 5000});
-            } else {
+            } else if (res === '') {
                 this.snackBar.open('Error sharing vm', null, {duration: 5000});
             }
             // console.log('CLOSED');
@@ -218,7 +218,7 @@ export class VmComponent implements OnInit {
                 this.refreshTeamResources();
                 this.initVmsData();
                 this.snackBar.open('Vm created', null, {duration: 5000});
-            } else {
+            } else if (res === '') {
                 this.snackBar.open('Error creating vm', null, {duration: 5000});
             }
             // console.log('CLOSED');
@@ -245,7 +245,7 @@ export class VmComponent implements OnInit {
                 this.refreshTeamResources();
                 this.initVmsData();
                 this.snackBar.open('Vm updated', null, {duration: 5000});
-            } else {
+            } else if (res === '') {
                 this.snackBar.open('Error updating vm', null, {duration: 5000});
             }
             // console.log('CLOSED');
