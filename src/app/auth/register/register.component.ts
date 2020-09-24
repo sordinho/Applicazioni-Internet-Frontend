@@ -58,18 +58,10 @@ export class RegisterComponent implements OnInit {
 
   loading = false;
   registerError = false;
-  redirectUrl: string;
 
   success = false
 
-  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
-    this.redirectUrl = this.route.snapshot.queryParams['redirect_to'] || '/';
-
-    // redirect to redirectUrl if already logged in
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate([this.redirectUrl]);
-    }
-  }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.filename = this.defaultFilename
@@ -106,7 +98,6 @@ export class RegisterComponent implements OnInit {
                           //console.dir("LoginComponent - .subscribe (success) - result.accessToken: " + suc.accessToken);
                           this.loading = false
                           this.success = true
-                          // this.router.navigate([this.redirectUrl]);
                         },
                         err => {
                           //console.dir(".subscribe (error) - result.accessToken: " + err.accessToken);

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -21,15 +21,17 @@ export class LoginComponent implements OnInit {
 
     loading = false;
     loginError = false;
-    redirectUrl: string;
+    redirectUrl: string = '/'
 
     constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
-        this.redirectUrl = this.route.snapshot.queryParams['redirect_to'] || '/';
-
-        // redirect to redirectUrl if already logged in
-        if (this.authService.isLoggedIn()) {
-            this.router.navigate([this.redirectUrl]);
-        }
+        this.route.queryParams.subscribe(params => {
+            this.redirectUrl = this.route.snapshot.queryParams['redirect_to'] || '/';
+            console.dir(this.redirectUrl)
+            // redirect to redirectUrl if already logged in
+            if (this.authService.isLoggedIn()) {
+                this.router.navigate([this.redirectUrl]);
+            }
+        });
     }
 
     ngOnInit(): void {
