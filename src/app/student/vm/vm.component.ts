@@ -69,7 +69,7 @@ export class VmComponent implements OnInit {
         // console.log('Connect to vm: ' + vm.id);
         let win = window.open('', 'VM ' + vm.id, 'width=1280, height=720, status=no, toolbar=no, menubar=no, location=no, addressbar=no');
         win.document.title = 'VM ' + vm.id;
-        win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="http://localhost:4200/assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
+        win.document.write('<head><title>VM ' + vm.id + '</title></head><body><img src="assets/images/' + this.vmModel.id + '.png" style="max-width: 100%; height: auto;"></body>');
         win.document.close();
     }
 
