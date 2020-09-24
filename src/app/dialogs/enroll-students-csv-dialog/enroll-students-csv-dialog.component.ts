@@ -13,9 +13,9 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
 
   students: Student[]
   selectedStudents: Student[]
-  fileStudents: Student[] = []
+  enrollableStudents: Student[] = []
 
-  enrollableStudents: number = 0 // number of students in the csv file
+  totalStudents: number = 0 // number of students in the csv file
 
   courseId: string
 
@@ -48,8 +48,8 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
     if(files && files.length > 0) {
       // Fill file variable with the file content
       this.fileRequiredError = false
-      this.fileStudents = [] // clear fileStudents list
-      this.enrollableStudents = 0
+      this.enrollableStudents = [] // clear enrollableStudents list
+      this.totalStudents = 0
 
       this.file = files[0]
       this.filename = this.file.name
@@ -61,21 +61,17 @@ export class EnrollStudentsCsvDialogComponent implements OnInit {
         reader.readAsText(this.file)
         reader.onload = (e) => {
           let csv: string = reader.result as string
+
           csv.split('\n')
               .slice(1, csv.length) // remove first (header) line
               .forEach((id:string) => {
-                //console.dir(id)
                 let foundStudent = this.students.find(stud => stud.id == id)
-                if(foundStudent !== undefined) this.fileStudents.push(foundStudent)
+                if(foundStudent !== undefined) this.enrollableStudents.push(foundStudent)
+                
+                if(id !== '') {
+                  this.totalStudents++
+                }
               })
-
-          csv.split('\n')
-            .slice(1, csv.length) // remove first (header) line
-            .forEach((id:string) => {
-              if(id !== '') {
-                this.enrollableStudents++
-              } 
-            })
         }
       } else {
         this.filename = this.defaultFilename
