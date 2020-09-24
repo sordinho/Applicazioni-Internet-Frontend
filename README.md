@@ -10,10 +10,11 @@ The backend is a Spring Boot application.
 
 ## Docker
 
-- Use the [Dockerfile](Dockerfile) for building a new image of this application.
+There are 2 predefined images on docker hub. One has a predefined DB the other starts with an empty one.
 
-- Use the [docker-compose](docker-compose.yml) for executing both frontend and backend. (Build backend image first)
+- [Docker image with db](https://hub.docker.com/repository/docker/sordinho/ai-project-db)
 
+- [Docker image without db](https://hub.docker.com/repository/docker/sordinho/ai-project)
 
 ## Angular Informations
 
@@ -26,4 +27,3 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ### Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
