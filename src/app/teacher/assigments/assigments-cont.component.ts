@@ -45,6 +45,7 @@ export class AssigmentsContComponent implements OnInit {
 
   getPapers(assignmentId: string) {
     const papersReq = this.assignmentService.queryPapers(assignmentId)
+    /* forkJoin - When all observables complete, emit the last emitted value from each */
     /* it returns obj { paper: Paper, studentId: string } */
     forkJoin([papersReq, this.allStudentsReq]).subscribe(
       data => {        

@@ -7,7 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
 
-
 @Component({
   selector: 'app-students-cont',
   templateUrl: './students-cont.component.html',
@@ -35,7 +34,8 @@ export class StudentsContComponent implements OnInit {
     const allStudentsReq$: Observable<Student[]> = this.studentService.queryAll()
     const enrolledStudentsReq$ = this.courseService.queryEnrolledStudent(`${this.courseId}`)
 
-    forkJoin(allStudentsReq$, enrolledStudentsReq$).subscribe( res => {
+    /* forkJoin - When all observables complete, emit the last emitted value from each */
+    forkJoin([allStudentsReq$, enrolledStudentsReq$]).subscribe( res => { 
       this.allStudents = res[0]
       this.enrolledStudents = res[1]
       //console.dir("allStudents: " + this.allStudents)
