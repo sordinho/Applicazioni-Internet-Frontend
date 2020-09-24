@@ -142,8 +142,7 @@ export class HomeComponent implements OnInit {
                 //console.dir("editCourse() - success ");
                 this._courses[index] = course;
             } else {
-                // user pressed cancel (?)
-                console.dir('editCourse() - unsuccess');
+                // user pressed cancel
             }
         });
     }

@@ -177,8 +177,8 @@ export class AssigmentsComponent implements OnInit {
         this.papersToFetch++
         this.getPapersEmitter.emit(this.selectedAssignment.id)
       } else {
-        // user pressed cancel (?)
-        console.dir("uploadCorrection() - unsuccess");
+        // user pressed cancel 
+        //console.dir("uploadCorrection() - unsuccess");
       }
     });
   }
@@ -213,9 +213,9 @@ export class AssigmentsComponent implements OnInit {
   }
 
   downloadPaper(paper: Paper) {
-    console.dir('Download Paper: ' + paper.id + ' ' + paper.status)
-    console.dir('image: ')
-    console.dir(paper.image)
+    //console.dir('Download Paper: ' + paper.id + ' ' + paper.status)
+    //console.dir('image: ')
+    //console.dir(paper.image)
     let date = new Date(paper.published)
     this.downloadImage(paper.image, `A${this.selectedAssignment.id}_${paper.student.id}_${date.getFullYear()}${date.getMonth()}${date.getDate()}_(${paper.id})`);
   }

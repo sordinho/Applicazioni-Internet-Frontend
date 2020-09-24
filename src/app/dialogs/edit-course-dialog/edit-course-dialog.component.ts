@@ -90,7 +90,7 @@ export class EditCourseDialogComponent implements OnInit {
                 this.dialogRef.close(editedCourse)
             },
             err => {
-              console.dir(JSON.stringify(err))
+              //console.dir(JSON.stringify(err))
               const snackbarMessage = new SnackbarMessage(err.error)
               this.snackBar.open(snackbarMessage.message, null, { duration: 5000 })
             }

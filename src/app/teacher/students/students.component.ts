@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { Student } from '../../models/student.model';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
+import { MatSort } from '@angular/material/sort';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { SnackbarMessage } from 'src/app/models/snackbarMessage.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -74,19 +74,8 @@ export class StudentsComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort
+    this.dataSource.sort = this.sort /* apply sort (MatSort) to sort automatically the data sousce on sort changes */  
     this.dataSource.paginator = this.paginator
-  }
-
-  onSortChanged() {
-    // update data source (sorting)
-    this.dataSource.data = this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort)
-    // const shownStudents = this.getShownStudents()
-  }
-
-  onPageChanged() {
-    // nothing to do. Only for debug
-    // const shownStudents = this.getShownStudents()
   }
 
   getShownStudents() {
@@ -235,8 +224,7 @@ export class StudentsComponent implements AfterViewInit {
         //console.dir("enrollStudentsCSV() - success ");
         this.reloadStudentsListEmitter.emit()
       } else {
-        // user pressed cancel (?)
-        console.dir("uploadCorrection() - unsuccess");
+        // user pressed cancel
       }
     })
 
