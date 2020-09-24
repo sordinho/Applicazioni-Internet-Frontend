@@ -116,22 +116,15 @@ export class CourseService {
             );
     }
 
-    enroll(students: Student[], courseId: string): Observable<any[]> {
-        const requests$ = new Array<Observable<any>>();
+    enroll(student: Student, courseId: string): Observable<any[]> {
 
-        students.forEach(student => {
-            requests$.push(
-                this.http.post<any>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id})
+        return this.http.post<any>(`${this.API_PATH}/${courseId}/enrollOne`, {'studentId': student.id})
                     .pipe(
                         catchError(err => {
                             console.error(err);
                             return throwError(`CourseService.enrollOne ${student.id} error: ${err.message}`);
                         })
                     )
-            );
-        });
-
-        return forkJoin(requests$);
     }
 
     unenroll(students: Student[], courseId: string): Observable<any> {

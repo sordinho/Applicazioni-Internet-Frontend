@@ -57,10 +57,10 @@ export class StudentsContComponent implements OnInit {
     })
   }
 
-  enrollStudents(students: Student[]) {
-    this.courseService.enroll(students, this.courseId)
+  enrollStudent(student: Student) {
+    this.courseService.enroll(student, this.courseId)
                           .subscribe( _ => {
-                            //console.dir("enrolledStudents :" + students);
+                            this.snackbarMessage = new SnackbarMessage(student.lastName + " " + student.firstName + " has been enrolled", "UNDO", () => { this.unenrollStudents([student]) })
                             this.reloadEnrolledStudents() // reload students list
                           })
   }

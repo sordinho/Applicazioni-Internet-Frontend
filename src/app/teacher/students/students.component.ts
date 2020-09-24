@@ -55,14 +55,17 @@ export class StudentsComponent implements AfterViewInit {
     }
   }
   @Input() set snackbarMessage(snackbarMessage: SnackbarMessage) {
-    let action: string = undefined
     if(snackbarMessage !== undefined) {
-      this.snackBar.open(snackbarMessage.message, snackbarMessage.action, { duration: 5000 })
+      const snackBarRef = this.snackBar.open(snackbarMessage.message, snackbarMessage.action, { duration: 5000 })
+      
+      if(snackbarMessage.actionFunction !== undefined) {
+      }
+      snackBarRef.onAction().subscribe(snackbarMessage.actionFunction);
     }
   }
 
   // component Output interfaces 
-  @Output() addStudentsEmitter = new EventEmitter<Student[]>()
+  @Output() addStudentEmitter = new EventEmitter<Student>()
   @Output() removeStudentsEmitter = new EventEmitter<Student[]>()
   @Output() reloadStudentsListEmitter = new EventEmitter<void>()
 
@@ -202,7 +205,7 @@ export class StudentsComponent implements AfterViewInit {
   }
 
   addStudent() {
-    this.addStudentsEmitter.emit([this.addStudentSelection]);
+    this.addStudentEmitter.emit(this.addStudentSelection);
     this.addStudentSelection = null; // reset selection
   }
 
